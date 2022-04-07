@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>高度坍塌</title>
+    <style type="text/css">
+    .box1{
+    border: 10px red solid;
+    /*法一：打开BFC*/
+    /* overflow: auto; */
+    }
+    .box2{
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+        float: left;
+        }
+    /*法二： 在坍塌块元素后加一个块并清除浮动*/
+    /* .box3{
+        clear: both;
+    } */
+    /* 法三： 利用after伪类解决高度塌陷（推荐使用） IE6不支持 */
+    .clearfix:before,
+    .clearfix:after{
+        content:"";
+        /*after和before默认是行内元素,需转换为块元素*/
+        /*table 既可以解决高度塌陷，又可以解决外边距重叠*/
+        display: table;
+        clear: both;
+    }
+    .clearfix{
+        zoom: 1;
+    } 
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+    .box3{
+        width: 200px;
+        height: 200px;
+        background-color: #bfa;
+    }
+    .box4{
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+        margin-top: 100px;/* 此时相邻父子元素会导致外边距折叠 */
+        }
+
+ 
+
+    </style>
+</head>
+
+
+<body>
+<!-- 
+文档流中，父元素高度时由子元素撑开，子元素多高父元素就有多高，但是对子元素设置浮动,子元素会完全脱离文档流，，导致父元素高度坍塌，会导致页面布局混乱
+    ·BFC默认关闭（打开后可解决，并不推荐）
+    Block(块) Formatting(格式化) Context(环境)
+-->
+
+    <div class="box1 clearfix"> 
+        <div class="box2"></div>
+         <!-- <div class="box3"></div> -->
+    </div>
+
+<!-- 
+    clearfix解决外边距折叠问题
+ -->
+    <div class="box3 clearfix">
+        <div class="box4"></div>
+    </div>
+   
+</body>
+</html>
+

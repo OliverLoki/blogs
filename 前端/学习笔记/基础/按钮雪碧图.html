@@ -1,0 +1,59 @@
+<!-- 
+    利用a标签的hover和active属性
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title></title>
+     <style>
+    /* 
+        将伪类的三张图片整合为一张图片
+        这样将三张图片一起加载
+        然后通过
+        background-position来切换显示图片的位置
+        这种技术叫做图片整合技术（CSS-Sprite）
+        雪碧图，精灵图
+    */
+    /*
+    使用步骤：
+        ·先确定要使用的图标
+        ·再测量图标大小
+        ·然后创建一个元素
+        ·将雪碧图设置为背景图片
+        ·设置偏移量
+    */
+         a{
+             border: turquoise 2px double;
+             border-radius: 10px;
+            display: block;
+            width: 360px;
+            height: 150px;
+      
+            background-image: url(anniu.png) ;
+            background-repeat: no-repeat;
+         }
+        
+         a:hover{
+            background-position: -370px 0px;
+         }
+         body{
+             background-color: #bbffaa;
+           
+         }
+     </style>
+ </head>
+ <body>
+
+     <a href="#">
+         <pre>
+
+
+                 我是一个超链接
+        </pre> 
+    </a>
+
+     
+ </body>
+ </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>可以让块元素不独占一行</title>
+    <style type="text/css">
+    a{
+        background-color:yellow ;
+        /*
+        内联元素不可设置宽高
+        需要用display样式修改元素的类型
+        可选值：
+        inline:可将一个元素作为内联元素显示
+        block:可以将一个元素设置为块元素
+        inline-block:可以将一个元素设置为行内块元素，
+        既有行内元素的特点又有块元素的特点
+        既可以设置宽高，又可以独占一行
+        none：隐藏元素，不会继续占位
+        visbility
+
+        */
+        display: block;
+        width: 100px;
+        height: 100px;
+    }
+   
+    </style>
+
+</head>
+<body>
+    <a href="#">
+        我是一个大大的超链接
+    </a>
+</body>
+</html>

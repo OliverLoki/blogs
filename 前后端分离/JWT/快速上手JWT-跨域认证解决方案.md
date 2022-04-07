@@ -1,16 +1,8 @@
 
 
-快速上手JWT-详细流程分析与代码实现（包含与Shiro和Redis的整合)
+快速上手JWT-详细流程分析与代码实现（包含与Shiro的整合)
 
-> [JWT整合系列——SpringBoot+Shiro+JWT整合(流程分析与代码实现)]()
->
-> [JWT整合系列——Springboot+Shiro+JWT+Redis整合(流程分析与代码实现)]()
-
-> [JWT官方文档](https://jwt.io/introduction)
->
-> [Redis官方文档](https://redis.io/docs/)
->
-> [Shrio官方文档](https://shiro.apache.org/documentation.html)
+==JWT整合系列——SpringBoot整合Shiro+JWT整合(流程分析与代码实现)==
 
 ## 一、你需要的知识储备
 
@@ -36,10 +28,6 @@
 2. 请求返回时将此 Session 的**唯一标识信息 SessionID** 返回给浏览器。
 3. 浏览器接收到服务器返回的 SessionID 信息后，会**将此信息存入到 Cookie 中，同时 Cookie 记录此 SessionID 属于哪个域名** 。
 4. **当用户第二次访问服务器的时候，请求会自动判断此域名下是否存在 Cookie 信息**，如果存在自动将 Cookie 信息也发送给服务端，服务端会从 Cookie 中获取 SessionID，再根据 SessionID 查找对应的 Session 信息，如果没有找到说明用户没有登录或者登录失效，如果找到 Session 证明用户已经登录可执行后面操作
-
-**图示：**
-
-
 
 
 
@@ -167,6 +155,10 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjdXJyZW50VGltZU1pbGxpcyI6MTY0ODgwNzQ3NDk
 
 ## 三、JWT认证流程分析——与Springboot的整合
 
+**注：这不是一个完整的实现，只展示了核心代码，但是一定能让你更直观的理解它的工作流程**
+
+[你可以点击这里看到一个完整实现的demo](https://github.com/OliverLoki/LokiBlogver2.0)
+
 ### 流程分析
 
 > 1、客户端发起请求，拦截器生效，判断是否是login或logout或公共资源请求，如果是就直接执行请求
@@ -177,26 +169,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjdXJyZW50VGltZU1pbGxpcyI6MTY0ODgwNzQ3NDk
 
 ![image-20220331160949189](D:\桌面\P_picture_cahe\image-20220331160949189.png)
 
-### 具体实现
-
-**注：这不是一个完整的实现，只展示了核心代码，但是一定能让你更直观的理解它的工作流程**
-
-[你可以点击这里看到一个完整实现的demo](https://github.com/OliverLoki/LokiBlogver2.0)
-
-> 新建一个Springboot项目，Maven导入Jwt依赖
-
-```xml
-<!-- jwt -->
-<dependency>
-    <groupId>com.auth0</groupId>
-    <artifactId>java-jwt</artifactId>
-    <version>3.18.1</version>
-</dependency>
-```
-
-**代码结构**
-
-理解代码结构，从代码结构理解JWT工作的流程
+### 代码结构分析
 
 > + com.loki.util.JwtUtil
 >
@@ -211,55 +184,171 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjdXJyZW50VGltZU1pbGxpcyI6MTY0ODgwNzQ3NDk
 >   将自定义好的拦截器处理类进行注册，并通过`addPathPatterns`、`excludePathPatterns`等属性设置需要拦截或需要排除的URL
 >
 > + com.loki.controller.TestController
+>
 >   + 登录接口
 >   + 需要登录才能访问的接口
 >   + 公共资源接口
 
-这个一般是固定的写法
+### Jwt依赖两种方式全实现
 
-+ com.loki.util.JwtUtil
+> 代码差距在于JwtUtil这个类，具体代码中我都实现了，实际只需要一种方式
+
+导入jwt
+
+```xml
+<!-- jwt -->
+<dependency>
+    <groupId>com.auth0</groupId>
+    <artifactId>java-jwt</artifactId>
+    <version>3.18.1</version>
+</dependency>
+```
+
+或者导入jjwt
+
+```xml
+<!--jjwt 18年以后就不更新了-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+```
+
+### 具体代码
+
+#### JWtUtil
+
+**com.loki.util.JwtUtil**
+
+导入JWT依赖的实现
 
 ```java
-package com.loki.utils;
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import java.util.Date;
-import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.interfaces.Claim;
-import java.util.Calendar;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import java.util.Date;
 import java.util.Map;
 
+/**
+ * @author oliverloki
+ * @Description: JWt工具类--生成 token 和 校验 token
+ * @date 2022年03月29日 22:11
+ */
+@Data
 public class JwtUtil {
-	//密钥
-    private static String SECRET = "WX:oliverloki";
-    //传入payload信息获取token
-    public static String getToken(Map<String, String> map) {
-        JWTCreator.Builder builder = JWT.create();
-        //payload
-        //通过map集合生成token的对象
-        map.forEach(builder::withClaim);
-        Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DATE, 3); //默认3天过期
-        builder.withExpiresAt(instance.getTime());//指定令牌的过期时间
-        //指定加密方式
-        return builder.sign(Algorithm.HMAC256(SECRET));
+    /**
+     * 密钥
+     */
+    private String secretKey="";
+
+    /**
+     * Token有效时间，单位min
+     */
+    private long effectiveTime=1234;
+
+    /**
+     * 根据payload信息生成JSON WEB TOKEN
+     *
+     * @param payloadClaims 在jwt中存储的一些非隐私信息
+     * @return
+     */
+    public String generateToken(Map<String, Object> payloadClaims) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Date expireTime = new Date(System.currentTimeMillis() + effectiveTime * 1000 * 60);
+        return JWT.create()
+                .withPayload(payloadClaims)
+                .withExpiresAt(expireTime)//过期时间
+                //.withJWTId(UUID.randomUUID().toString())
+                .withIssuedAt(new Date(currentTimeMillis))
+                .sign(Algorithm.HMAC256(secretKey));
     }
-    //验证token
-    public static DecodedJWT verify(String token) {
-        //如果有任何验证异常，此处都会抛出异常
-        return JWT.require(Algorithm.HMAC256(SECRET)).build().verify(token);
-    }
-	//获取token中的payload
-    public static Map<String, Claim> getPayloadFromToken(String token) {
-        return JWT.require(Algorithm.HMAC256(SECRET)).build().verify(token).getClaims();
+    
+
+    /**
+     * 校验并获得Token中的信息
+     * 1、token的header和payload是否没改过；
+     * 2、没有过期
+     *
+     * @param token
+     * @return
+     */
+    public Map<String, Claim> getClaimByToken(String token) {
+        try {
+            return JWT
+                    .require(Algorithm.HMAC256(secretKey))
+                    .build()
+                    .verify(token)
+                    .getClaims();
+        } catch (Exception e) {
+            log.debug("解析token出错", e);
+            return null;
+        }
     }
 }
 ```
 
-+ com.loki.intercepter.JwtInterceptor
+导入JJWT依赖的实现
+
+```java
+@Data
+public class JwtUtils {
+
+    private  String secret;
+    private  long expire;
+    private  String header;
+
+    /**
+     * 生成jwt token
+     */
+    public  String generateToken(long userId) {
+        Date nowDate = new Date();
+        //过期时间
+        Date expireDate = new Date(nowDate.getTime() + expire * 1000);
+
+        return Jwts.builder()
+                .setHeaderParam("typ", "JWT")
+                .setSubject(userId + "")
+                .setIssuedAt(nowDate)
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+
+    /**
+     * 校验jwt是否合法
+     * @param token
+     * @return
+     */
+    public  Claims getClaimByToken(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            log.debug("validate is token error ", e);
+            return null;
+        }
+    }
+
+    /**
+     * token是否过期
+     * @return true：过期
+     */
+    public  boolean isTokenExpired(Date expiration) {
+        return expiration.before(new Date());
+    }
+}
+```
+
+#### 配置拦截器
+
+com.loki.intercepter.JwtInterceptor
 
 > Interceptor的拦截范围其实就是Controller方法，它实际上就相当于基于AOP的方法拦截。因为Interceptor只拦截Controller方法，所以要注意，返回`ModelAndView`并渲染后，后续处理就脱离了Interceptor的拦截范围
 
@@ -310,7 +399,9 @@ public class JwtInterceptor implements HandlerInterceptor {
 }
 ```
 
-+ com.loki.config.IntercepterConfig
+#### 注册拦截器 
+
+com.loki.config.IntercepterConfig
 
 ```java
 package com.loki.config;
@@ -334,10 +425,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
 }
 ```
 
-+ com.loki.controller.TestController
+#### 测试Controller
+
+com.loki.controller.TestController
 
 ```java
-	//登录请求放行，不进入拦截器
+@RestController
+public class UserController {
+//登录请求放行，不进入拦截器
     @GetMapping("/login/{username}/{password}")
     public Result login(@PathVariable("username") String username,
                         @PathVariable("password") String password) {
@@ -356,14 +451,73 @@ public class InterceptorConfig implements WebMvcConfigurer {
         }
     }
 
-	//用户请求
+	//用户请求不放行
     //如果用户请求如果携带token，会被进去拦截器JwtInterceptor进行认证
-    @GetMapping("/auth")
+    @GetMapping("/user")
     public Result test() {
- 		return "/content";
+ 		return "content";
     }
-
+}
 ```
 
+## 四、总结以及我的理解
 
+谈一谈我的理解，如果有任何问题的话，才疏学浅，请您多多指教
+
+> **在微服务中我们一般采用的是无状态登录，因此如果我们需要在前后端分离项目中使用[Shiro](https://blog.csdn.net/Night__breeze/article/details/123594845)的话，会不恰巧的与我们的期望有所违背，原因：**
+>
+> 1. **Shiro默认的拦截跳转都是跳转url页面，而前后端分离后，后端并无权干涉页面跳转**
+> 2. **Shiro默认使用的登录拦截校验机制恰恰就是使用的Session**
+>
+> **因此如需使用shiro，我们就需要对其进行改造，那么要如何改造呢？我们可以在整合Shiro的基础上自定义登录校验，继续整合JWT，或者oauth2.0等，使其成为支持服务端==无状态登录==，即token登录。**
+>
+> **但是我们又遇到了问题，Token颁发之后，由于只在客户端存储，所以在Token有效期内，我们无法实现Jwt的可控性，例如无法实现将用户强制下线的功能**
+>
+> **因此我们如果想要实现这个功能的话，就又要进行改造了，使用内存型数据库Redis作为第三方存储，这样一来我们可以通过删除Redis中的Token信息让Token失效**
+>
+> **但是这样做，就失去了Token最大的优点去中心化:cry:**
+
+### Jwt的适用场景
+
+JWT 最适合的场景是不需要服务端保存用户状态的场景，如果考虑到 token 注销和 token 续签的场景话，没有特别好的解决方案，大部分解决方案都给 token 加上了状态，这就有点类似 Session 认证了
+
+### JWT的优点
+
+1. 无状态，去中心化
+
+2. 有效避免了CSRF 攻击
+
+3. 适合移动端应用
+
+   使用 Session 进行身份认证的话，需要保存一份信息在服务器端，而且这种方式会依赖到 Cookie（需要 Cookie 保存 SessionId），所以不适合移动端。
+
+   但是，使用 token 进行身份认证就不会存在这种问题，因为只要 token 可以被客户端存储就能够使用，而且 token 还可以跨语言使用
+
+4. 单点登录友好
+
+### Token常见问题以及解决办法
+
+> 注销登录等场景下 token 还有效
+>
+> 与之类似的具体相关场景有：
+>
+> 1. 退出登录;
+> 2. 修改密码;
+> 3. 服务端修改了某个用户具有的权限或者角色；
+> 4. 用户的帐户被删除/暂停。
+> 5. 用户由管理员注销；
+
+解决方法：
+
+> 使用Redis存储Token
+
+将 token 存入**内存数据库**：将 token 存入 DB 中，redis 内存数据库在这里是是不错的选择。如果需要让某个 token 失效就直接从 redis 中删除这个 token 即可。但是，这样会导致每次使用 token 发送请求都要先从 DB 中查询 token 是否存在的步骤，而且违背了 JWT 的无状态原则
+
+> 附：
+>
+> [JWT官方文档](https://jwt.io/introduction)
+>
+> [Redis官方文档](https://redis.io/docs/)
+>
+> [Shrio官方文档](https://shiro.apache.org/documentation.html)
 

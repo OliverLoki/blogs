@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+    *{
+        margin:0px ;
+        padding: 0px;
+
+    
+    }
+    .body{
+        font:12px/1 宋体;
+
+    }
+    .outer{
+        width: 350px;
+        height: 400000px;
+      
+       
+        /*
+        某些网页需要添加东西，尽量不指定高度
+        （可以先添加一个高度，等最后在取消）
+         */
+        
+        margin: 0px auto;
+
+    }
+    .header{
+        /*
+        width先不指定
+        */
+        height:36px ;
+        background-color: #f5f5f5;
+        border-top:2px #019e8d  solid;
+
+        line-height: 36px;
+        padding: 0px 20px 0px 18px;
+        /*盒子宽度没指定，padding不会影响可见宽大小*/
+    }
+    .header a{
+        float: right;
+        color: red;
+    }
+    .title h3{
+        font: 14px/36px "微软雅黑";
+    }
+    .content{
+        border: 1px solid #deddd9;
+        padding: 0px 28px 0px 18px;
+    }
+    .content a{
+        color: black;
+        /*去除超链接的下划线*/
+        text-decoration: none;
+      
+    }    
+      /*为超链接添加一个hover伪类*/
+    .contnet a:hover{
+    
+         color: red;
+        /*为超链接添加一个下划线*/
+        text-decoration: black;
+
+
+       
+    }
+    
+    
+    ul{
+      /*去除项目符号*/
+      list-style: none;
+
+    }
+    .content .red{
+        color: red;
+    }
+    .content .right{
+        float: right;
+    }
+    .contnet h3{
+        margin-top: 40px;
+        margin-bottom: 16px;
+    }
+    .content li{
+        margin-bottom: 14px;
+    }
+
+
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <div class="header">
+         <a href="#">16年面授开班计划</a>
+            <h3>近期开班</h3>   </div>
+<!--
+    让文字垂直居中，设置行高
+-->
+
+  <!--
+    产生原因：
+如果一个浮动的元素上边是一个块元素，而且这个块元素没有设置
+浮动，浮动元素不会超过块元素
+
+
+解决方式：
+1、将块元素与浮动元素交换位置
+2、将超链接设置浮动
+
+-->
+<div class="content">
+    <h3><a href="#">JaveEE+云计算-全程就业班</a></h3>
+<!--ul无序列表-->
+    <ul>
+        <li>
+            <a href="#">开班时间：<span class="red">2016-04-27</span>  </a>
+            <a class="right" href="#"><span class="red">预约报名</span>  </a>
+            
+        </li>
+        <li>
+                <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                <a class="right" href="#"><span class="red">无座，名额爆表</span>  </a>
+                
+        </li>
+        <li>
+                    <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                    <a class="right" href="#"><span>开班盛况</span>  </a>
+                    
+        </li>
+        <li>
+                <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                <a class="right" href="#"><span>开班盛况</span>  </a>
+                
+        </li>
+        <li>
+            <a href="#">开班时间：<span>2016-04-27</span>  </a>
+            <a class="right" href="#"><span>开班盛况</span>  </a>
+            
+        </li>
+
+    </ul>
+
+
+
+
+</div>
+
+<div class="content">
+        <h3><a href="#">Android+人工智能-全程就业班</a></h3>
+    <!--ul无序列表-->
+        <ul>
+            <li>
+                <a href="#">开班时间：<span class="red">2016-04-27</span>  </a>
+                <a class="right" href="#"><span class="red">预约报名</span>  </a>
+                
+            </li>
+            <li>
+                    <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                    <a class="right" href="#"><span class="red">无座，名额爆表</span>  </a>
+                    
+            </li>
+            <li>
+                        <a href="#">开班时间：<span>2016-04-07</span>  </a>
+                        <a class="right" href="#"><span>开班盛况</span>  </a>
+                        
+            </li>
+            <li>
+                    <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                    <a class="right" href="#"><span>开班盛况</span>  </a>
+                    
+            </li>
+            <li>
+                <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                <a class="right" href="#"><span>开班盛况</span>  </a>
+                
+            </li>
+    
+        </ul>
+    
+    
+    
+    
+    </div>
+    <div class="content">
+            <h3><a href="#">Android+人工智能-全程就业班</a></h3>
+        <!--ul无序列表-->
+            <ul>
+                <li>
+                    <a href="#">开班时间：<span class="red">2016-04-10</span>  </a>
+                    <a class="right" href="#"><span class="red">预约报名</span>  </a>
+                    
+                </li>
+                <li>
+                        <a href="#">开班时间：<span>2016-04-27</span>  </a>
+                        <a class="right" href="#"><span>开办盛况</span>  </a>
+                        
+                </li>
+    </ul>
+    </div>
+
+
+
+      
+
+
+
+
+    </div>
+
+
+    
+</body>
+</html>

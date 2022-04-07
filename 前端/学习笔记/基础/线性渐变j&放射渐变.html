@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+            通过渐变设置一些复杂的背景颜色
+            ！渐变是图片需要通过background-image 来设置
+
+            ·线性渐变，颜色沿一条直线变化
+                linear-gradient(to top right, red,yellow)
+            · 径向渐变
+                radial-gradient()
+                可以手动指定径向渐变的大小
+                circle   圆
+                ellipse  椭圆
+                200px 200px 以这个点为圆心
+        */
+        .box1{float: left;
+            width:200px;
+            height: 200px;
+            background-image: linear-gradient(.1turn, red,yellow);
+        }
+        .box2{
+            float: left;
+            margin: 0 20px;
+            width:200px;
+            height: 200px;
+            background-image: repeating-linear-gradient(.1turn, red,yellow 50px);
+        }
+        .box3{
+            float: left;
+            width:200px;
+            height: 200px;
+            background-image:radial-gradient(red,yellow);
+        }
+        .box4{
+            margin: 0 2px;
+            float: left;
+            width:200px;
+            height: 200px;
+            background-image:repeating-radial-gradient(10px,red,yellow);
+        }
+        .box5{
+            margin:  20px 0px;
+            float: left;
+            width:200px;
+            height: 200px;
+            background-image:repeating-radial-gradient(farthest-corner at 20px 20px,red,yellow);
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="box1"></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+    <div class="box4"></div>
+    <div class="box5"></div>
+</body>
+</html>

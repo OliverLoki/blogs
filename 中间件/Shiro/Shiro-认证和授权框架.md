@@ -360,17 +360,19 @@ public class QuickStart {
 
 **先做个总结**
 
-> Springboot整合Shiro就做两件事
+> **Springboot整合Shiro就做两件事**
 >
-> 1. 引入Shiro依赖
-> 2. 配置Shiro环境
+> 1. **引入Shiro依赖**
+> 2. **配置Shiro环境**
 >
 > `Realm.java`
 >
 > ```java
 > public class CustomRealm {
 >     //认证
+>     //用户登录就会进入这个方法，进行密码校验工作 	
 >     //授权
+>     //此处编写后，controller中可以使用@RequiresPermissions来对用户权限进行拦截
 > }
 > ```
 >

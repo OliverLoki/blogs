@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+    /*
+    border 
+    ·边框的简写样式
+    ·通过它可以同时设置样式，宽度，颜色
+    ·不能分别指定边框宽度
+        ·实线：solid   点状：dotted   虚线：dashed 双线 double
+        ·3D边框  
+        `eg: border: 2px red solid;
+box-shadow 用来设置阴影效果 
+    第一个值：正值向右移动，反之
+    第二个值：正直向下 反之
+    第三个值：阴影的模糊半径
+    第四个值： 颜色
+    */
+    .box1{
+        width: 200px;
+        height: 200px;
+        background-color: aqua;
+        /*阴影*/
+        box-shadow:10px 10px 11px rgba(0,0,0,.3);
+    }
+
+    .box{
+        width: 200px;
+        height: 200px;
+        background-color: #bfa;
+        /*圆角*/
+        border-radius:50% ;
+        border-top:8px red dotted;
+        border-bottom:8px seagreen dashed;
+
+    }
+
+    </style>
+</head>
+<body>
+    <center>
+    <br><br>
+    <!-- 圆角 -->
+    <div class="box">pp</div>
+    <br><br><br>
+    <!-- 阴影 -->
+    <div class="box1">dd</div>
+    </center>
+</body>
+</html>

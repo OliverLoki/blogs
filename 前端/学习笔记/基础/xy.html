@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>导航条</title>
+    <style class="text/css">
+    *{
+        margin: 0px;
+        padding:0px;
+    }
+    .nav{
+        width: 540px;
+        list-style: none;
+        /*去除项目符号*/
+        /*为ul设置一个背景颜色*/
+        background-color: cornflowerblue;
+        /*设置一个宽度
+         会默认打开
+        */
+        margin: 50px auto;
+        overflow: hidden;
+        /*在IE6中，设置宽度自动打开haslayout*/
+    }
+    .nav2{
+        width: 90px;
+        list-style: none;
+        /*去除项目符号*/
+        /*为ul设置一个背景颜色*/
+        background-color: rgb(255,255,255);
+        /*设置一个宽度
+         会默认打开
+        */
+        margin: 50px auto;
+        border: 1px solid rgb(168,169,171);
+        overflow: hidden;
+        box-shadow:0px 0px 10px #000;
+        /*在IE6中，设置宽度自动打开haslayout*/
+    }
+    /*给超链接设置宽度*/
+    .nav li{
+        float: left;
+        width: 11%;   
+    } 
+    .nav a{
+        font-size: x-small;
+        display: block;
+        width: 100%;
+        /*设置居中*/
+        text-align: center;
+        /*设置一个上下内边距*/
+        /*去除下划线*/
+        text-decoration: none;
+        /*设置字体颜色*/
+        color:white;
+        /*设置加粗*/
+    }
+    .nav a:hover{
+        background-color: rgb(206,223,236);
+    }
+    .nav2 a{
+        display: block;
+        width: 100%;
+        /*设置居中*/
+        text-align: center;
+        /*设置一个上下内边距*/
+        /*去除下划线*/
+        text-decoration: none;
+        /*设置字体颜色*/
+        color: #666;;
+        border-bottom: 1px solid #666;
+        /*设置加粗*/
+    }
+
+
+    
+    </style>
+</head>
+<body>
+    <!--创建导航条结构-->
+    <ul class="nav">
+        <li><a href="#">新闻</a></li>
+        <li><a href="#">视频</a></li>
+        <li><a href="#">图片</a></li>
+        <li><a href="#">军事</a></li>
+        <li><a href="#">体育</a></li>
+        <li><a href="#">NBA</a></li>
+        <li><a href="#">娱乐</a></li>
+        <li><a href="#">财经</a></li>
+        <li><a href="#">科技</a></li>    
+    </ul>
+    <!--创建导航条结构-->
+    <ul class="nav2">
+        <li style="background-color: rgb(88,136,236);"><a href="#">相关报道</a></li>
+        <li><a href="#">互联网</a></li>
+        <li><a href="#">通信/传统IT</a></li>
+        <li><a href="#">区块链</a></li>
+        <li><a href="#">人工智能</a></li>
+        <li><a href="#">创业创新</a></li>
+        <li><a href="#">数码产品</a></li>
+        <li><a href="#">企鹅智酷</a></li>
+  
+    </ul>
+
+</body>
+</html>

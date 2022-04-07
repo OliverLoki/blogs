@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伪元素</title>
+    <style>
+        p{
+            font-size: 20px;
+        }
+        p::first-letter{
+            color: green;
+        }
+        p::first-line{
+            color: indigo;
+        }
+        p::selection{
+            color: lightblue;
+        }
+        /*鼠标选中的内容*/
+        /*before和after必须和content结合使用*/
+        div::before{
+            content: '《《';
+            color:red;
+        }
+        div::after{
+           
+            content: '》》';
+            color:red;
+        }
+
+    </style>
+</head>
+<body>
+   
+    <div></div>
+    <p></p>
+</body>
+</html>

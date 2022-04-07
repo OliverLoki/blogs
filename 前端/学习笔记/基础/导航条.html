@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>导航条练习</title>
+    <style class="text/css">
+    *{
+        margin: 0px;
+        padding:0px;
+    }
+    .nav{
+        padding-left: 15%;
+        list-style: none;
+        /*去除项目符号*/
+        /*为ul设置一个背景颜色*/
+        background-color: cornflowerblue;
+        /*设置一个宽度
+         会默认打开
+        */
+        width: 100%;
+        margin: 50px auto;
+        overflow: hidden;
+        /*在IE6中，设置宽度自动打开haslayout*/
+    }
+    /*给超链接设置宽度*/
+    .nav li{
+        float: left;
+        width: 12.5%;   
+    } 
+    .nav a{
+        display: block;
+        width: 100%;
+        /*设置居中*/
+        text-align: center;
+        /*设置一个上下内边距*/
+        padding:5px;
+        /*去除下划线*/
+        text-decoration: none;
+        /*设置字体颜色*/
+        color:white;
+        /*设置加粗*/
+        font-weight:bold;
+    }
+    .nav a:hover{
+        background-color: cyan;
+    }
+    
+
+    .nav{
+        background-image: url(周杰伦.jpg);
+        background-repeat: repeat-x;
+
+    }
+    </style>
+</head>
+<body>
+    <!--创建导航条结构-->
+    <ul class="nav">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">新闻</a></li>
+        <li><a href="#">关于</a></li>
+        <li><a href="#">联系</a></li>
+            
+    </ul>
+
+</body>
+</html>

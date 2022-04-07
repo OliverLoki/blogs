@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <!-- 
+            ·<form action=""></form>创建表单
+            ·action属性指向一个服务器地址 
+            ·用户填写的信息会附在url地址的后边以查询字符串的形式发送给服务器；  url？地址查询字符串；  格式：属性名+属性值
+            ·使用input来创建一个文本框      type属性：  text/submit/password/checkbox(多选)/radio（单选）/button
+
+            ·表单中数据提交到服务器，必须给表单项添加一个name属性
+            ·value属性值修改按钮上的文字
+            ·文本框里的value是作为默认值进行显示（不是提示文字）
+——————————————————————————————————————————————————————————————————————————————————————————————————————————
+            单选按钮通过name属性进行分组，name属性相同时是一组按钮，像这种需要用户选择但是不需要用户直接填写
+
+            ·使用select标签来创建一个列表项
+         -->
+
+<form action="/servlet">
+    用户 <input type="text" name="username"><br>
+    密码 <input type="password" name="password"> <br>
+<!-- 选择框————必须在指定一个value属性值，这样被选中项的value属性值将会最终提交给服务器-->
+    性别  <input type="radio" name="sex" value="femal" checked>女 <!--checked表示默认选中状态-->
+        <input type="radio" name="sex" value="meal">男 <br>
+     
+
+    爱好 <input type="checkbox" name="hobby" value="zq">足球
+        <input type="checkbox" name="hobby" value="lq">篮球
+        <input type="checkbox" name="hobby" value="zq">乒乓球
+        <input type="checkbox" name="hobby" value="ymq">羽毛球
+        <input type="checkbox" name="hobby" value="pq">排球 <br>
+    你喜欢的人有几个
+        <select name="love" id="">
+        <option value="1" selected>1</option> <!--selected为默认选中-->
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        </select><br>
+        <input type="submit" value="提交按钮" ><br>
+</form>
+<br><br><br><br><br><br>
+<form action="服务器.html">
+    <input type="button" value="按钮"><!--普通按钮，但是可以通过js添加效果-->
+    
+    <input type="reset"><!--重置按钮-->
+    
+    <button type="reset"></button><!--用途多，不是自结束标签-->
+
+</form>
+ 
+
+</body>
+</html>

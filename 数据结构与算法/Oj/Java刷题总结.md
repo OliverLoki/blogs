@@ -85,7 +85,7 @@ public void moveZeroes(int[] nums) {
 
 ## String类
 
-#### 字符串大小写转化
+### 字符串大小写转化
 
 ```
 str.toLowerCase() 

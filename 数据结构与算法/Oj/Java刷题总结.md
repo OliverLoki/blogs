@@ -113,8 +113,6 @@ toUpperCase()方法将Srtring转换为大写。如果字符串中没有应该转
 	a.revrese().toString();//翻转字符串
 ```
 
-
-
 ## Java内置进制转换
 
 进制转化在JAVA中已经封装好了.Integer和Long类都有对应方法

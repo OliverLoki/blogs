@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select />
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0fdbabe-db22-4202-942a-58ee665e9e07" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../README.md" afterDir="false" />
+    <list default="true" id="5d173aa6-4a47-4247-a0b2-a0321ecad062" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../JVM_内存与垃圾回收.md" beforeDir="false" afterPath="$PROJECT_DIR$/../JVM_内存与垃圾回收.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jvmCode.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/StackStructureTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/StackStructureTest.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,60 +29,93 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
-  <component name="ProjectId" id="27eAL7uWjVtZi5gYsVO3qtnxS7Y" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <hideBySeverity>
+      <option value="300" />
+    </hideBySeverity>
+  </component>
+  <component name="ProjectId" id="27lxpQYRZje4MQ0TtppznWQHUNG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.path.for.package.tslint" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
-  </component>
-  <component name="RunManager">
-    <configuration name="StackStructureTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="StackStructureTest" />
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/StudyCode/Blog/BlogVersion3/lokiblog-api&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Application.String">
+    <configuration name="获取ClassLoader示例" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="类加载器.获取ClassLoader示例" />
       <module name="jvmCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="类加载器.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="String" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="java.lang.String" />
+      <module name="jvmCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="java.lang.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.StackStructureTest" />
+        <item itemvalue="Application.String" />
+        <item itemvalue="Application.获取ClassLoader示例" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f0fdbabe-db22-4202-942a-58ee665e9e07" name="Default Changelist" comment="" />
-      <created>1649670118653</created>
+      <changelist id="5d173aa6-4a47-4247-a0b2-a0321ecad062" name="Changes" comment="" />
+      <created>1649908662775</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1649670118653</updated>
-      <workItem from="1649670121861" duration="903000" />
-      <workItem from="1649689937681" duration="17000" />
-      <workItem from="1649751593028" duration="3408000" />
+      <updated>1649908662775</updated>
+      <workItem from="1649908663418" duration="346000" />
+      <workItem from="1649910385646" duration="6966000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -102,43 +127,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="744" y="190" key="FileChooserDialogImpl" timestamp="1649689822626">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="744" y="190" key="FileChooserDialogImpl/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649689822626" />
-    <state x="2515" y="152" key="FileChooserDialogImpl/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649689771677" />
-    <state width="1864" height="281" key="GridCell.Tab.0.bottom" timestamp="1649778120388">
-      <screen x="1920" y="0" width="1536" height="864" />
-    </state>
-    <state width="1864" height="281" key="GridCell.Tab.0.bottom/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649752060855" />
-    <state width="1864" height="281" key="GridCell.Tab.0.bottom/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649778120388" />
-    <state width="1864" height="281" key="GridCell.Tab.0.center" timestamp="1649778120387">
-      <screen x="1920" y="0" width="1536" height="864" />
-    </state>
-    <state width="1864" height="281" key="GridCell.Tab.0.center/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649752060855" />
-    <state width="1864" height="281" key="GridCell.Tab.0.center/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649778120387" />
-    <state width="1864" height="281" key="GridCell.Tab.0.left" timestamp="1649778120387">
-      <screen x="1920" y="0" width="1536" height="864" />
-    </state>
-    <state width="1864" height="281" key="GridCell.Tab.0.left/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649752060854" />
-    <state width="1864" height="281" key="GridCell.Tab.0.left/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649778120387" />
-    <state width="1864" height="281" key="GridCell.Tab.0.right" timestamp="1649778120387">
-      <screen x="1920" y="0" width="1536" height="864" />
-    </state>
-    <state width="1864" height="281" key="GridCell.Tab.0.right/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649752060855" />
-    <state width="1864" height="281" key="GridCell.Tab.0.right/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649778120387" />
-    <state x="2073" y="0" key="SettingsEditor" timestamp="1649777530631">
-      <screen x="1920" y="0" width="1536" height="864" />
-    </state>
-    <state x="191" y="0" key="SettingsEditor/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649752011601" />
-    <state x="2073" y="0" key="SettingsEditor/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649777530631" />
-    <state x="605" y="356" width="781" height="343" key="org.intellij.images.editor.actions.BackgroundImageDialog" timestamp="1649689853486">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="605" y="356" width="781" height="343" key="org.intellij.images.editor.actions.BackgroundImageDialog/1920.0.1536.864/0.0.1920.1080@0.0.1920.1080" timestamp="1649689853486" />
-    <state x="2404" y="285" width="777" height="342" key="org.intellij.images.editor.actions.BackgroundImageDialog/1920.0.1536.864/0.0.1920.1080@1920.0.1536.864" timestamp="1649689772921" />
   </component>
 </project>

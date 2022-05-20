@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box1{
+            width: 800px;
+            height: 800px;
+            background-color: silver;
+            overflow: hidden;
+        }
+        .box1 div{
+            width: 100px;
+            height: 100px;
+            margin-top: 100px;
+            margin-left: 700px;
+            background-color: blue;
+        }
+        .box3{
+            margin-top: 300px;
+        }
+        /*
+            transition:过渡
+                ·通过过渡指定一个属性发生变化时的切换方式
+                ·通过过渡可以——提升用户体验
+                ·大部分属性支持过渡（有效数字的变换）
+
+                可选值：
+                    transition-property：指定要执行过渡的一个属性
+                        ··多个属性值之间用 , 隔开
+                        ··所有属性都需要过渡————使用all关键字
+                    transition-duration：
+                    transition-timing-function：
+                        可选值：
+                            ··· ease：默认，先加速后减速
+                            ··· linear：匀速
+                            ··· ease-in 加速
+                            ··· ease-out 减速
+                            ··· cubic-bezier(.24,.95,.82,.-0.88)  移动方式
+                                https：//cubic-bezier.com
+                            ··· steps() 分布执行过渡效果（闪现）
+
+
+                    transition-delay：
+            */
+        .box2{
+
+            /*需要转换的属性*/
+            transition-property: all;
+            /*转换时间*/
+            transition-duration: 2s;
+            /*过渡的时序函数（指定过渡执行方式）*/
+            transition-timing-function:cubic-bezier(.24,.95,.82,-0.88);
+            /*过渡效果的延迟（等待相应事件后在执行过渡）*/
+            transition-delay:0.1s;
+        }
+
+        .box3{
+            /*简写属性*/
+            /*如果写时间，前边是持续时间，后面的延续时间*/
+            transition:all 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+        }
+        /*后代选择器*/
+        .box1:hover .box2,
+        .box1:hover .box3{
+            margin-left: 0;    
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="box1">
+
+        <div class="box2"></div>
+        <div class="box3"></div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>flex</title>
+     <style>
+         *{
+             margin: 0;
+             padding: 0;
+             list-style: none;
+         }
+         ul{
+             width: 800px;
+             border: 10px red solid;
+             display: flex;
+
+         }
+         li{
+             width: 200px;
+             height: 100px;
+             background-color: #bfa;
+             line-height: 100px;
+             font-size: 50px;
+             text-align: center;
+             /*增长系数按比例分配*/
+             flex-grow: 1;
+             /*缩减系数按缩减系数和元素大小计算（较复杂，越大缩减越多）*/
+             flex-shrink: 1;
+             /*指定元素的基础长度*/
+             flex-basis: 100px;
+             /*简写属性*/
+             /*  flex:增长 缩减 基础长度  */
+             /*通过表现干预结构
+             flex-order:;设置元素的顺序
+             */
+         }
+         li:nth-child(2){
+             background-color: pink;
+         }
+
+         li:nth-child(3){
+             background-color: orange;
+         }
+     </style>
+     
+ </head>
+ <body>
+
+
+     <ul>
+         <li>1</li>
+         <li>2</li>
+         <li>3</li>
+     </ul>
+     
+
+
+
+ </body>
+ </html>

@@ -1,0 +1,135 @@
+<!-- 
+    flex(弹性盒)
+        -css中的一种布局手段，主要用来代替浮动完成页面的布局
+        -要使用弹性盒，必须先将一个元素设置为弹性容器
+
+    ·弹性容器
+        display:flex
+        display:inline-flex
+
+    ·弹性元素
+        ·弹性容器的直接子元素是弹性元素
+
+    让元素在弹性盒垂直水平双方向对齐居中
+     justify-content:center;
+     aligh-items:center;
+
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>flex</title>
+     <style>
+         *{
+             margin: 0;
+             padding: 0;
+             list-style: none;
+         }
+         .box1{
+             width: 500px;
+             border: 10px red solid; 
+             display: flex;
+             /* flex-direction: column; */
+             /*
+                flex-wrap：设置是否自动换行
+                nowwrap   不会自动换行
+                wrap    沿着辅轴方向换行
+                wrap-reseverse  沿着辅轴反方向换行
+             */
+             flex-wrap:wrap;
+             /*    
+             justify-content:如何分配主轴上空白空间
+                    ·flex-start     元素在主轴开始
+                    ·flex-end       元素在主轴末尾
+                    ·center         元素居中，空白在两边
+                    ·space-around   空白均匀分布到元素两侧
+                    ·space-between  空白均匀分布到元素两侧
+             */
+             justify-content: flex-start;
+         }
+         .box2{
+             width:600px;
+             height: 800px;
+             border: 10px red solid; 
+             display: flex;
+             flex-wrap: wrap;
+             /*
+            align-items：表示元素在辅轴上如何对齐
+                默认值：stretch     将元素长度设置为相同的值 
+                       flex-start  沿着辅轴起边对齐 
+                       flex-end    沿着辅轴终边对齐
+                       center      居中对齐        
+             */
+             align-items: center;
+             /*
+             align-content:辅轴上空间分布
+                    ·flex-start     元素在辅轴开始
+                    ·flex-end       元素在辅轴末尾
+                    ·center         元素居中，空白在两边
+                    ·space-around   空白均匀分布到元素两侧
+                    ·space-between  空白均匀分布到元素两侧
+             */
+             align-content: center;
+            
+         }
+         li{
+             width: 200px;
+             background-color: #bfa;
+             font-size: 50px;
+             text-align: center;
+             line-height: 100px;
+             /*收缩系数*/
+             flex-shrink: 0;
+
+         }
+         li:nth-child(2){
+             background-color: pink;
+
+         }
+
+         li:nth-child(3){
+             background-color: orange;
+
+         }
+         li:nth-child(4){
+             background-color: purple;
+         }
+         li:nth-child(5){
+             background-color: chocolate;
+         }
+
+     </style>
+     
+ </head>
+ <body>
+     <ul class="box1">
+         <li>1</li>
+         <li>2</li>
+         <li>3</li>
+     </ul>
+     <br>
+     <ul class="box2">
+        <li>1</li>
+        <li>2
+            <div>2</div>
+        </li>
+        <li>3
+            <div>3</div>
+            <div>3</div>
+        </li>
+        <li>1</li>
+        <li>2
+            <div>2</div>
+        </li>
+       
+
+
+    </ul>
+     
+
+
+
+ </body>
+ </html>

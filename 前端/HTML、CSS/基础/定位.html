@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+    .box1{
+        width: 200px;
+        height: 200px;
+        background-color: red;
+
+    }
+    .box2{
+        width: 200px;
+        height: 200px;
+        background-color:yellow;
+        /*测试区*/
+        position: sticky;
+        top:0;
+
+    }
+    .box3{
+        width: 200px;
+        height: 200px;
+        background-color: green;
+        
+
+    }
+            /*
+        定位指的就是将指定元素摆放到任意位置
+        通过position属性
+        可选值：
+        static：默认值，没开启定位
+        relative：开启元素的相对定位
+        absolute：开启元素的绝对定位
+        fixed：开启元素的固定定位（也是绝对定位的一种）
+        sticky:粘滞定位
+
+    相对定位：
+        ··相对定位的元素不会脱离文档流
+        ··相对定位会使元素提升一个层级
+        ··通常偏移量只需要使用两个
+        ··相对定位不会改变元素性质，块还是块,块元素占得位置不会腾出
+        ··相对定位得相对是相对于本身原来的位置
+    绝对定位：
+        ··绝对定位得元素会脱离文档流
+        ··绝对元素会让行内元素变为块元素
+        ··相对定位会使元素提升一个层级
+        ··相对于离他最近的开启定位得祖先元素
+        ··如果没有祖先元素开启定位，则相对于浏览器定位
+    固定定位:
+        ··永远参照浏览器窗口进行定位，不会随滚动条滚动
+    粘滞定位：
+        ··元素到达某个位置时将其固定
+        */
+    
+    /* 祖先元素层级再高也盖不住后代元素 */
+    
+    </style>
+</head>
+<body>
+
+        <div class="box1"></div>
+        <div class="box2"></div>
+        <div class="box3"></div>  
+        
+</body>
+</html>

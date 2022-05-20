@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .clock{
+            background-image: url(../img/表盘.png);
+            width: 490px;
+            height: 490px;
+            margin: 0 auto;
+            margin-top: 100px;
+   
+            border-radius: 50%;
+            position: relative;
+        }
+        .clock > div{
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            margin: auto;
+        }
+        /*时针*/
+        .hour_wapper{
+            width: 60%;
+            height: 60%;
+            animation: run 86400s linear infinite;
+        }
+        .hour{
+            height: 50%;
+            width: 6px;
+            background-color: black;
+            margin: 0 auto;
+        }
+        .min_wapper{
+            height: 80%;
+            width: 80%;
+            animation: run 3600s steps(60) infinite;
+        }
+        .min{
+            width: 4px;
+            height: 50%;
+            background-color: black;
+            margin: 0 auto;
+        }
+        .sec_wapper{
+            height: 90%;
+            width: 90%;
+            animation: run 60s steps(60) infinite;
+        }
+        .sec{
+            width: 2px;
+            height: 50%;
+            background-color: red;
+            margin: 0 auto;      
+        }
+
+        @keyframes run{
+            from{
+                transform: rotateZ(0);
+            }
+            to{
+                transform: rotateZ(360deg);
+            }
+        }
+
+
+                /*将六张图片拼成一个立方体*/
+/*
+        
+
+
+
+
+
+*/
+
+
+
+    </style>
+</head>
+<body>
+    <!-- 表的容器 -->
+    <div class="clock">
+        <!-- 时针容器 -->
+        <div class="hour_wapper">
+            <div class="hour"></div>
+        </div>
+        <!-- 分针容器 -->
+        <div class="min_wapper">
+            <div class="min"></div>
+        </div>
+        <!-- 秒针容器 -->
+        <div class="sec_wapper">
+            <div class="sec"></div>
+        </div>
+
+    </div>
+</body>
+</html>

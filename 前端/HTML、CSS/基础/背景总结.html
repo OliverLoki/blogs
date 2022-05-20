@@ -1,0 +1,142 @@
+<!-- 
+      background-color: ;
+      background-attachment: ;
+      background-image: ;
+      background-position: ;
+      background-repeat: ;
+      background-size: ;
+      background-clip: ;
+      background-origin: ;
+
+    background 简写得注意事项;
+    1· background-origin在background-clip的前面
+    2·background-size必须在background-position的后边，且用隔开
+ -->
+
+ <!-- 导航条渐变背景，可以截取一个像素做背景，水平方向平铺-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style class="type/css">
+    
+    /*
+    ··使用background-color 设置背景颜色
+    ··使用background-image来设置背景图片
+
+        ·如果图片大于元素，默认显示左上角，如果图片和元素一样大，则全部显示，如果图片小于元素，则默认平铺填充
+        ·可以同时为一个元素设置背景颜色和背景图片，这样背景颜色会作为背景图片的底色，一般设置图片的时候都会指定一个背景颜色
+
+    ·设置图片重复
+        可选值
+        repeat:默认值，x，y方向重复
+        no-repeat:不重复
+        repeat-x;   在x方向重复
+        repeat-y； 
+  
+    ·用background-position来调整图片在元素中的位置
+        top left:坐上
+        center center：居中
+    ·也可以直接指定两个偏移量；
+        background-position：100px  0px；（可以是负值）
+      
+    ·设置背景图片是否随页面一起滚动  
+        background-attachment
+            可选值：
+            scroll：默认值  随窗口滚动而滚动
+            fixed：不随页面滚动而滚动（一般设置给body）
+    */
+  *{
+      margin: 0xp;
+      padding: 0px;
+  }
+    .box1{
+        width:450px;
+        height: 300px;
+        /*不用在意顺序的要求，谁在前在后都可以，数量也没有要求*/
+        /*至少需要两个值确定图片在元素中的位置*/ 
+        /*no-repeat导致图片变短是因为起点不同,通过background-origin 设置偏移量计算原点*/
+        background-origin:padding-box;
+        background-position: 0 0;
+        background:red url(/周杰伦.jpg) no-repeat;
+        /*0-1之间的值，表示透明程度*/
+        opacity: 0.9;
+        /*
+        设置背景得范围
+        background-clip
+            可选值:
+                boder-box  (默认值，边框有背景)
+                padding-box  (边框没有背景,内容区和内边距有)
+                content-box   (背景只出现在内容区)
+        */
+        background-clip: content-box;    
+        background-size:450px 300px;
+        /*
+        可选值:
+            200px 200px
+            200px auto
+            cover  图片比例不变，将元素铺满
+            contain   比例不变，在元素中完整显示
+        */
+      
+        overflow: auto;
+    }
+    .box2{
+        width: 200px;
+        height: 1000px;
+        background-image: url(/ji.png);
+        background-size: 200px auto;
+        /*注意这一点*/
+        background-attachment: scroll;
+        background-repeat: no-repeat;
+    }
+
+    .box3{float: left;
+        border:10px red double ;
+        width: 200px;
+        height: 500px;
+        padding: 50px;
+        background:turquoise url(ji.png) center center/contain border-box padding-box no-repeat;
+    }
+    
+    .box4{
+        margin: 0 40px;
+        float:left;
+        border:10px red double ;
+        width: 200px;
+        height: 500px;
+        padding: 50px;
+        background:turquoise url(ji.png) center center/contain border-box border-box no-repeat;
+    }
+    .box5{
+        float:left;
+        border:10px red double ;
+        width: 200px;
+        height: 500px;
+        padding: 50px;
+        background:turquoise url(ji.png) center center/contain border-box content-box no-repeat;
+    }
+
+
+    </style>
+</head>
+<body>
+
+        <div class="box1">
+            box1
+            <div class="box2">
+                box2
+            </div>
+        </div>
+
+        <div class="box3">box3</div>
+        <div class="box4">box4</div>
+        <div class="box5">box5
+    
+        </div>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }   
+        /*设置图片容器
+        将ul得大小设置为一张图片大小*/
+        .img_list{
+         
+            width: 4000px;
+            height: 2248px;
+            margin: 100px auto;
+            /*做父元素，不设置偏移量不会有影响*/
+            position: relative;
+        }
+        .img_list li{
+            position:absolute;
+        }
+        .img_list li:nth(4){
+            z-index: 1;
+        }
+        .pointer{
+             position: absolute;
+             /*层级高防止被图片盖住*/
+             z-index: 9999;
+             top:2100px;
+             left: 50px;
+        }        
+        .pointer a{
+            /*内联元素脱离文档流变为块元素*/
+            float: left;
+            /*圆得大小*/
+            width: 100px;
+            height: 100px;
+            /*将背景颜色设置到内容区，边框和内边距不再有背景色*/
+            background-clip: content-box;
+            background-color: rgba(255, 255, 255, .3);
+            /*设置为圆形*/
+            border-radius: 50%;
+            margin-left: 100px;
+            /*解决原型一大一小*/
+            border:20px solid transparent;
+        }
+        .pointer a.active,
+        .pointer a:hover{
+            background-color: #fff;
+            border: 20px solid rgba(255, 255, 255, .3);
+        }
+    </style>
+</head>
+<body>
+    <ul class="img_list">
+        <li><a href="#"><img src="img/IMG_0385.JPG" alt=""></a></li>
+        <li><a href="#"><img src="img/IMG_0386.JPG" alt=""></a></li>
+        <li><a href="#"><img src="img/IMG_0388.JPG" alt=""></a></li>
+        <li><a href="#"><img src="img/IMG_0389.JPG" alt=""></a></li>
+        <li><a href="#"><img src="img/IMG_0391.JPG" alt=""></a></li>
+        <div class="pointer">
+            <a class="active" href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+        </div>
+    </ul>
+</body>
+</html>

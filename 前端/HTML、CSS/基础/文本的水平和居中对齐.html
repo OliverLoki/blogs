@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    /*水平对齐*/
+    /*
+    text-align:;
+    可选值：
+    left 左对齐
+    right 右对齐
+    center 居中对齐
+    justify 两端对齐
+    */
+    /*垂直对齐*/
+    /*
+    vertical:;
+    可选值：
+    baseline 基线对齐
+    top 顶部对齐
+    bottom 底部对齐
+    middle 居中对齐
+    */
+    /*文本其他样式*/
+    /*
+    text-decoration:underline red;
+    可选值:
+    underline 下划线
+    line-through 删除线
+    overline 上划线
+    */
+
+    /*设置溢出文本格式*/
+    .box{
+        width:200px;
+        /*
+        white-space 网页如何处理空白
+            可选值;
+            normal 正常
+            nowrap 不换行
+            pre 保留空白
+        */
+        white-space: nowrap;
+        overflow: hidden;
+        /*文本溢出得*/
+        text-overflow: ellipsis;
+    }
+    </style>
+</head>
+<body>
+    
+    <!-- 
+        p标签中引入图片，会导致底部有一个缝隙
+        通过vertical ：top;可解决
+     -->
+     <div class="box">
+         i am a good god boy i am a good god boyi am a good god boyi am a good god boy
+     </div>
+     <div class="box2">今天天气好</div>
+</body>
+</html>

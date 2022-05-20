@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+    使用媒体查询
+        ·语法 ： @media 查询规则{}
+            媒体类型：
+                all     所有设备
+                print   打印机
+                screen  带屏幕设备
+                speech  屏幕阅读器
+                可以使用逗号连接多个媒体类型
+
+        */
+        @media print,screen{
+            body{
+                background-color: #bfa;/*对所有设备生效*/
+            }
+        }
+        /*
+        媒体特性
+            min-width 视口的宽度（不能比这个小）
+            max-eidth(不能比这个大)
+            height 视口高度(一般不管)
+        */
+        @media(max-width:500px) and (min-width: 200px){
+            body{
+                background-color:orange;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- 
+        响应式布局
+            -网页可以根据不同的设备或窗口呈现出不同的效果
+            -使用响应式布局，可以使4一个网页适用于不同设备
+            -响应布局的关键是媒体查询
+            -
+     -->
+</body>
+</html>

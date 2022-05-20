@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小球跌落</title>
+    <style>
+    .box1{
+            height: 500px;
+            border-bottom:10px solid black;
+            
+            overflow: hidden;
+        }
+
+        .box2{
+            margin-left: 500px;
+            width: 100px;
+            height: 100px;
+            background-color: #bfa;
+            border-radius: 50%;
+            animation: ball 1s forwards ease-in;
+        }
+        
+        /*下落动画*/
+        @keyframes ball{
+            from{
+                margin-top: 0px;
+            }
+            20%,60%,to{
+                margin-top: 400px;
+                animation-timing-function: ease-in;
+            }
+            40%{
+                margin-top:100px ;
+            }
+            80%{
+                margin-top: 200px;
+            }
+        
+        }
+    </style>
+</head>
+<body>
+    
+<div class="box1">
+    <div class="box2">
+    </div>
+</div>
+
+
+
+</body>
+</html>

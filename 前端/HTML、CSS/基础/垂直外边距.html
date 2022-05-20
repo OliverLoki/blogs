@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style class="text/css">
+    .box1{
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        margin-bottom: 100px;
+    }
+    /*为上边元素设置一个下外边距
+    垂直方向得相邻外边距会发生外边距重叠
+    取最大值（不是求和）
+    给子元素设置垂直外边距会传递给父元素
+    
+    */
+    .box2{
+        width: 200px;
+        height: 200px;
+        background-color: green;
+    }
+    .box3{
+        width: 200px;
+        height: 200px;
+        background-color:red;
+        border-top: 200px;
+
+        /*为box3设置一个上边框
+        或者设置padding*/
+    }
+    .box4{
+        width: 100px;
+        height: 100px;
+        background-color:yellow;
+    }
+    
+    
+    
+    
+    </style>
+
+
+
+</head>
+<body>
+    <div class="box1"></div>
+    a
+
+
+    <div class="box2"> </div>
+    <div class="box3">
+        <div class="box4"></div>
+    </div>
+    
+</body>
+</html>

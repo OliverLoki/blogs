@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+/*
+link用来表示没访问过的链接(正常的)
+*/
+a:link{
+    color: royalblue;
+}
+/*
+visited用来表示没访问过的链接
+由于隐私原因，visited只能修改链接颜色
+*/
+a:visited{
+    color: green;
+}
+/*
+hover用来表示鼠标移入状态
+*/
+a:hover{
+    color: blue;
+}
+/*
+hover用来表示鼠标点击状态
+*/
+a:active{
+    font-size: 20px;
+}
+
+
+    </style>
+</head>
+<body>
+    
+
+<!-- 
+    使用a标签创建一个超链接
+
+    属性：
+    herf：指向链接跳转目标地址
+    target:target属性可以用来指定打开链接的位置
+        可选值：
+        _self,表示在当前窗口打开（默认值）
+        _blank,打开一个新的窗口 
+    
+     瞄点链接：属性herf值为#时，点击超链接会到当前页底部
+
+     <a id="top" href="#">去底部</a>
+     
+     <a href="#top">回到顶部</a>
+     
+    id不能重复
+    
+
+-->
+<center>
+    使文字居中显示
+</center>
+<!-- 
+    超链接的伪类
+ -->
+ <a href="#">没问过的超链接</a>
+ <br><br>
+ <a href="#">访问过的超链接</a>
+
+
+</body>
+</html>

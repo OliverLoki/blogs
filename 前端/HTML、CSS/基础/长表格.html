@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        table{
+            margin: 0 auto;
+            width: 50%;
+            border: 1px solid black;
+            /*边框之间的距离*/
+            border-spacing: 0px;
+            /*设置边框的合并*/
+            /* border-collapse:collapse; */
+            background-color: lightcoral;
+        }
+        td,tr,th{
+            border: 1px solid black;
+        }
+        table tr:nth-child(odd){
+            background-color: #bfa;
+        } 
+        table tr:hover{
+            background-color: gray;
+        } 
+        
+    </style>
+</head>
+<body>
+    <table>
+        <!--在一些情况下表格是非常长的，
+            这时将表格分为3个部分表头，表格的主体，表格底部
+            在HTML中提供了3个标签
+            thead 表头
+            tbody 表格主体
+            tfoot 表格底部
+
+            作用：区别表格的不同部分
+            均为table的子标签，直接写到table中，tr写在这些标签当中
+            横向合并：cowspan
+            纵向合并：rowspan
+          -->
+
+    <tr>
+        <th>日期</th>
+        <th>收入</th>
+        <th>支出</th>
+        <th>合计</th>
+    </tr>
+
+     <tr>
+          <td>10.24</td>
+          <td>500</td>
+          <td>300</td>
+          <td>200</td>
+     </tr>
+     <tr>
+        <td>10.24</td>
+        <td>500</td>
+        <td>300</td>
+        <td>200</td>
+    </tr>
+    <tr>
+        <td>10.24</td>
+        <td>500</td>
+        <td>300</td>
+        <td>200</td>
+    </tr>
+    <tr>
+        <td>10.24</td>
+        <td>500</td>
+        <td>300</td>
+        <td>200</td>
+    </tr>
+    <tr>
+        <td>10.24</td>
+        <td>500</td>
+        <td>300</td>
+        <td>200</td>
+    </tr>
+    <tr>
+        <td>10.24</td>
+        <td>500</td>
+        <td>300</td>
+        <td>200</td>
+    </tr>   
+
+    <td colspan="2"></td>
+    <td>合计</td>
+    <td>100</td>
+
+    </table>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淘宝导航</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        /*设置外层容器*/
+        .nav_wapper{
+            width:100% ;
+
+        }
+        /*设置每一行容器*/
+        .nav_inner{
+            display: flex;
+
+        }
+        .item{
+            /*通过设置元素大小和主轴上空白处理解决元件之间的问题*/
+            width: 18%;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .item img{
+            width: 100%;
+        }
+        .item a{
+            font-size: 16px;
+            text-decoration: none;
+            color: #333;
+            
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="nav_wapper">
+       <div class="nav_inner">
+            <div class="item">
+                <a href="#">
+                    <img src="../img/淘宝/1.png">
+                    <span>天猫</span>
+                </a>
+            </div>    
+            <div class="item">
+                <a href="#">
+                    <img src="../img/淘宝/2.png">
+                    <span>抵钱</span>
+                </a>
+            </div>  
+            <div class="item">
+                <a href="#">
+                    <img src="../img/淘宝/3.png">
+                    <span>拍卖</span>
+                </a>
+            </div>  
+            <div class="item">
+                <a href="#">
+                    <img src="../img/淘宝/4.png">
+                    <span>超市</span>
+                </a>
+            </div>  
+            <div class="item">
+                <a href="#">
+                    <img src="../img/淘宝/5.png">
+                    <span>超市</span>
+                </a>
+            </div>  
+            
+       </div>
+       <div class="nav_inner">
+        <div class="item">
+            <a href="#">
+                <img src="../img/淘宝/6.png">
+                <span>充值</span>
+            </a>
+        </div>    
+        <div class="item">
+            <a href="#">
+                <img src="../img/淘宝/7.png">
+                <span>聚划算</span>
+            </a>
+        </div>  
+        <div class="item">
+            <a href="#">
+                <img src="../img/淘宝/8.png">
+                <span>进口商品</span>
+            </a>
+        </div>  
+        <div class="item">
+            <a href="#">
+                <img src="../img/淘宝/9.png">
+                <span>旅行</span>
+            </a>
+        </div>  
+        <div class="item">
+            <a href="#">
+                <img src="../img/淘宝/10.png">
+                <span>分类</span>
+            </a>
+        </div> 
+       </div>
+    </nav>
+
+
+
+</body>
+</html>

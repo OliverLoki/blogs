@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .box1{
+        width: 200px;
+        height: 200px;
+        background-color: #bfa;
+        transform:translateX(-100px)
+    }
+    /*
+    变形不会影响布局
+        通过函数
+        平移：translatX()   translatY()  translatZ()  如果是百分比，则相对于自身计算
+    */
+    .box2{
+        width: 200px;
+        height: 200px;
+        background-color: orange;
+        margin: 0 auto;    
+    }
+    .box3{
+        /*设置居中*/ 
+        background-color: orange;
+        position: absolute;
+        left: 50%;/*相对于包含块左侧的50%*/
+        top: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .box4{
+        width: 220px;
+        height: 300px;   
+        background-color: palegreen;
+        transition: all .3s;
+
+    }
+    .box4:hover{
+        transform: translateY(-4px);
+        box-shadow: 0 0 10px rgba(0, 0,0,.5);
+    }
+    /*设置当前网页的视距为800，（600~1200）*/
+    html{
+        perspective: 800px;
+    }
+    .box5{
+        width: 220px;
+        height: 300px;
+        background-color: plum;
+        /*z轴平移————调整元素和人眼之间的距离（距离越大，元素离人越近）*/
+        /*默认情况下不支持透视，需要给网页设置一个视距*/
+        transition: 2s;
+    }
+    body:hover .box5{
+        transform: translateZ(800px);
+    }
+    .box6{
+        width: 220px;
+        height: 300px;
+        background-color: palegreen;
+        transition: 2s;
+    }
+    .box6:hover{
+        box-shadow: 0 0 10px rgba(0, 0,0,.5);
+        transform: rotatex(65deg) rotateY(50deg);
+
+        /*设置图片的背面是否显示 backface-visibility: visible; */
+    }
+
+    /*缩放*/
+    /*
+    transform:scaleX();
+    scaleY() 垂直方向按倍数缩放
+    scale()双方向
+    给img标签设置后，鼠标移入，元素内图片放大
+    */
+
+    </style>
+</head>
+<body>
+
+<center>
+    <div class="box1">相对于自身向左平移</div><br>
+    <div class="box2">对比块</div><br>
+    <div class="box4">hover效果</div><br>
+    <div class="box5">z轴平移</div><br>
+    <div class="box6">旋转</div>
+</center>
+
+
+     <div class="box3">我可以在包含块中居中显示</div>
+</body>
+</html>

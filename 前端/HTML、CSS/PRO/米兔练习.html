@@ -1,0 +1,54 @@
+<!-- 
+    动画和过渡类似
+    设置动画效果，必须要先设置一个关键帧
+
+     /*设置box2的动画*/
+    /*要对当前帧元素生效的关键帧的名字*/
+    animation-name: text;
+    /*动画的执行时间（必须要有）*/
+    animation-duration: 2s;
+    /*动画的执行次数*/
+    animation-iteration-count: infinite;
+    /*动画执行方向
+    反方向： reverse(反向)  alternate（正向-》反向）
+    */
+    animation-direction: normal;
+    /*设置动画执行状态
+    animation-play-state: running;   &&pause
+    用在伪类
+    */
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>米兔动画</title>
+    <style>
+        .box1{
+            height: 271px;
+            width: 132px;
+            margin: 0 auto;
+            background-image: url(../img/米兔.png);  
+            animation: run 1s steps(4) infinite;
+        }
+        /*设置一个关键帧*/
+        @keyframes run{
+            /*动画的开始位*/
+            from{
+                background-position: 0 0;
+            }
+            /*动画的结束位*/
+            to{
+                background-position: -523px 0;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="box1">
+      
+    </div>
+</body>
+</html>

@@ -1,23 +1,6 @@
-# About Loki
+# About this repository
 
-**Hi there，This is Loki**
-
-+ :watermelon: 20岁的boy，一名双非软件工程专业的大三在校生
-+ :ear_of_rice: 对Java语言相关的服务器端开发比较熟悉，也在折腾网络、区块链和一些好玩的东西
-+ :rabbit: 闭门造车走了很多弯路，所以到现在大三下的暑假也没有找到合适的暑期实习，准备沉下心来准备秋招，
-+ :haircut: 很不专业的斯诺克和乒乓球运动员，人文摄影、小楷爱好者，喜欢旅游，喜欢折腾，经常让自己处于劳累、不健康的状态
-
-
-
-# About this special repository
-
-这个仓库主要起到两点作用
-
-1. **仓库的README.md作为个人自述文件**
-
-   > Github中，使用与GitHub 用户名匹配的名称创建仓库，GitHub 将在您的个人资料页面显示您的个人资料自述文件
-
-2. **通过Github repo来记录Loki的个人博客，[仓库博客详情戳这个~](https://github.com/OliverLoki/OliverLoki)，算是Loki的个人笔记初版，但是东西会比较多，完善的内容会发布在其他内容创作平台**
+**通过Github repo来记录Loki的个人博客，算是Loki的个人笔记初版，但是东西会比较多，完善的内容会发布在其他内容创作平台**
 
 
 

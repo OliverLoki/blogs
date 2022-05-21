@@ -1,6 +1,22 @@
-# [About this repository
+# About this repository
 
-**通过Github repo来记录Loki的个人博客，算是Loki的个人笔记初版，但是东西会比较多，完善的内容会发布在其他内容创作平台**
+**通过Github repo来记录Loki的个人博客，内容也会发布在其他内容创作平台**
+
+
+
+**内容如下，会持续更新**
+
++ Java系列：JavaSE入门与进阶、JVM、Java并发编程、JavaWeb
+
++ 计算机基础系列：计算机网络、操作系统、数据结构与算法等
++ Web应用框架：Spring、Springboot
++ Web服务器：Tomcat、Nginx、Netty
++ ORM框架：Mybatis、Mybatis-plus、JPA
++ 认证与授权：JWT、Shiro、SpringSecurity等
++ 分布式架构：
++ 微服务：
++ 开发工具：Git、Maven、IDEA
++ 常用中间件：Docker、ElasticSearch、RabbitMQ
 
 
 
@@ -10,14 +26,12 @@
 
 **注：**
 
-+ 以下为Loki的技术栈整理与归档，如果有什么纰漏之处被您看到请及时指正、交流、共同进步
-
 + 由于任务列表的粒度较粗，所以没有打勾可能是处于学习阶段，但是没有完结，也有可能是准备去学这门技术
 
-+ Tag说明
-
-  + `todo` -> 待办清单
-  + `wait` -> 太忙了~，先搁置一会儿
++ ~~Tag说明~~
++ ~~`todo` -> 待办清单~~
+  + ~~`wait` -> 太忙了~，先搁置一会儿~~
++ 如果有什么纰漏之处被您看到请及时指正、交流、共同进步
 
 ## 计算机内功基础
 
@@ -27,19 +41,16 @@
 - [ ] 计算机网络系列：TCP协议
 - [ ] 计算机网络系列：IP协议 
 
-### 计算机组成原理
-
-- [ ] todo
-
 ### 操作系统
 
-- [ ] Linux入门 `todo`
+- [ ] Linux入门
 - [ ] 进程调度算法
 
 ### 数据结构与算法
 
-- [ ] Leetcode刷题专栏（每日更新）： 0 
-- [ ] Java手撕数据结构 `ing`
+- [ ] Leetcode刷题专栏（每日更新）题量： 
+- [ ] Java手写常见数据结构
+- [ ] Java手写常用算法
 
 ### UML：统一建模语言
 
@@ -56,7 +67,7 @@
 
 ### JVM
 
-+ [ ] JVM入门：内存结构、类加载、垃圾回收
++ [x] [JVM入门：内存结构、类加载、垃圾回收](blog.csdn.net/Night__breeze/article/details/124253231)
 
 ### Java并发编程
 
@@ -72,18 +83,14 @@
 ### MySQL
 
 - [ ] [MySQL入门]()
+- [ ] 
 
 ### Redis
 
 - [ ] [Redis入门](https://blog.csdn.net/Night__breeze/article/details/123778708)
+- [ ] 
 
 ### MongoDB `todo`
-
-
-
-
-
-
 
 ## Web应用框架
 
@@ -111,7 +118,7 @@
 
   - [x] [Mybatis系列整合](https://blog.csdn.net/Night__breeze/article/details/124792108)
 
-+ JPA 
++ Mybatis-plus
 
   
 
@@ -123,15 +130,11 @@
 - [ ] Docker compose
 - [ ] Docker 容器连接
 
-
-
 ### ElasticSearch
 
+- [ ] ElasticSearch入门
 
-
-
-
-## 认证授权
+## 认证与授权
 
 - [x] [JWT](blog.csdn.net/Night__breeze/article/details/123937833)
 - [x] [前后端分离中SpringBoot优雅的整合Shiro+Jwt](https://blog.csdn.net/Night__breeze/article/details/124016688)
@@ -151,6 +154,10 @@
 
 
 
+
+
+
+
 ## 开发工具
 
 + Idea优化与整合
@@ -159,7 +166,7 @@
     + [x] [Git系列整合]()
     + [ ] Git实践与进阶
 
-+ **Maven——java包管理工具**
++ Maven——java包管理工具
     + [x] Maven基础
 
 

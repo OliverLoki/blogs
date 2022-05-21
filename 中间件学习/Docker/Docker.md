@@ -64,7 +64,7 @@ Docker 镜像，也称为 `image` 是一个特殊的文件系统，除了提供�
 
 比如我们想要搜索自己想要的镜像：
 
-[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-qhMEtiZk-1651827951265)(D:\桌面\P_picture_cahe\Screen Shot 2019-11-04 at 8.21.39 PM.png)]
+![](https://s2.loli.net/2022/05/21/SNiFE15r6jyYs42.png)]
 
 在 Docker Hub 的搜索结果中，有几项关键的信息有助于我们选择合适的镜像：
 
@@ -93,7 +93,7 @@ Docker 镜像，也称为 `image` 是一个特殊的文件系统，除了提供�
 
 **[《Docker 从入门到实践](https://yeasy.gitbook.io/docker_practice/introduction/why) 这本开源书籍中也已经给出了使用 Docker 的原因**
 
-[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-YiMEQh4p-1651827951265)(D:\桌面\P_picture_cahe\20210412220015698.png)]
+![](https://s2.loli.net/2022/05/21/NfZjIcn7i2KXdq1.png)]
 
 
 

@@ -1529,10 +1529,10 @@ public class DeadLockDemo {
 + `Collections.synchronizedSet` -> `CopyOnWriteArraySet`
 + `HashTable` -> `Collections.synchronizedMap` -> `ConcurrentHashMap`
 
-注：
+**注：**
 
-1. Vector和HashTable因为性能原因被弃用，通过`synchronized`修饰代码块实现线程安全
-2. Collections工具类也是通过使用`synchronized`代码块实现线程安全，效率不高，代码如下，但是这种方式也不常用
+1. **Vector和HashTable因为性能原因被弃用，通过`synchronized`修饰代码块实现线程安全**
+2. **Collections工具类也是通过使用`synchronized`代码块实现线程安全，效率不高，代码如下，但是这种方式也不常用**
 
 > **Collections针对每种集合都声明了一个线程安全的包装类，作为方法的返回值**
 
@@ -1641,19 +1641,44 @@ public CopyOnWriteArraySet() {
 
 # 十、JUC常用类详解
 
-## CountDownLatch
+## CountDownLatch类
+
+CountDownLatch类位于java.util.concurrent包下，利用它可以实现类似计数器的功能。比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了
+
+
+
+CountDownLatch类只提供了一个构造器
+
+```java
+public CountDownLatch(int count) {
+        if (count < 0) throw new IllegalArgumentException("count < 0");
+        this.sync = new Sync(count);
+    }
+```
+
+然后下面这3个方法是CountDownLatch类中最重要的方法
+
+```java
+public void await() throws InterruptedException { };   //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+public boolean await(long timeout, TimeUnit unit) throws InterruptedException { };  //和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+public void countDown() { };  //将count值减1
+```
 
 
 
 
 
-## CyclicBarrier
+## CyclicBarrier类
 
 
 
 
 
-## Semaphore
+## Semaphore类
+
+
+
+
 
 
 

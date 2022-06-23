@@ -1,5 +1,3 @@
-  
-
 > Linux是自由、开源的操作系统，安装在计算机的硬件之上，是用来操作计算机硬件和软件资源的系统软件，一般应用于专业的web服务器上，具有以下特性
 >
 > + Linux注重系统的安全性，对文件访问权限有严格设定，最高权限账户为`root`用户，可以操作一切，详见第三章
@@ -380,7 +378,9 @@ mv #移动文件或者目录|重命名文件
 	mv lokistudy lokistudy2 #重命名文件夹名
 ```
 
-## 文件内容查看
+## 文件管理
+
+> 内容查看
 
 Linux系统中使用以下命令来查看文件的内容:
 
@@ -397,6 +397,504 @@ tail #只看尾巴几行 通过-n参数来控制显示几行
 
 + 常用的有 `cat`,` nl`,`less`
 + 退出查看使用 `q`
+
+> 创建空文件
+
+```
+touch [参数] [文件名]
+```
+
+
+
+## 搜索查找命令
+
+> find命令：将从指定目录向下递归地遍历其各个子目录，将满足条件的文件显示在终端
+
+```
+find  [搜索范围] [选项]
+```
+
+可选参数
+
++ -name：按名称查找
++ -user：查找属于指定用户的所有文件
++ -size：按照指定大小查找文件
+
+```bash
+find /home -name "*.txt"
+find /home -user loki
+#查找Home目录下大于10M的文件
+find /home -size +10M
+```
+
+> locate快速定位文件路径
+
+locate指令利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件。Locate 指令无需遍历整个文件系统，查询速度较快。为了保证查询结果的准确度，管理员必须定期更新locate时刻。
+
++ 执行更新操作
+
+```
+update db
+```
+
+语法
+
+```
+locate [文件名]
+```
+
+> 查询Linux命令所在的目录
+
+```
+which [命令]
+whereis [命令]
+```
+
+例如
+
+```
+which ls
+whereis ls
+```
+
+> grep：过滤查找
+
+```
+#找到后缀名为.cfg的
+ls | grep .cfg
+```
+
+> Linux管道符，`|` ，表示将前一个命令的处理结果输出传递给后面的命令处理
+
+```
+#wc是Linux自带的统计，全称word count
+ls | wc
+```
+
+## 压缩相关命令
+
+> gzip和gunzip
+
+```
+gzip [文件名]
+```
+
++ 只能将文件压缩为 .gz 格式文件
++ 不能压缩目录
++ 不保留原来的文件
+
+```
+gunzip [文件名]
+```
+
+> zip和unzip
+
+```
+zip [压缩文件名称] [原文件名] -r [可指定压缩目录]
+```
+
++ 支持目录压缩
+
++ 保留原文件
+
++ 示例
+
+  ```
+  zip nginx.zip nginx -r /usr/root
+  ```
+
+```
+unzip [文件名] -d [解压缩文件目录]
+```
+
+> tar
+
+语法
+
+```
+tar [可选项] [-f 压缩文件名称] [原文件/目录名]
+#文件可以有多个，用空格断开
+```
+
++ -c：产生.tar打包文件
++ -v：显示详细信息
++ -f：指定压缩后文件名
++ -z：调用系统的gzip/gunip工具
++ -x：解压.tar文件
++ -C：解压到指定目录
+
+**示例**
+
+压缩
+
+```bash
+tar -zcvf nginx.tar.gz nginx-1.21.6 
+```
+
+解压
+
+```bash
+tar -zxvf nginx.tar.gz -C /user/loki/tmp
+```
+
+## 目录/磁盘/内存使用情况查询
+
+> 目录占用的磁盘空间
+
+注：使用`ls -lh`查看到的文件大小，并不是当前目录的真实大小
+
+因此执行du命令来查看
+
+```bash
+#指定目录文件大小,只显示总和
+du [目录/文件] -sh
+#分别显示目录下文件大小和总和
+du [目录/文件] -ch
+```
+
+> 磁盘占用情况：`df -h` 
+
+示例
+
+```
+[root@cento]# df -h
+文件系统       大小  已使用  剩余 百分比   挂载点
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        908M     0  908M   0% /dev
+tmpfs           919M   24K  919M   1% /dev/shm
+tmpfs           919M  620K  919M   1% /run
+tmpfs           919M     0  919M   0% /sys/fs/cgroup
+/dev/vda1        40G  5.4G   33G  15% /
+tmpfs           184M     0  184M   0% /run/user/0
+```
+
++ tmpfs是指临时文件系统
++ shm指共享内存 sharedmemory
+
+> 内存使用情况：`free -h`
+
+```
+[root@centos ~]# free -h
+              total        used        free      shared  buff/cache   available
+Mem:           1.8G        890M        283M        648K        663M        754M
+Swap:            0B          0B          0B
+```
+
+## 设备挂载管理
+
+> 查看设备挂载信息：`lsblk`
+
+```
+[root@VM-16-12-centos ~]# lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sr0     11:0    1 184.1M  0 rom  
+vda    253:0    0    40G  0 disk 
+└─vda1 253:1    0    40G  0 part /
+overlay          40G  5.4G   33G  15% /var/lib/docker/overlay2/f399908693a01d31f6c45de83f0d132e6fececaf35309a192c5b2389f60de7e4/merged
+```
+
++ IDE硬盘：hda(如果是第二块硬盘就叫做hdb，以此类推)
++ SATA硬盘（个人电脑使用，容量大，成本低）：sda(如果是第二块硬盘就叫做sdb，以此类推)
++ SCSI硬盘（服务器使用）：sda(如果是第二块硬盘就叫做sdb，以此类推)
++ vda:虚拟化模拟设备硬盘
+
+> mount/unmount 挂载/卸载
+
+对于Linux用户来讲，不论有几个分区，分别分给哪一一个目录使用，它总归就是一个根目录、一个独立且唯一的文件结构。Linux中每个分区都是用来组成整个文件系统的一部分，它在用一种叫做“挂载”的处理方法，它整个文件系统中包含了一整套的文件和目录，并将一个分区和一个目录联系起来，要载入的那个分区将使它的存储空间在这个目录下获得
+
+```
+mount [设备名称] [挂载点]
+```
+
+```
+umount [设备名称/挂载点]
+```
+
+> 自动挂载配置 `/etc/fstab`
+
+分析这个文件，有6列
+
+1. UUID 
+2. 文件挂载点
+3. 文件系统类型
+4. 默认方式安装
+5. kdump，值为0代表不备份，1代表每天备份
+6. 文件系统的检查
+
+```
+UUID   /   ext4    defaults   1    1
+```
+
+因此，想要开机自动挂载一个光盘的话，我们可以这样做
+
+```
+[设备全限定路径] [挂载点] [文件系统类型] defaluts 0 0
+```
+
+## 磁盘分区管理
+
+查看当前磁盘分区信息
+
+```
+fdisk -l
+```
+
+> 场景：如何将一块硬盘添加到当前系统并进行使用
+
+1. 将硬盘外挂给设备
+
+2. 重启设备
+
+3. 添加一块磁盘，通过 `fdisk -l` 命令找到新挂载的磁盘目录
+
+   ```
+    fdidk [磁盘目录]
+   ```
+
+4. 之后根据提示进行相关操作
+
+**注：**
+
++ Linux一块磁盘最多拓展四个主分区，十六个分区
+
+> + **一个正在执行的程序或命令，称为进程**
+>
+> + **启动后常驻内存的进程，被称为服务（守护进程）**
+>
+
+## 服务管理：状态、启动、重启、停止、开机自启动
+
+> 基本语法
+
+```bash
+systemctl start|stop|restart|status [服务名]
+```
+
+> 查看服务的方法
+
+```bash
+cd /usr/lib/systemd/system
+ls -al
+```
+
+> 开机自启动服务配置
+
+图形化界面命令:`setup`，进入后通过空格键勾选	
+
+```
+setup
+```
+
+命令行方式设置开机自启动和关闭
+
+```
+systemctl enable [服务名]
+systemctl disable [服务名]
+```
+
+通过`systemctl status [服务名]` ，可以看出当前服务是否开机自启动，如下例所示
+
+```bash
+[root@VM-16-12-centos system]# systemctl status nginx
+● nginx.service - nginx
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+   Active: active (running) since Sun 2022-05-08 00:01:32 CST; 1 months 12 days ago
+ Main PID: 32377 (nginx)
+    Tasks: 2
+   Memory: 2.6M
+   CGroup: /system.slice/nginx.service
+           ├─32377 nginx: master process /usr/local/nginx/sbin/nginx
+           └─32378 nginx: worker process
+
+May 08 00:01:32 VM-16-12-centos systemd[1]: Starting nginx...
+May 08 00:01:32 VM-16-12-centos systemd[1]: Started nginx.
+
+```
+
+其中，这一段说明了nginx服务开机自启动是关闭的
+
+```
+Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+```
+
+> 列举所有的服务单元以及是否开机自启动
+
+注：static状态说明暂时无法判断是否开机自启动
+
+```
+systemctl list-unit-files
+```
+
+## Linux防火墙管理
+
+```bash
+systemctl enable firewalld
+systemctl disable firewalld
+systemctl status firewalld #查看防火墙状态
+systemctl start firewalld
+systemctl stop firewalld
+```
+
+## 进程管理
+
+> 查看当前系统进程状态
+
+直接调用ps只显示当前用户调用的进程和当前控制台关联的进程
+
+```
+ps
+```
+
+**`ps`基本语法**
+
+```bash
+#查看系统中所有进程
+ps aux | grep xxx
+#可以查看父子进程的关系(PPID)
+ps -ef | grep xxx 
+```
+
+选项说明
+
++ a：列出带有终端的所有用户的进程（不显示后台进程）
++ x：列出当前用户的所有进程（包含后台进程）
++ u：用户友好的风格显示
++ -e：列出所有进程
++ -u：列出某个用户关联的所有进程
++ -f：显示完整格式的进程列表
+
+> 进程状态详解
+
+todo
+
+> 进程的终止
+
+```bash
+#终止进程
+kill [选项] [进程pid]
+#终止该进程和相关进程，谨慎使用
+killall [进程pid] 
+```
+
++ -9：强行终结进程
+
+> 查看进程树
+
+```
+pstree [可选参数]
+```
+
++ -p：显示进程id
++ -u：显示进程所属用户
+
+如果没有该命令，则执行安装命令
+
+```
+yum install pstree
+```
+
+> 实时监控进程状态
+
+```
+top [可选参数]
+```
+
++ -d：指定每隔几秒刷新，默认是3秒
++ -i：不显示闲置火鹤僵死进程
++ -p：监控指定id的进程状态
+
+## 网络状态和端口监控：netstat
+
++ ping：查看网络连通性
++ ifconfig：查看网络连接和信息
+
+以上命令局限性比较大
+
+> `netstat`：显示网路状态和端口占用信息
+
+**基本语法**
+
+```bash
+#查看某一进程网络信息
+netstat -anp | grep [进程id、进程名]
+#查看网络端口号占用情况
+netstat -nlp| grep [端口号 
+```
+
++ -a：显示正在监听和未监听的套接字
++ -n：拒绝显示别名，尽量转化为数字
++ -l：仅列出在监听的服务状态
++ -p：表示显示那个进程在调用
+
+
+
+## 系统定时任务：crontab
+
++ 可以用来做数据库定时备份
+
+crontab需要在后台运行一个守护进程`crond`
+
+```
+systemctl status crond
+```
+
+如果没有开始需要启动这个服务
+
+
+
+> **语法**
+
+```
+crontab [可选参数]
+```
+
++ -l：查询crontab定时任务
++ -e：编辑定时任务
++ -r：删除当前用户所有的crontab任务
+
+执行`crontab -e`，打开vim编辑器编辑你的工作，语法如下
+
+```
+* * * * * [需要执行的命令]
+```
+
+总共有五个*号，意义依次如下
+
+1. 分钟（0-59）
+2. 小时（0-23）
+3. 天数（1-31）
+4. 月份（1-12）
+5. 星期几（0-7，0和7都代表星期日）
+
+> **特殊符号**
+
++ *
+
++ ，分割符号
+
+  ```
+  #代表 1：00，2：00，3：00都执行一次命令
+  0 1，2，3 * * * [命令]
+  ```
+
++ -：代表连续的时间范围
++ */n：代表没隔多久执行一次，n的默认单位分钟
+
+> **举个例子：**
+
+每天12：45，22:45执行清空历史操作记录
+
+```
+45 12，22 * * * history -c
+```
+
+每隔一分钟给文件追加一句helloworld
+
+```
+*/1 * * * * echo "hello world" >> /home/loki/test
+```
+
+
 
 ## 其他常用命令
 
@@ -459,167 +957,13 @@ Mon Jun 20 17:19:06 CST 2022
 + 善用tab键
 + 善用上下键，PageDown，PageUp键
 
-# 三、Linux文件访问权限
+# 三、Linux文件访问权限与用户管理
 
 Linux 系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。最高权限账户为`root`用户，可以操作一切
 
 为了保护系统的安全性，Linux 系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定
 
-## ls -l：查看文件的属性和权限、并详细说明
 
-> 通过 `ls -l` 命令来显示一个文件的属性以及文件所属的用户和组
-
-:rocket:**注：每个文件的属性由左边第一部分的 10 个字符来确定，最后一行以点(.)结尾的是隐藏文档**
-
-```bash
-[root@VM-16-12-centos /]# ls -l
-total 72
-lrwxrwxrwx.   1 root root     7 Mar  7  2019 bin -> usr/bin
-dr-xr-xr-x.   5 root root  4096 Apr 26 09:07 boot
-drwxr-xr-x    2 root root  4096 Nov  5  2019 data		
-drwxr-xr-x   19 root root  2980 Apr 26 10:44 dev
-drwxr-xr-x.  96 root root 12288 May  4 18:37 etc
-drwxr-xr-x.   3 root root  4096 May  7 19:31 home
-lrwxrwxrwx.   1 root root     7 Mar  7  2019 lib -> usr/lib
-lrwxrwxrwx.   1 root root     9 Mar  7  2019 lib64 -> usr/lib64
-drwx------.   2 root root 16384 Mar  7  2019 lost+found
-drwxr-xr-x.   2 root root  4096 Apr 11  2018 media
-drwxr-xr-x.   2 root root  4096 Apr 11  2018 mnt
-drwxr-xr-x.   5 root root  4096 May  4 18:37 opt
-dr-xr-xr-x  109 root root     0 Apr 26 10:44 proc
-dr-xr-x---.   9 root root  4096 May  7 19:27 root
-drwxr-xr-x   28 root root  1000 Jun  4 19:36 run
-lrwxrwxrwx.   1 root root     8 Mar  7  2019 sbin -> usr/sbin
-drwxr-xr-x.   2 root root  4096 Apr 11  2018 srv
-dr-xr-xr-x   13 root root     0 Apr 26 16:55 sys
-drwxrwxrwt.   9 root root  4096 Jun 19 03:20 tmp
-drwxr-xr-x.  14 root root  4096 Jan  8  2021 usr
-drwxr-xr-x.  20 root root  4096 Jan  8  2021 var
-```
-
-从上面可以看到，每一行都有列，分别是
-
-1. 第一列共10位，第1位表示文档类型，`d`表示目录，`-`表示文件，`l`表示链接文件，`b`表示可随机存取的设备，如U盘等，`c`表示一次性读取设备，如鼠标、键盘等。后9位，以三个为一组，依次对应三种身份所拥有的权限，且均为 **rwx** 的三个参数的组合。身份顺序为：owner、group、others
-
-   + `r` 代表可读(read)
-   + `w` 代表可写(write)
-   + ` x` 代表可执行(execute)
-   + 如果没有权限，就会出现减号` - `
-
-   如：`-r-xr-x---`的含义为**当前文档是一个文件，拥有者可读、可执行，同一个群组下的用户，可读、可执行，其他人没有任何权限**。
-
-   **总结**
-
-   ![363003_1227493859FdXT](https://www.runoob.com/wp-content/uploads/2014/06/363003_1227493859FdXT.png)
-
-2. **第二列**表示链接数，表示有多少个文件链接到inode号码
-
-3. **第三列**表示拥有者（属主）
-
-4. **第四列**表示所属群组（属组）
-
-5. **第五列**表示文档容量大小，单位字节
-
-6. **第六列**表示文档最后修改时间，注意不是文档的创建时间
-
-> 注：
->
-> + **Linux文件属主和属组**
->
->   对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。
->
->   同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。
->
->   文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。
->
->   因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。
->
-> + **对于 root 用户来说，一般情况下，文件的权限对其不起作用**
-
-## chgrp：更改文件属组
-
-语法：
-
-```
-chgrp [-R] 属组名 文件名
-```
-
-参数选项
-
-- -R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。
-
-## chown：更改文件属主，也可以同时更改文件属组
-
-语法：
-
-```
-chown [–R] 属主名 文件名
-chown [-R] 属主名：属组名 文件名
-```
-
-进入 /root 目录（~）将install.log的拥有者改为bin这个账号：
-
-```
-[root@www ~] cd ~
-[root@www ~]# chown bin install.log
-[root@www ~]# ls -l
--rw-r--r--  1 bin  users 68495 Jun 25 08:53 install.log
-```
-
-将install.log的拥有者与群组改回为root：
-
-```
-[root@www ~]# chown root:root install.log
-[root@www ~]# ls -l
--rw-r--r--  1 root root 68495 Jun 25 08:53 install.log
-```
-
-## chmod：更改文件访问属性
-
-Linux文件属性有两种设置方法，一种是数字（常用），一种是符号。
-
-Linux 文件的基本权限就有九个，分别是 **owner/group/others(拥有者/组/其他)** 三种身份各有自己的 **read/write/execute** 权限。
-
-先复习一下刚刚上面提到的数据：文件的权限字符为： **-rwxrwxrwx** ， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，**各权限的分数对照表如下**：
-
-- r:4
-- w:2
-- x:1
-
-每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： **-rwxr-x---** 分数则是：
-
-- owner = rwx = 4+2+1 = 7
-- group = r-x = 4+0+1 = 5
-- others= --- = 0+0+0 = 0
-
-所以等一下我们设定权限的变更时，该文件的权限数字就是 **750**。变更权限的指令 chmod 的语法是这样的：
-
-```
- chmod [-R] xyz 文件或目录
-```
-
-选项与参数：
-
-- xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。
-- -R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更
-
-举例来说，如果要将 .bashrc 这个文件所有的权限都设定启用，那么命令如下：
-
-```
-[root@www ~]# ls -al .bashrc
--rw-r--r--  1 root root 395 Jul  4 11:45 .bashrc
-[root@www ~]# chmod 777 .bashrc
-[root@www ~]# ls -al .bashrc
--rwxrwxrwx  1 root root 395 Jul  4 11:45 .bashrc
-```
-
-那如果要将权限变成 *-rwxr-xr--* 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754
-
-
-
-
-
-# 五、Linux系统管理：Centos7版本
 
 ## 用户与用户组管理
 
@@ -707,6 +1051,8 @@ passwd [用户名]
 ```
 
 ### 设置普通用户具有root权限
+
++ 关键配置文件`/etc/sudoers`
 
 > 默认情况下，普通用户无法执行sudo命令，因此如果我们需要设置普通用户具有root权限，**这需要在root用户下进行操作**
 
@@ -799,206 +1145,217 @@ loki    ALL=(ALL)       ALL
 
 
 
+## 文件权限管理
 
+### ls -l：查看文件的属性和权限、并详细说明
 
-## 进程和服务管理
+> 通过 `ls -l` 命令来显示一个文件的属性以及文件所属的用户和组
 
-+ **一个正在执行的程序或命令，称为进程**
-
-+ **启动后常驻内存的进程，被称为服务（守护进程）**
-
-### 服务管理：状态、启动、重启、停止、开机自启动
-
-> 基本语法
+:rocket:**注：每个文件的属性由左边第一部分的 10 个字符来确定，最后一行以点(.)结尾的是隐藏文档**
 
 ```bash
-systemctl start|stop|restart|status [服务名]
+[root@VM-16-12-centos /]# ls -l
+total 72
+lrwxrwxrwx.   1 root root     7 Mar  7  2019 bin -> usr/bin
+dr-xr-xr-x.   5 root root  4096 Apr 26 09:07 boot
+drwxr-xr-x    2 root root  4096 Nov  5  2019 data		
+drwxr-xr-x   19 root root  2980 Apr 26 10:44 dev
+drwxr-xr-x.  96 root root 12288 May  4 18:37 etc
+drwxr-xr-x.   3 root root  4096 May  7 19:31 home
+lrwxrwxrwx.   1 root root     7 Mar  7  2019 lib -> usr/lib
+lrwxrwxrwx.   1 root root     9 Mar  7  2019 lib64 -> usr/lib64
+drwx------.   2 root root 16384 Mar  7  2019 lost+found
+drwxr-xr-x.   2 root root  4096 Apr 11  2018 media
+drwxr-xr-x.   2 root root  4096 Apr 11  2018 mnt
+drwxr-xr-x.   5 root root  4096 May  4 18:37 opt
+dr-xr-xr-x  109 root root     0 Apr 26 10:44 proc
+dr-xr-x---.   9 root root  4096 May  7 19:27 root
+drwxr-xr-x   28 root root  1000 Jun  4 19:36 run
+lrwxrwxrwx.   1 root root     8 Mar  7  2019 sbin -> usr/sbin
+drwxr-xr-x.   2 root root  4096 Apr 11  2018 srv
+dr-xr-xr-x   13 root root     0 Apr 26 16:55 sys
+drwxrwxrwt.   9 root root  4096 Jun 19 03:20 tmp
+drwxr-xr-x.  14 root root  4096 Jan  8  2021 usr
+drwxr-xr-x.  20 root root  4096 Jan  8  2021 var
 ```
 
-> 查看服务的方法
+从上面可以看到，每一行都有列，分别是
+
+1. 第一列共10位，第1位表示文档类型，`d`表示目录，`-`表示文件，`l`表示链接文件，`b`表示可随机存取的设备，如U盘等，`c`表示一次性读取设备，如鼠标、键盘等。后9位，以三个为一组，依次对应三种身份所拥有的权限，且均为 **rwx** 的三个参数的组合。身份顺序为：owner、group、others
+
+   + `r` 代表可读(read)
+   + `w` 代表可写(write)
+   + ` x` 代表可执行(execute)
+   + 如果没有权限，就会出现减号` - `
+
+   如：`-r-xr-x---`的含义为**当前文档是一个文件，拥有者可读、可执行，同一个群组下的用户，可读、可执行，其他人没有任何权限**。
+
+   **总结**
+
+   ![363003_1227493859FdXT](https://www.runoob.com/wp-content/uploads/2014/06/363003_1227493859FdXT.png)
+
+2. **第二列**表示链接数，表示有多少个文件链接到inode号码
+
+3. **第三列**表示拥有者（属主）
+
+4. **第四列**表示所属群组（属组）
+
+5. **第五列**表示文档容量大小，单位字节
+
+6. **第六列**表示文档最后修改时间，注意不是文档的创建时间
+
+> 注：
+>
+> + **Linux文件属主和属组**
+>
+>   对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。
+>
+>   同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。
+>
+>   文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。
+>
+>   因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。
+>
+> + **对于 root 用户来说，一般情况下，文件的权限对其不起作用**
+
+### chgrp：更改文件属组
+
+语法：
+
+```
+chgrp [-R] 属组名 文件名
+```
+
+参数选项
+
+- -R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。
+
+### chown：更改文件属主，也可以同时更改文件属组
+
+语法：
+
+```
+chown [–R] 属主名 文件名
+chown [-R] 属主名：属组名 文件名
+```
+
+进入 /root 目录（~）将install.log的拥有者改为bin这个账号：
+
+```
+[root@www ~] cd ~
+[root@www ~]# chown bin install.log
+[root@www ~]# ls -l
+-rw-r--r--  1 bin  users 68495 Jun 25 08:53 install.log
+```
+
+将install.log的拥有者与群组改回为root：
+
+```
+[root@www ~]# chown root:root install.log
+[root@www ~]# ls -l
+-rw-r--r--  1 root root 68495 Jun 25 08:53 install.log
+```
+
+### chmod：更改文件访问属性
+
+Linux文件属性有两种设置方法，一种是数字（常用），一种是符号。
+
+Linux 文件的基本权限就有九个，分别是 **owner/group/others(拥有者/组/其他)** 三种身份各有自己的 **read/write/execute** 权限。
+
+先复习一下刚刚上面提到的数据：文件的权限字符为： **-rwxrwxrwx** ， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，**各权限的分数对照表如下**：
+
+- r:4
+- w:2
+- x:1
+
+每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： **-rwxr-x---** 分数则是：
+
+- owner = rwx = 4+2+1 = 7
+- group = r-x = 4+0+1 = 5
+- others= --- = 0+0+0 = 0
+
+所以等一下我们设定权限的变更时，该文件的权限数字就是 **750**。变更权限的指令 chmod 的语法是这样的：
+
+```
+ chmod [-R] xyz 文件或目录
+```
+
+选项与参数：
+
+- xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。
+- -R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更
+
+举例来说，如果要将 .bashrc 这个文件所有的权限都设定启用，那么命令如下：
+
+```
+[root@www ~]# ls -al .bashrc
+-rw-r--r--  1 root root 395 Jul  4 11:45 .bashrc
+[root@www ~]# chmod 777 .bashrc
+[root@www ~]# ls -al .bashrc
+-rwxrwxrwx  1 root root 395 Jul  4 11:45 .bashrc
+```
+
+那如果要将权限变成 *-rwxr-xr--* 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754
+
+
+
+# 四、Linux软件包管理
+
+> 以CentOS为例，安装软件有以下几种方式
+>
+
++ rpm
+  + 需要有rpm安装包
+  + 不支持安装依赖
++ 解压缩包方式（以Tomcat为例）
++ yum在线安装（推荐使用）
+  + 基于rpm包管理器，可以从指定服务器下载rpm包，并且自动处理依赖关系
+
+### RPM安装：半自动化安装
+
+> rpm查询
+
+```
+#查询所有
+rpm -qa | grep []
+#查询后展示详细信息
+rpm -qi | grep []
+```
+
+> 卸载
+
+```
+rpm -e [软件名]
+```
+
+> 安装
+
+```
+rpm -ivh [rpm包全名]
+```
+
+### yum安装：全自动安装
+
+如果yum下载很慢，可以考虑修改yum镜像源，但是一般不用这个操作，yum在下载时会自动选择合适的服务器
+
+> 语法
 
 ```bash
-cd /usr/lib/systemd/system
-ls -al
+yum -y [可选参数] [软件包]
 ```
 
-> 开机自启动服务配置
+-y代表了对yum安装过程中的提问自动回答"yes"
 
-图形化界面命令:`setup`，进入后通过空格键勾选	
+**参数：**
 
-```
-setup
-```
++ install：安装
++ update：更新
++ check-update：检查更新
++ remove：移除rpm包
++ clean：清理yum缓存
++ list：显示软件包信息
 
-命令行方式设置开机自启动和关闭
 
-```
-systemctl enable [服务名]
-systemctl disable [服务名]
-```
 
-通过`systemctl status [服务名]` ，可以看出当前服务是否开机自启动，如下例所示
-
-```bash
-[root@VM-16-12-centos system]# systemctl status nginx
-● nginx.service - nginx
-   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
-   Active: active (running) since Sun 2022-05-08 00:01:32 CST; 1 months 12 days ago
- Main PID: 32377 (nginx)
-    Tasks: 2
-   Memory: 2.6M
-   CGroup: /system.slice/nginx.service
-           ├─32377 nginx: master process /usr/local/nginx/sbin/nginx
-           └─32378 nginx: worker process
-
-May 08 00:01:32 VM-16-12-centos systemd[1]: Starting nginx...
-May 08 00:01:32 VM-16-12-centos systemd[1]: Started nginx.
-
-```
-
-其中，这一段说明了nginx服务开机自启动是关闭的
-
-```
-Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
-```
-
-> 列举所有的服务单元以及是否开机自启动
-
-注：static状态说明暂时无法判断是否开机自启动
-
-```
-systemctl list-unit-files
-```
-
-### Linux防火墙管理
-
-```bash
-systemctl enable firewalld
-systemctl disable firewalld
-systemctl status firewalld #查看防火墙状态
-systemctl start firewalld
-systemctl stop firewalld
-```
-
-### 进程管理
-
-
-
-
-
-
-
-
-
-## 磁盘管理
-
-
-
-
-
-
-
-
-
-
-
-# 环境安装
-
-安装软件一般有三种方式
-
-+ rpm（以JDK为例）
-+ 解压缩（以Tomcat为例）
-+ yum在线安装（以Docker为例）
-
-
-
-### JDK安装
-
-1. 检测是否有java环境，如果有需要卸载
-2. 从Oracle官网下载，如 `jdk8 rpm`
-3. 通过Xftp传输到指定目录，执行以下操作
-
-```bash
-#检测当前系统是否存在Java环境 和windows命令一样
-java -version 
-#如果有的话就需要卸载
-rpm -qa|grep jdk #查看JDK版本信息
-rpm -e --nodeps #jdk_ 卸载
-#卸载完毕后可安装JDK
-rpm -ivh rpm包 
-```
-
-安装成功截图
-
-![image-20220104021105588](https://s2.loli.net/2022/01/04/EuIn3meoA7x12is.png)
-
-
-
-> 配置环境变量  -->  /etc/profile 
-
-**注：通过rpm和yum方式安装JDK不需要配置环境变量**
-
-通过压缩包解压安装，需要配置环境变量
-
-1. ```bash
-   vim /etc/profile #进入该文件
-   ```
-
-2. 启用编辑，在最后配置环境变量
-
-   ![image-20220104022100812](https://s2.loli.net/2022/01/04/YQ5McpPWJTBqF1K.png)
-
-   ```
-   JAVA_HOME=/usr/java/jdk-14.0.1
-   JRE_HOME=$JAVA_HOME/jre
-   PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
-   CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
-   export JAVA_HOME JRE_HOME PATH CLASSPATH
-   ```
-
-> 尝试部署Springboot项目，通过ip访问
-
-1. 将一个Springboot应用打jar包
-
-2. 首先在本地Windows环境下测试运行
-
-   ```
-   java -jar 包名
-   ```
-
-3. 通过Xftp上传至Linux系统，
-
-4. 
-
-
-
-如果防火墙8080端口开放，并且阿里云安全组也开放，这个时候就可以通过公网ip进行访问了
-
-### Tomcat安装
-
-一般tomcat安装都是通过压缩包的方式
-
-**注：安装Jdk后已经可以运行SpringBoot应用了，但是传统的SSM项目还是打war包，需要安装Tomcat才可以运行**
-
-**方法**
-
-1.下载tomcat 官网下载即可
-
-![img](https://img-blog.csdn.net/20180522102228504)
-
-2.解压
-
-```
-tar -zxvf apache-tomcat-9.0.36.tar.gz
-```
-
-3.启动tomcat
-
-进入解压目录的bin文件夹，运行命令 
-
-```
-./startup.sh
-```
-
-### Docker安装
+# 五、Shell编程
 

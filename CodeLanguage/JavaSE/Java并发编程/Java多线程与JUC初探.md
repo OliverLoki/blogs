@@ -1,11 +1,13 @@
 **引言——为什么需要多线程**
 
-> 多核CPU意味着多个线程可以同时运行，多线程的并行计算减少了线程上下文切换的开销。
->
-> + 对于CPU的一个核，想要处理多个任务，就需要时间片轮转来处理任务，这就是并发
-> + 对于多个核，则可以同时执行这多个任务，这就是并行
+> 多核CPU时代意味着多个线程可以同时运行，多线程的`并行计算`减少了线程上下文切换的开销
 >
 > 现在的系统动不动就要求百万级甚至千万级的并发量，而多线程并发编程正是开发高并发系统的基础，利用好多线程机制可以大大提高系统整体的并发能力以及性能
+
+**对于并发和并行的说明**
+
++ 对于CPU的一个核，想要处理多个任务，就需要时间片轮转来处理任务，这就是并发
++ 对于多个核，则可以同时执行这多个任务，这就是并行
 
 :rocket:附：​Java执行以下代码来获取当前电脑的CPU的核数
 
@@ -1013,11 +1015,11 @@ B线程 release the lock
 
 从执行结果可以看出，A线程和B线程同时对资源加锁，A线程获取锁之后，B线程只好等待，直到A线程释放锁B线程才获得锁
 
-## ReadWriteLock接口
+## ReadWriteLock：读写锁
 
 > **源码阅读**
 
-ReadWriteLock 维护了一对相关的锁，一个用于只读操作，另一个用于写入操作。只要没有 writer，读取锁可以由多个 reader 线程同时保持，而写入锁是独占的
+`ReadWriteLock` 维护了一对相关的锁，一个用于只读操作，另一个用于写入操作。只要没有 writer，读取锁可以由多个 reader 线程同时保持，而写入锁是独占的
 
 jdk11中`java.util.concurrent.locks`包下的ReadWriteLock接口源码，删减注释后
 
@@ -1032,7 +1034,7 @@ public interface ReadWriteLock {
 
 ### ReentrantReadWriteLock锁
 
-源码阅读
+建议阅读该类源码深入学习
 
 ```java
 public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializable{
@@ -1518,6 +1520,8 @@ public class DeadLockDemo {
 
 # 九、线程安全的集合
 
+
+
 + 大部分在java.util包下的实现类都没有保证线程安全为了保证性能的优越，除了`Vector`和`Hashtable`以外
 + 通过`Collections`工具类可以创建线程安全类，但是他们的性能都比较差
 + 同步集合既保证线程安全也在给予不同的算法上保证了性能，他们都在`java.util.concurrent`包中
@@ -1536,6 +1540,8 @@ public class DeadLockDemo {
 
 > **Collections针对每种集合都声明了一个线程安全的包装类，作为方法的返回值**
 
+本质上是返回了一个线程安全的集合
+
 ```java
 List<E> synArrayList = Collections.synchronizedList(new ArrayList<E>());
 
@@ -1546,17 +1552,22 @@ Map<K,V> synHashMap = Collections.synchronizedMap(new HashMap<K,V>());
 
 接下来我们学习JUC包中的集合
 
-## 写时复制集合
 
-> 注：`CopyOnWrite`也称为`COW`，是计算机领域的一种优化策略
 
-### CopyOnWriteArrayList源码阅读
+==注：`CopyOnWrite`也称为`COW`，是计算机领域的一种优化策略，以这个开头的集合具有写时复制的特性==
 
-采用读写分离的思想来实现多线程的安全问题
+## CopyOnWriteArrayList
 
-> 构造方法
+> 首先建议阅读[源码](https://docs.oracle.com/javase/11/docs/api/java/util/concurrent/CopyOnWriteArrayList.html)
 
-jdk11
+分析源码
+
++ 采用读写分离的思想来实现多线程的安全问题。底层是一个`Object`数组，没有初始容量，当每一次`add`的时候都会复制原来的数组，然后创建一个原长度+1的数组，添加值
++ 具有写时复制的特性
+
+重点方法节选
+
+> **构造方法**
 
 ```java
 public CopyOnWriteArrayList() {
@@ -1576,12 +1587,7 @@ public CopyOnWriteArrayList(Collection<? extends E> c) {
 }
 ```
 
-分析
-
-+ 底层是一个`Object`数组，没有初始容量
-+ 当每一次`add`的时候都会复制原来的数组，然后创建一个原长度+1的数组，添加值
-
-> **add()方法源码**
+> **add()方法**
 
 jdk1.8：使用可重入锁
 
@@ -1617,9 +1623,11 @@ public boolean add(E e) {
 }
 ```
 
-### CopyOnWriteSet源码阅读
+## CopyOnWriteSet
 
-底层是一个`CopyOnWriteArrayList`
+> 首先建议阅读[源码](https://docs.oracle.com/javase/11/docs/api/java/util/concurrent/CopyOnWriteArraySet.html)
+
++ 底层是一个`CopyOnWriteArrayList`
 
 ```java
 public CopyOnWriteArraySet() {
@@ -1627,25 +1635,197 @@ public CopyOnWriteArraySet() {
 }
 ```
 
-## CAS集合
+## ConcurrentHashMap
+
+> [源码](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html)
+
+### 源码分析
+
+**「1.7实现：」**
+
+底层基于数组+链表。通过分段锁实现线程安全，存储数据的是`Segment`数组，`Segment`中存储了`HashEntry`，通过对`Segment`的数组位进行加锁，实现线程安全
+
+**「1.8实现：」**
+
+底层基于数组+链表+红黑树。也是通过分段锁实现，不过`1.8`抛弃了`1.7`中的`Segment`数组的实现方式，而是采用了`Node`数组存储具体的值。通过`CAS`+`synchronized`实现分段锁。
+
+### put方法
+
+首先判断数组有没有初始化，如果没有初始化，进行初始化。
+
+初始化时需要判断`sizeCtl`这个值是否等于零，如果等于零，说明没有其他线程进行初始化，当前线程进行初始化即可。如果小于零，说明有线程进行初始化，当前线程让出系统资源，等待。数组初始化完毕以后，将`sizeCtl`设置为容量的0.75倍
+
+初始化完成以后，通过`key`的`hash`值计算出当前`key`的数组位置，如果当前数组位置为`null`，直接进行赋值
+
+如果当前数组位不为`null`，则判断当前数组位的首节点是否为`fwd`节点(标志当前节点正在扩容，此时的哈希值为`-1`)，如果是则表示当前数组正在进行扩容，则帮助数组扩容。
+
+如果当前数组没有进行扩容，则执行红黑树或者链表的添加节点。链表添加的时候，采用了`DCL`的思想，进行了两次判断，才执行的添加或者替换节点的操作。
+
+**「下面我们看源代码」**
+
+```javascript
+final V putVal(K key, V value, boolean onlyIfAbsent) {
+        if (key == null || value == null) throw new NullPointerException();
+    //计算当前键的hash值
+        int hash = spread(key.hashCode());
+    //定义节点的个数
+        int binCount = 0;
+        for (Node<K,V>[] tab = table;;) {
+            Node<K,V> f; int n, i, fh;
+            //判断是否进行了初始化
+            if (tab == null || (n = tab.length) == 0)
+                tab = initTable();
+            //判断当前数组位是否有值，如果没有，直接CAS赋值
+            else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
+                if (casTabAt(tab, i, null,
+                             new Node<K,V>(hash, key, value, null)))
+                    break;                   // no lock when adding to empty bin
+            }
+            //判断当前数组位的首节点是否fwd节点
+            else if ((fh = f.hash) == MOVED)
+                //帮助扩容
+                tab = helpTransfer(tab, f);
+            else {
+                V oldVal = null;
+                synchronized (f) {
+                    //判断是不是Node节点
+                    if (tabAt(tab, i) == f) {
+                        if (fh >= 0) {
+                            binCount = 1;
+                            for (Node<K,V> e = f;; ++binCount) {
+                                K ek;
+                                //获取到重复的key，进行替换值
+                                if (e.hash == hash &&
+                                    ((ek = e.key) == key ||
+                                     (ek != null && key.equals(ek)))) {
+                                    oldVal = e.val;
+                                    if (!onlyIfAbsent)
+                                        e.val = value;
+                                    break;
+                                }
+                                Node<K,V> pred = e;
+                                //不存在value,则直接链表尾部添加
+                                if ((e = e.next) == null) {
+                                    pred.next = new Node<K,V>(hash, key,
+                                                              value, null);
+                                    break;
+                                }
+                            }
+                        }
+                        //节点为红黑树
+                        else if (f instanceof TreeBin) {
+                            Node<K,V> p;
+                            binCount = 2;
+                            if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key,
+                                                           value)) != null) {
+                                oldVal = p.val;
+                                if (!onlyIfAbsent)
+                                    p.val = value;
+                            }
+                        }
+                    }
+                }
+                if (binCount != 0) {
+                    //判断是否需要进行转换红黑树
+                    if (binCount >= TREEIFY_THRESHOLD)
+                        treeifyBin(tab, i);
+                    if (oldVal != null)
+                        return oldVal;
+                    break;
+                }
+            }
+        }
+     //增加节点数量
+        addCount(1L, binCount);
+        return null;
+    }
+```
+
+### 辅助扩容方法
+
+`ConcurrentHashMap`中有一个思想，单线程初始化，多线程扩容，这个机制非常牛X
+
+**思想**：通过一个成员变量`nextTab`的值来实现单线程初始化，当初始化结束以后，`nextTab`的值不为`Null`所以，直接走多线成扩容的机制
+
+多线程扩容，首先获取到当前机器的CPU核数，然后给每一个线程最少`16`个数组位的扩容责任，当有线程将数组位扩容完成以后，就将这个数组位的头节点设置为`fwd`节点(`hash`值为`-1`即`MOVED`)
+
+当有线程完成了自己的任务以后，就帮助其他线程进行扩容，拿到一个数组位以后判断当前数组位是否位`fwd`节点，如果是，则跳过，寻找下一个头节点不是`fwd`的数组位进行扩容
+
+在扩容中，如果发现数组位中的红黑树的节点数量小于6，则直接将红黑树转换为链表
+
+### 成员变量
+
+```javascript
+ private static final int DEFAULT_CAPACITY = 16;
+//默认并发级别，满足并发级别<=数组容量，以支持并发
+ private static final int DEFAULT_CONCURRENCY_LEVEL = 16;
+//链表转红黑树的阈值
+static final int TREEIFY_THRESHOLD = 8;
+//红黑树转链表的阈值
+static final int UNTREEIFY_THRESHOLD = 6;
+//转红黑树最小的数组容量
+static final int MIN_TREEIFY_CAPACITY = 64;
+
+//fwd节点，表示正在扩容
+static final int MOVED     = -1; // hash for forwarding nodes
+//表示该数组位位红黑树
+static final int TREEBIN   = -2;
+
+//存储元素
+transient volatile Node<K,V>[] table;
+//多线程扩容时不为null,其余时间为null
+private transient volatile Node<K,V>[] nextTable;
+//进行初始化和扩容控制
+//-1 代表有线程在初始化
+//-n 代表有n-1个线程在扩容
+//正数，没有初始化，下一次会将这个值作为初始化的值
+private transient volatile int sizeCtl;
+```
+
+### 成员内部类
+
+- 存储具体的值
+
+```javascript
+Node<K,V>
+   final int hash;
+        final K key;
+        volatile V val;
+        volatile Node<K,V> next;
+```
+
+- 代表当前数组正在扩容
+
+```javascript
+static final class ForwardingNode<K,V> extends Node<K,V> {
+        final Node<K,V>[] nextTable;
+        ForwardingNode(Node<K,V>[] tab) {
+            super(MOVED, null, null, null);
+            this.nextTable = tab;
+        }
+```
+
+- 可重入锁
+
+```javascript
+static class Segment<K,V> extends ReentrantLock implements Serializable {
+        private static final long serialVersionUID = 2249069246763182397L;
+        final float loadFactor;
+        Segment(float lf) { this.loadFactor = lf; }
+    }
+```
 
 
 
+# 十、JUC常用辅助类详解
 
-
-
-
-
-
-
-
-# 十、JUC常用类详解
+推荐文章[Java并发编程：CountDownLatch、CyclicBarrier和Semaphore ](https://www.cnblogs.com/dolphin0520/p/3920397.html)
 
 ## CountDownLatch类
 
-CountDownLatch类位于java.util.concurrent包下，利用它可以实现类似计数器的功能。比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了
+CountDownLatch类位于java.util.concurrent包下，利用它可以实现类似计数器的功能
 
-
+> 使用场景：比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了
 
 CountDownLatch类只提供了一个构造器
 
@@ -1664,11 +1844,34 @@ public boolean await(long timeout, TimeUnit unit) throws InterruptedException { 
 public void countDown() { };  //将count值减1
 ```
 
-
-
-
-
 ## CyclicBarrier类
+
+字面意思回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了。
+
+> 使用场景：假若有若干个线程都要进行写数据操作，并且只有所有线程都完成写数据操作之后，这些线程才能继续做后面的事情，此时就可以利用CyclicBarrier
+
+CyclicBarrier类位于java.util.concurrent包下，提供2个构造器
+
+```java
+public CyclicBarrier(int parties, Runnable barrierAction) {
+}
+ 
+public CyclicBarrier(int parties) {
+}
+```
+
++ 参数parties指让多少个线程或者任务等待至barrier状态
++ 参数barrierAction为当这些线程都达到barrier状态时会执行的内容
+
+CyclicBarrier中最重要的方法就是await方法，它有2个重载版本：
+
+```java
+public int await() throws InterruptedException, BrokenBarrierException { };
+public int await(long timeout, TimeUnit unit)throws InterruptedException,BrokenBarrierException,TimeoutException { };
+```
+
++ 第一个版本比较常用，用来挂起当前线程，直至所有线程都到达barrier状态再同时执行后续任务
++ 第二个版本是让这些线程等待至一定的时间，如果还有线程没有到达barrier状态就直接让到达barrier的线程执行后续任务。
 
 
 
@@ -1676,55 +1879,61 @@ public void countDown() { };  //将count值减1
 
 ## Semaphore类
 
+Semaphore翻译成字面意思为 信号量，Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
+
+> 使用场景：假若一个工厂有5台机器，但是有8个工人，一台机器同时只能被一个工人使用，只有使用完了，其他工人才能继续使用。那么我们就可以通过Semaphore来实现：
+
+Semaphore类位于java.util.concurrent包下，它提供了2个构造器
+
+```java
+public Semaphore(int permits) {          //参数permits表示许可数目，即同时可以允许多少线程进行访问
+    sync = new NonfairSync(permits);
+}
+public Semaphore(int permits, boolean fair) {    //这个多了一个参数fair表示是否是公平的，即等待时间越久的越先获取许可
+    sync = (fair)? new FairSync(permits) : new NonfairSync(permits);
+}
+```
+
+下面说一下Semaphore类中比较重要的几个方法，首先是acquire()、release()方法：
+
+```java
+public void acquire() throws InterruptedException {  }     //获取一个许可
+public void acquire(int permits) throws InterruptedException { }    //获取permits个许可
+public void release() { }          //释放一个许可
+public void release(int permits) { }    //释放permits个许可
+```
+
++ acquire()用来获取一个许可，若无许可能够获得，则会一直等待，直到获得许可。
+
++ release()用来释放许可。注意，在释放许可之前，必须先获获得许可。
+
+这4个方法都会被阻塞，如果想立即得到执行结果，可以使用下面几个方法：
+
+```java
+public boolean tryAcquire() { };    //尝试获取一个许可，若获取成功，则立即返回true，若获取失败，则立即返回false
+public boolean tryAcquire(long timeout, TimeUnit unit) throws InterruptedException { };  //尝试获取一个许可，若在指定的时间内获取成功，则立即返回true，否则则立即返回false
+public boolean tryAcquire(int permits) { }; //尝试获取permits个许可，若获取成功，则立即返回true，若获取失败，则立即返回false
+public boolean tryAcquire(int permits, long timeout, TimeUnit unit) throws InterruptedException { }; //尝试获取permits个许可，若在指定的时间内获取成功，则立即返回true，否则则立即返回false
+
+```
+
+另外还可以通过availablePermits()方法得到可用的许可数目
+
+## 总结
+
+下面对上面说的三个辅助类进行一个总结：
+
+1. CountDownLatch和CyclicBarrier都能够实现线程之间的等待，只不过它们侧重点不同：CountDownLatch一般用于某个线程A等待若干个其他线程执行完任务之后，它才执行；而CyclicBarrier一般用于一组线程互相等待至某个状态，然后这一组线程再同时执行
+
+   另外，CountDownLatch是不能够重用的，而CyclicBarrier是可以重用的
+
+2. Semaphore其实和锁有点类似，它一般用于控制对某组资源的访问权限
 
 
 
+# 十三、深入JUC并发编程与源码深入
 
-
-
-
-
-
-
-
-
-
-
-
-
-# 十一、线程池
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ing
 
 
 
@@ -1732,4 +1941,4 @@ public void countDown() { };  //将count值减1
 
 [Java6及以上版本对synchronized的优化](https://www.cnblogs.com/wuqinglong/p/9945618.html)
 
-[java 锁 Lock接口详解](https://www.cnblogs.com/myseries/p/10784076.html)
+[java锁Lock接口详解](https://www.cnblogs.com/myseries/p/10784076.html)

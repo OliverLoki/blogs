@@ -1,6 +1,6 @@
-# 让你彻底理解Servlet中请求转发&重定向
+Servlet中请求转发和重定向
 
-## **forward（转发）**：
+## **forward（转发）**
 
 ```java
 request.getRequestDispatcher(String url).forward(request,response);
@@ -20,7 +20,7 @@ request.getRequestDispatcher(String url).forward(request,response);
 
 
 
-## **redirect（重定向）：**
+## **redirect（重定向）**
 
 ```java
 response.sendRedirect(String url);//返回登录界面
@@ -41,7 +41,7 @@ response.sendRedirect(String url);//返回登录界面
 
 
 
-## 转发和重定向路径问题：
+## 转发和重定向路径问题
 
 1）使用相对路径在重定向和转发中没有区别
 2）重定向和请求转发使用绝对路径时，根/路径代表了不同含义

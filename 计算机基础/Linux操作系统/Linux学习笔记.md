@@ -126,115 +126,6 @@
 
 
 
-## Linux系统目录结构以及功能
-
-登录系统后，在当前命令窗口下输入命令
-
-```
-ls / 
-```
-
-![image-20220619011237336](https://s2.loli.net/2022/06/19/NovWaEqYuwO4khd.png)
-
-> 注：
->
-> + 下图中的箭头指向该文件夹的的实际位置，可以理解为Windows中的快捷方式，Linux通过**`挂载`**实现这个功能
-
-![img](https://www.runoob.com/wp-content/uploads/2014/06/d0c50-linux2bfile2bsystem2bhierarchy.jpg)
-
-以下是对这些目录的解释：
-
-- **/bin**：
-  bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着最经常使用的命令。
-
-- **/boot：**
-  这里存放的是启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。
-
-- **/dev ：**
-  dev 是 Device(设备) 的缩写, 该目录下存放的是 Linux 的外部设备，在 Linux 中访问设备的方式和访问文件的方式是相同的。
-
-- **/etc：** 
-  etc 是 Etcetera(等等) 的缩写,这个目录用来存放所有的系统管理所需要的配置文件和子目录。
-
-- **/home**：
-  用户的主目录，在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的，如上图中的 alice、bob 和 eve。
-
-- **/lib**：
-  lib 是 Library(库) 的缩写这个目录里存放着系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。几乎所有的应用程序都需要用到这些共享库。
-
-- **/lost+found**：
-  这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
-
-- **/media**：
-  linux 系统会自动识别一些设备，例如U盘、光驱等等，当识别后，Linux 会把识别的设备挂载到这个目录下。
-
-- **/mnt**：
-  系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。
-
-- **/opt**：
-  opt 是 optional(可选) 的缩写，这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
-
-- **/proc**：
-  proc 是 Processes(进程) 的缩写，/proc 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。
-  这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：
-
-  ```
-  echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
-  ```
-
-- **/root**：
-  该目录为系统管理员，也称作超级权限者的用户主目录。
-
-- **/sbin**：
-  s 就是 Super User 的意思，是 Superuser Binaries (超级用户的二进制文件) 的缩写，这里存放的是系统管理员使用的系统管理程序。
-
-- **/selinux**：
-  这个目录是 Redhat/CentOS 所特有的目录，Selinux 是一个安全机制，类似于 windows 的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。
-
-- **/srv**：
-  该目录存放一些服务启动之后需要提取的数据。
-
-- **/sys**：
-
-  这是 Linux2.6 内核的一个很大的变化。该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 
-
-  sysfs 文件系统集成了下面3种文件系统的信息：针对进程信息的 proc 文件系统、针对设备的 devfs 文件系统以及针对伪终端的 devpts 文件系统。
-
-  该文件系统是内核设备树的一个直观反映。
-
-  当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。
-
-- **/tmp**：
-  tmp 是 temporary(临时) 的缩写这个目录是用来存放一些临时文件的。
-
-- **/usr**：
-  usr 是 unix shared resources(共享资源) 的缩写，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。
-
-- **/usr/bin：**
-  系统用户使用的应用程序。
-
-- **/usr/sbin：**
-  超级用户使用的比较高级的管理程序和系统守护程序。
-
-- **/usr/src：**
-  内核源代码默认的放置目录。
-
-- **/var**：
-  var 是 variable(变量) 的缩写，这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
-
-- **/run**：
-  是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。
-
-+ **/etc**：
-
-  上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。
-
-+ **/bin, /sbin, /usr/bin, /usr/sbin**: 这是系统预设的执行文件的放置目录，比如 ls 就是在 /bin/ls 目录下的。
-
-+ 值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给 root 使用的指令。
-
-+ **/var**： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在 /var/log 目录下，另外 mail 的预设放置也是在这里
-
 ## Linux系统开关机
 
 Linux系统在开机时会自启动许多程序。它们在Windows叫做服务(`service`) , 在Linux就叫做守护进程 (`daemon`)
@@ -536,6 +427,8 @@ tar -zcvf nginx.tar.gz nginx-1.21.6
 ```bash
 tar -zxvf nginx.tar.gz -C /user/loki/tmp
 ```
+
+
 
 ## 目录/磁盘/内存使用情况查询
 
@@ -957,15 +850,278 @@ Mon Jun 20 17:19:06 CST 2022
 + 善用tab键
 + 善用上下键，PageDown，PageUp键
 
-# 三、Linux文件访问权限与用户管理
-
-Linux 系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。最高权限账户为`root`用户，可以操作一切
-
-为了保护系统的安全性，Linux 系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定
+# 三、Linux文件系统与文件权限
 
 
 
-## 用户与用户组管理
+## Linux文件系统
+
+Linux文件系统是一个由许多目录组成的树状结构。这些目录只是包含其他文件列表的文件。Linux在文件和目录之间没有区别。Linux文件系统中的所有文件都称为目录，这些文件的分类如下：
+
+- 包含数据，文本，图像，程序指令的普通文件。
+- 用于访问硬件设备的特殊文件。
+- 包含普通文件和特殊文件的目录。
+
+下面让我们看一下Linux文件系统。使用`ls -l`命令列出所有文件和目录
+
+```
+ls / 
+```
+
+![image-20220619011237336](https://s2.loli.net/2022/06/19/NovWaEqYuwO4khd.png)
+
+> 注：
+>
+> + 下图中的箭头指向该文件夹的的实际位置，可以理解为Windows中的快捷方式，Linux通过**`挂载`**实现这个功能
+
+![img](https://www.runoob.com/wp-content/uploads/2014/06/d0c50-linux2bfile2bsystem2bhierarchy.jpg)
+
+以下是对这些目录的解释：
+
+- **/bin**：
+  bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着最经常使用的命令。
+
+- **/boot：**
+  这里存放的是启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。
+
+- **/dev ：**
+  dev 是 Device(设备) 的缩写, 该目录下存放的是 Linux 的外部设备，在 Linux 中访问设备的方式和访问文件的方式是相同的。
+
+- **/etc：** 
+  etc 是 Etcetera(等等) 的缩写,这个目录用来存放所有的系统管理所需要的配置文件和子目录。
+
+- **/home**：
+  用户的主目录，在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的，如上图中的 alice、bob 和 eve。
+
+- **/lib**：
+  lib 是 Library(库) 的缩写这个目录里存放着系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。几乎所有的应用程序都需要用到这些共享库。
+
+- **/lost+found**：
+  这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
+
+- **/media**：
+  linux 系统会自动识别一些设备，例如U盘、光驱等等，当识别后，Linux 会把识别的设备挂载到这个目录下。
+
+- **/mnt**：
+  系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。
+
+- **/opt**：
+  opt 是 optional(可选) 的缩写，这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
+
+- **/proc**：
+  proc 是 Processes(进程) 的缩写，/proc 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。
+  这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：
+
+  ```
+  echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+  ```
+
+- **/root**：
+  该目录为系统管理员，也称作超级权限者的用户主目录。
+
+- **/sbin**：
+  s 就是 Super User 的意思，是 Superuser Binaries (超级用户的二进制文件) 的缩写，这里存放的是系统管理员使用的系统管理程序。
+
+- **/selinux**：
+  这个目录是 Redhat/CentOS 所特有的目录，Selinux 是一个安全机制，类似于 windows 的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。
+
+- **/srv**：
+  该目录存放一些服务启动之后需要提取的数据。
+
+- **/sys**：
+
+  这是 Linux2.6 内核的一个很大的变化。该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 
+
+  sysfs 文件系统集成了下面3种文件系统的信息：针对进程信息的 proc 文件系统、针对设备的 devfs 文件系统以及针对伪终端的 devpts 文件系统。
+
+  该文件系统是内核设备树的一个直观反映。
+
+  当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。
+
+- **/tmp**：
+  tmp 是 temporary(临时) 的缩写这个目录是用来存放一些临时文件的。
+
+- **/usr**：
+  usr 是 unix shared resources(共享资源) 的缩写，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。
+
+- **/usr/bin：**
+  系统用户使用的应用程序。
+
+- **/usr/sbin：**
+  超级用户使用的比较高级的管理程序和系统守护程序。
+
+- **/usr/src：**
+  内核源代码默认的放置目录。
+
+- **/var**：
+  var 是 variable(变量) 的缩写，这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
+
+- **/run**：
+  是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。
+
++ **/etc**：
+
+  上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。
+
++ **/bin, /sbin, /usr/bin, /usr/sbin**: 这是系统预设的执行文件的放置目录，比如 ls 就是在 /bin/ls 目录下的。
+
++ 值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给 root 使用的指令。
+
++ **/var**： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在 /var/log 目录下，另外 mail 的预设放置也是在这里
+
+## 文件权限管理
+
+### ls -l：查看文件的属性和权限、并详细说明
+
+> 通过 `ls -l` 命令来显示一个文件的属性以及文件所属的用户和组
+
+:rocket:**注：每个文件的属性由左边第一部分的 10 个字符来确定，最后一行以点(.)结尾的是隐藏文档**
+
+```bash
+[root@VM-16-12-centos /]# ls -l
+total 72
+lrwxrwxrwx.   1 root root     7 Mar  7  2019 bin -> usr/bin
+dr-xr-xr-x.   5 root root  4096 Apr 26 09:07 boot
+drwxr-xr-x    2 root root  4096 Nov  5  2019 data		
+drwxr-xr-x   19 root root  2980 Apr 26 10:44 dev
+drwxr-xr-x.  96 root root 12288 May  4 18:37 etc
+drwxr-xr-x.   3 root root  4096 May  7 19:31 home
+lrwxrwxrwx.   1 root root     7 Mar  7  2019 lib -> usr/lib
+lrwxrwxrwx.   1 root root     9 Mar  7  2019 lib64 -> usr/lib64
+drwx------.   2 root root 16384 Mar  7  2019 lost+found
+drwxr-xr-x.   2 root root  4096 Apr 11  2018 media
+drwxr-xr-x.   2 root root  4096 Apr 11  2018 mnt
+drwxr-xr-x.   5 root root  4096 May  4 18:37 opt
+dr-xr-xr-x  109 root root     0 Apr 26 10:44 proc
+dr-xr-x---.   9 root root  4096 May  7 19:27 root
+drwxr-xr-x   28 root root  1000 Jun  4 19:36 run
+lrwxrwxrwx.   1 root root     8 Mar  7  2019 sbin -> usr/sbin
+drwxr-xr-x.   2 root root  4096 Apr 11  2018 srv
+dr-xr-xr-x   13 root root     0 Apr 26 16:55 sys
+drwxrwxrwt.   9 root root  4096 Jun 19 03:20 tmp
+drwxr-xr-x.  14 root root  4096 Jan  8  2021 usr
+drwxr-xr-x.  20 root root  4096 Jan  8  2021 var
+```
+
+从上面可以看到，每一行都有列，分别是
+
+1. 第一列共10位，第1位表示文档类型，`d`表示目录，`-`表示文件，`l`表示链接文件，`b`表示可随机存取的设备，如U盘等，`c`表示一次性读取设备，如鼠标、键盘等。后9位，以三个为一组，依次对应三种身份所拥有的权限，且均为 **rwx** 的三个参数的组合。身份顺序为：owner、group、others
+
+   + `r` 代表可读(read)
+   + `w` 代表可写(write)
+   + ` x` 代表可执行(execute)
+   + 如果没有权限，就会出现减号` - `
+
+   如：`-r-xr-x---`的含义为**当前文档是一个文件，拥有者可读、可执行，同一个群组下的用户，可读、可执行，其他人没有任何权限**。
+
+   ![363003_1227493859FdXT](https://www.runoob.com/wp-content/uploads/2014/06/363003_1227493859FdXT.png)
+
+2. **第二列**表示链接数，表示有多少个文件链接到inode号码
+
+3. **第三列**表示拥有者（属主）
+
+4. **第四列**表示所属群组（属组）
+
+5. **第五列**表示文档容量大小，单位字节
+
+6. **第六列**表示文档最后修改时间，注意不是文档的创建时间
+
+> 注：
+>
+> + **Linux文件属主和属组**
+>
+>   对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。
+>
+>   同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。
+>
+>   文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。
+>
+>   因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。
+>
+> + **对于 root 用户来说，一般情况下，文件的权限对其不起作用**
+
+### chgrp：更改文件属组
+
+语法：
+
+```
+chgrp [-R] 属组名 文件名
+```
+
+参数选项
+
+- -R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。
+
+### chown：更改文件属主，也可以同时更改文件属组
+
+语法：
+
+```
+chown [–R] 属主名 文件名
+chown [-R] 属主名：属组名 文件名
+```
+
+进入 /root 目录（~）将install.log的拥有者改为bin这个账号：
+
+```
+[root@www ~] cd ~
+[root@www ~]# chown bin install.log
+[root@www ~]# ls -l
+-rw-r--r--  1 bin  users 68495 Jun 25 08:53 install.log
+```
+
+将install.log的拥有者与群组改回为root：
+
+```
+[root@www ~]# chown root:root install.log
+[root@www ~]# ls -l
+-rw-r--r--  1 root root 68495 Jun 25 08:53 install.log
+```
+
+### chmod：更改文件访问属性
+
+Linux文件属性有两种设置方法，一种是数字（常用），一种是符号。
+
+Linux 文件的基本权限就有九个，分别是 **owner/group/others(拥有者/组/其他)** 三种身份各有自己的 **read/write/execute** 权限。
+
+先复习一下刚刚上面提到的数据：文件的权限字符为： **-rwxrwxrwx** ， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，**各权限的分数对照表如下**：
+
+- r:4
+- w:2
+- x:1
+
+每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： **-rwxr-x---** 分数则是：
+
+- owner = rwx = 4+2+1 = 7
+- group = r-x = 4+0+1 = 5
+- others= --- = 0+0+0 = 0
+
+所以等一下我们设定权限的变更时，该文件的权限数字就是 **750**。变更权限的指令 chmod 的语法是这样的：
+
+```
+ chmod [-R] xyz 文件或目录
+```
+
+选项与参数：
+
+- xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。
+- -R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更
+
+举例来说，如果要将 .test 这个文件所有的权限都设定启用，那么命令如下：
+
+```bash
+[root@www ~] ls -al .test
+-rw-r--r--  1 root root 395 Jul  4 11:45 .test
+[root@www ~] chmod 777 .test
+[root@www ~] ls -al .test
+-rwxrwxrwx  1 root root 395 Jul  4 11:45 .test
+```
+
+那如果要将权限变成 *-rwxr-xr--* 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754
+
+# 四、用户与用户组管理
+
+Linux 系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。最高权限账户为`root`用户，可以操作一切为了保护系统的安全性，Linux 系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定
 
 ### 用户管理：查看、新增删除、切换、密码管理
 
@@ -1143,163 +1299,11 @@ groupdel [组名称]
 loki    ALL=(ALL)       ALL
 ```
 
-
-
-## 文件权限管理
-
-### ls -l：查看文件的属性和权限、并详细说明
-
-> 通过 `ls -l` 命令来显示一个文件的属性以及文件所属的用户和组
-
-:rocket:**注：每个文件的属性由左边第一部分的 10 个字符来确定，最后一行以点(.)结尾的是隐藏文档**
-
-```bash
-[root@VM-16-12-centos /]# ls -l
-total 72
-lrwxrwxrwx.   1 root root     7 Mar  7  2019 bin -> usr/bin
-dr-xr-xr-x.   5 root root  4096 Apr 26 09:07 boot
-drwxr-xr-x    2 root root  4096 Nov  5  2019 data		
-drwxr-xr-x   19 root root  2980 Apr 26 10:44 dev
-drwxr-xr-x.  96 root root 12288 May  4 18:37 etc
-drwxr-xr-x.   3 root root  4096 May  7 19:31 home
-lrwxrwxrwx.   1 root root     7 Mar  7  2019 lib -> usr/lib
-lrwxrwxrwx.   1 root root     9 Mar  7  2019 lib64 -> usr/lib64
-drwx------.   2 root root 16384 Mar  7  2019 lost+found
-drwxr-xr-x.   2 root root  4096 Apr 11  2018 media
-drwxr-xr-x.   2 root root  4096 Apr 11  2018 mnt
-drwxr-xr-x.   5 root root  4096 May  4 18:37 opt
-dr-xr-xr-x  109 root root     0 Apr 26 10:44 proc
-dr-xr-x---.   9 root root  4096 May  7 19:27 root
-drwxr-xr-x   28 root root  1000 Jun  4 19:36 run
-lrwxrwxrwx.   1 root root     8 Mar  7  2019 sbin -> usr/sbin
-drwxr-xr-x.   2 root root  4096 Apr 11  2018 srv
-dr-xr-xr-x   13 root root     0 Apr 26 16:55 sys
-drwxrwxrwt.   9 root root  4096 Jun 19 03:20 tmp
-drwxr-xr-x.  14 root root  4096 Jan  8  2021 usr
-drwxr-xr-x.  20 root root  4096 Jan  8  2021 var
-```
-
-从上面可以看到，每一行都有列，分别是
-
-1. 第一列共10位，第1位表示文档类型，`d`表示目录，`-`表示文件，`l`表示链接文件，`b`表示可随机存取的设备，如U盘等，`c`表示一次性读取设备，如鼠标、键盘等。后9位，以三个为一组，依次对应三种身份所拥有的权限，且均为 **rwx** 的三个参数的组合。身份顺序为：owner、group、others
-
-   + `r` 代表可读(read)
-   + `w` 代表可写(write)
-   + ` x` 代表可执行(execute)
-   + 如果没有权限，就会出现减号` - `
-
-   如：`-r-xr-x---`的含义为**当前文档是一个文件，拥有者可读、可执行，同一个群组下的用户，可读、可执行，其他人没有任何权限**。
-
-   **总结**
-
-   ![363003_1227493859FdXT](https://www.runoob.com/wp-content/uploads/2014/06/363003_1227493859FdXT.png)
-
-2. **第二列**表示链接数，表示有多少个文件链接到inode号码
-
-3. **第三列**表示拥有者（属主）
-
-4. **第四列**表示所属群组（属组）
-
-5. **第五列**表示文档容量大小，单位字节
-
-6. **第六列**表示文档最后修改时间，注意不是文档的创建时间
-
-> 注：
->
-> + **Linux文件属主和属组**
->
->   对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。
->
->   同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。
->
->   文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。
->
->   因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。
->
-> + **对于 root 用户来说，一般情况下，文件的权限对其不起作用**
-
-### chgrp：更改文件属组
-
-语法：
-
-```
-chgrp [-R] 属组名 文件名
-```
-
-参数选项
-
-- -R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。
-
-### chown：更改文件属主，也可以同时更改文件属组
-
-语法：
-
-```
-chown [–R] 属主名 文件名
-chown [-R] 属主名：属组名 文件名
-```
-
-进入 /root 目录（~）将install.log的拥有者改为bin这个账号：
-
-```
-[root@www ~] cd ~
-[root@www ~]# chown bin install.log
-[root@www ~]# ls -l
--rw-r--r--  1 bin  users 68495 Jun 25 08:53 install.log
-```
-
-将install.log的拥有者与群组改回为root：
-
-```
-[root@www ~]# chown root:root install.log
-[root@www ~]# ls -l
--rw-r--r--  1 root root 68495 Jun 25 08:53 install.log
-```
-
-### chmod：更改文件访问属性
-
-Linux文件属性有两种设置方法，一种是数字（常用），一种是符号。
-
-Linux 文件的基本权限就有九个，分别是 **owner/group/others(拥有者/组/其他)** 三种身份各有自己的 **read/write/execute** 权限。
-
-先复习一下刚刚上面提到的数据：文件的权限字符为： **-rwxrwxrwx** ， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，**各权限的分数对照表如下**：
-
-- r:4
-- w:2
-- x:1
-
-每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： **-rwxr-x---** 分数则是：
-
-- owner = rwx = 4+2+1 = 7
-- group = r-x = 4+0+1 = 5
-- others= --- = 0+0+0 = 0
-
-所以等一下我们设定权限的变更时，该文件的权限数字就是 **750**。变更权限的指令 chmod 的语法是这样的：
-
-```
- chmod [-R] xyz 文件或目录
-```
-
-选项与参数：
-
-- xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。
-- -R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更
-
-举例来说，如果要将 .bashrc 这个文件所有的权限都设定启用，那么命令如下：
-
-```
-[root@www ~]# ls -al .bashrc
--rw-r--r--  1 root root 395 Jul  4 11:45 .bashrc
-[root@www ~]# chmod 777 .bashrc
-[root@www ~]# ls -al .bashrc
--rwxrwxrwx  1 root root 395 Jul  4 11:45 .bashrc
-```
-
-那如果要将权限变成 *-rwxr-xr--* 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754
+##
 
 
 
-# 四、Linux软件包管理
+# 五、Linux软件包管理
 
 > 以CentOS为例，安装软件有以下几种方式
 >
@@ -1357,5 +1361,5 @@ yum -y [可选参数] [软件包]
 
 
 
-# 五、Shell编程
+# 六、Shell编程
 

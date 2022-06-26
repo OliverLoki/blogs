@@ -4,173 +4,225 @@
 >+ Redis是一种满足CP原则的**高性能分布式**[NoSQL数据库](https://blog.csdn.net/Night__breeze/article/details/123766938)
 >   + 关于CP原则请看[分布式数据库中的CAP定理](https://blog.csdn.net/Night__breeze/article/details/123766938)
 
-# 一、Redis简介
+# 一、Redis简介：key-value内存型数据库
 
-简介旨在说明两个问题
++ **什么是Redis**
 
-+ 什么是Redis
-+ Redis可以帮助我们做什么
+  > The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker.
 
-图为官方对Redis的介绍
++ **Redis的特性**
 
+  + Redis是用C语言开发的一个开源的高性能基于内存运行的键值对NoSQL数据库
+  + Redis 通常被称为数据结构服务器，因为值（value）可以是字符串(String)、哈希(Hash)、列表(list)、集合(sets)和有序集合(sorted sets)等类型
 
+  + Redis运行在内存中但是可以持久化到磁盘，所以在对不同数据集进行高速读写时需要权衡内存，因为数据量不能大于硬件内存。在内存数据库方面的另一个优点是，相比在磁盘上相同的复杂的数据结构，在内存中操作起来非常简单，这样Redis可以做很多内部复杂性很强的事情。同时，在磁盘格式方面他们是紧凑的以追加的方式产生的，因为他们并不需要进行随机访问。
+  + Redis有着更为复杂的数据结构并且提供对他们的原子性操作，这是一个不同于其他数据库的进化路径。Redis的数据类型都是基于基本数据结构的同时对程序员透明，无需进行额外的抽象
+  + Redis支持数据的备份，即master-slave模式的数据备份
 
-![image-20220105175033483](https://s2.loli.net/2022/01/05/z5JSOutogYpByxR.png)
++ **Redis可以用在如下场景，其中1，2，5用得较多**
 
-> Redis的特性
+  + 缓存
+    热点数据（经常会被查询，但是不经常被修改或者删除的数据），首选是使用redis缓存。
 
-+ Redis是用C语言开发的一个开源的高性能基于内存运行的键值对NoSQL数据库
-+ Redis 通常被称为数据结构服务器，因为值（value）可以是字符串(String)、哈希(Hash)、列表(list)、集合(sets)和有序集合(sorted sets)等类型
+  + 计数器
+    单线程避免并发问题，高性能，如减库存。
 
-+ Redis运行在内存中但是可以持久化到磁盘，所以在对不同数据集进行高速读写时需要权衡内存，因为数据量不能大于硬件内存。在内存数据库方面的另一个优点是，相比在磁盘上相同的复杂的数据结构，在内存中操作起来非常简单，这样Redis可以做很多内部复杂性很强的事情。同时，在磁盘格式方面他们是紧凑的以追加的方式产生的，因为他们并不需要进行随机访问。
-+ Redis有着更为复杂的数据结构并且提供对他们的原子性操作，这是一个不同于其他数据库的进化路径。Redis的数据类型都是基于基本数据结构的同时对程序员透明，无需进行额外的抽象
-+ Redis支持数据的备份，即master-slave模式的数据备份
+  + 队列
+    相当于消息系统，ActiveMQ，RocketMQ等工具类似，但是个人觉得简单用一下还行，如果对于数据一致性要求高的话还是用RocketMQ等专业系统。
 
-> Redis能做什么
+  + 位操作
+    使用setbit、getbit、bitcount命令，如统计用户签到，去重登录次数统计，某用户是否在线状态等；
 
-Redis可以用在如下场景，其中1，2，5用得较多
+  + redis内构建一个足够长的数组，每个数组元素只能是0和1两个值，然后这个数组的下标index用来表示我们上面例子里面的用户id（必须是数字哈），那么很显然，这个几亿长的大数组就能通过下标和元素值（0和1）来构建一个记忆系统，上面我说的几个场景也就能够实现。用到的命令是：setbit、getbit、bitcount
 
-1. 缓存
-   热点数据（经常会被查询，但是不经常被修改或者删除的数据），首选是使用redis缓存。
+  + 分布式锁与单线程
+    验证前端的重复请求（可以自由扩展类似情况），可以通过redis进行过滤：每次请求将request Ip、参数、接口等hash作为key存储redis（幂等性请求），设置多长时间有效期，然后下次请求过来的时候先在redis中检索有没有这个key，进而验证是不是一定时间内过来的重复提交。秒杀系统，基于redis是单线程特征，防止出现数据库“爆破”
 
-2. 计数器
-   单线程避免并发问题，高性能，如减库存。
+  + 最新列表
+    redis的LPUSH命令构建List。
 
-3. 队列
-   相当于消息系统，ActiveMQ，RocketMQ等工具类似，但是个人觉得简单用一下还行，如果对于数据一致性要求高的话还是用RocketMQ等专业系统。
+  + 排行榜
 
-4. 位操作
-   使用setbit、getbit、bitcount命令，如统计用户签到，去重登录次数统计，某用户是否在线状态等；
+    谁得分高谁排名往上。命令：ZADD（有序集，sorted set）
 
-   redis内构建一个足够长的数组，每个数组元素只能是0和1两个值，然后这个数组的下标index用来表示我们上面例子里面的用户id（必须是数字哈），那么很显然，这个几亿长的大数组就能通过下标和元素值（0和1）来构建一个记忆系统，上面我说的几个场景也就能够实现。用到的命令是：setbit、getbit、bitcount
-
-5. 分布式锁与单线程
-   验证前端的重复请求（可以自由扩展类似情况），可以通过redis进行过滤：每次请求将request Ip、参数、接口等hash作为key存储redis（幂等性请求），设置多长时间有效期，然后下次请求过来的时候先在redis中检索有没有这个key，进而验证是不是一定时间内过来的重复提交。秒杀系统，基于redis是单线程特征，防止出现数据库“爆破”
-
-6. 最新列表
-   redis的LPUSH命令构建List。
-
-7. 排行榜
-
-   谁得分高谁排名往上。命令：ZADD（有序集，sorted set）
-
-# 二、搭建一个Redis学习环境
+# 二、Linux环境下安装与配置Redis
 
 推荐使用Linux环境学习使用Redis，更接近真实开发
 
-> 如何搭建自己的Linux学习环境？
+## Linux环境搭建
 
 [Linux基础环境搭建移步此处](https://blog.csdn.net/Night__breeze/article/details/125437582)
 
-### Redis的安装&环境&配置
+## 在CentOS中安装Redis7
 
-> 1、从Redis英文官网可以下载到最新的Redis压缩包
+### 官网下载压缩包安装
 
-https://redis.io/
+1. 在[Redis官网](https://redis.io/download/) 下载 `Redis` 压缩包
 
-通过Xftp传输到远程Linux环境
+2. 通过 `Xftp` 可以将 `Redis` 安装包上传到远程 `linux` 服务器
 
-![image-20220105002942085](https://s2.loli.net/2022/01/05/2OyZnX7BU4kuqWj.png)
+   注：主机额外安装的软件通常安装在 `/opt` 目录下
 
-> 2、解压Redis的安装包
+3. 解压redis安装包
 
-注：程序一般放在 /opt 目录下
+   ```bash
+   mv redis-6.2.6.tar.gz /opt #首先移动安装包至opt目录
+   tar -zxvf redis-6.2.6.tar.gz #解压安装包，解压后文件在当前目录
+   ```
 
-```bash
-mv redis-6.2.6.tar.gz /opt #首先移动安装包至opt目录
-tar -zxvf redis-6.2.6.tar.gz #解压安装包
-```
+4. 由于redis是由C语言编写的，它的运行需要C环境，因此我们需要先安装gcc。
 
-> 3、解压后查看redis安装目录（非必要，只是通过这个命令可以看到解压后的文件）
+   通过 `gcc -v` 检查是否有GCC环境，如果没有，安装命令如下	
 
-![image-20220105003606723](https://s2.loli.net/2022/01/05/fELTbnHv3IN4M8a.png)
+   ```
+   yum install gcc-c++ 
+   ```
 
-> 4、Redis依赖的环境安装
+5. 对解压后的文件进行编译与安装
 
-由于redis是由C语言编写的，它的运行需要C环境，因此我们需要先安装gcc。安装命令如下
+   ```bash
+   #进入Redis工作目录
+   cd redis-6.2.6 
+   #对解压后的文件进行编译
+   make 
+   #安装
+   make install 
+   ```
 
-**在Redis安装目录(/opt)中执行**
+   **注：Redis的默认安装路径 `/usr/local/bin`，所以安装成功后，我们可以去这个目录看看，如下所示**
 
-```
-yum install gcc-c++ #需要联网
-```
+   ```bash
+   [root@VM-16-12-centos bin]# ls
+   busybox-x86_64  redis-benchmark  redis-check-rdb  redisConfig     redis-server
+   dump.rdb        redis-check-aof  redis-cli        redis-sentinel
+   ```
 
-> 5、对解压后的文件进行编译与安装
+6. 查看`redis-cli`版本，若显示版本号，证明安装成功
 
-```bash
-# cd redis-6.2.6
-make #对解压后的文件进行编译
-make install #安装
-```
+   ```ruby
+   redis-cli --version
+   ```
 
-成功后截图
+### yum方式安装
 
-![image-20220105010302802](https://s2.loli.net/2022/01/05/uJPITOCDy7RiGtl.png)
-
-
-
-**注：Redis的默认安装路径  /usr/local/bin，所以安装成功后，我们可以去这个目录看看**
-
-> 6、为了方便管理，将Redis配置文件复制到Redis默认安装路径下`/usr/local/bin`
-
-```bash
- mkdir lokiconfig #新建一个目录(名称可自定义)用来存储拷贝的redis.conf
- cp /opt/redis-6.2.6/redis.conf lokiconfig #拷贝
-```
-
-![image-20220105005911911](https://s2.loli.net/2022/01/05/P5ZWhtO16eV9v2S.png)
-
-
-
-> 7、Redis默认不是后台启动的，需要配置 `redis.conf`
-
-![image-20220105010804847](https://s2.loli.net/2022/01/05/xvrcSwEQBX3DJM5.png)
-
-### 启动redis服务
-
-注意是在 /usr/bin 目录下启动
+Centos7 直接yum 安装的redis 不是最新版本
 
 ```bash
-redis-server lokiconfig/redis.conf
+yum install redis
 ```
 
-![image-20220105011129465](https://s2.loli.net/2022/01/05/XN1yVmpKHTosEJr.png)
 
-**注：6.24版本后启动命令没有返回值，只需要检查6379端口号即可**
+如果要安装最新的redis，需要安装Remi的软件源，官网地址：http://rpms.famillecollet.com/
 
-> 新开一个Xshell会话窗口，使用`redis-cli`测试连接
+```
+yum install -y http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+```
+
+
+然后可以使用下面的命令安装最新版本的redis：
+
+```
+yum --enablerepo=remi install redis -y
+```
+
+
+安装完毕后，即可使用下面的命令启动redis服务
+
+```
+systemctl start redis
+```
+
+查看redis版本：
+
+```ruby
+redis-cli --version
+```
+
+
+
+## 启动与退出Redis、Redis-cli连接
+
+> Reids启动
+
+1. **Redis的启动需要配置文件，为了方便管理，可将Redis配置文件复制到Redis默认安装路径下`/usr/local/bin`，操作如下**
+
+   ```bash
+    mkdir lokiconfig #新建一个目录(名称可自定义)用来存储拷贝的redis.conf
+    cp /opt/redis-6.2.6/redis.conf lokiconfig #拷贝
+   ```
+
+2. 在 `/usr/local/bin` 目录下
+
+   ```
+   redis-server [Redis配置文件的相对路径]
+   ```
+
+新开一个Xshell会话窗口，使用`redis-cli`测试是否启动成功
+
+> Redis-cli的连接
+
+在 `usr/local/bin` 目录下执行以下命令
 
 ```bash
 redis-cli -p 6379 
 ping #测试连通性
 ```
 
-这是设置redis登录密码后的登录方式![image-20220108214731261](https://s2.loli.net/2022/01/08/gRxeIsaqfMv4YGp.png)
+> 退出Redis服务
 
-
-
-查看redis进程是否开启
-
-![](https://img-blog.csdnimg.cn/20200820104300532.png#pic_center)
-
-### 关闭Redis服务
-
-![image-20220105011846153](https://s2.loli.net/2022/01/05/2zWSt4GUOiueK5E.png)
+在Redis-cli中执行以下命令
 
 ```bash
 shutdown #关闭进程
 exit #退出
 ```
 
-可以自行尝试单机多redis启动集群测试
+## 设置Redis开机自启动
+
+> 修改redis.conf配置文件中的两项配置
+
+- daemonize yes # 以守护进程方式启动
+- supervised systemd # 可以跟systemd进程进行交互
+
+> 新建redis.service
+
+```
+vim lib/systemd/system/redis.service
+```
+
+修改路径
+
++ ExecStart
++ ExecStop
+
+```
+[Unit]
+Description=Redis In-Memory Data Store
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/redis-6.0.10/src/redis-server /usr/local/redis-6.0.10/redis.conf
+ExecStop=/usr/local/redis-6.0.10/src/redis-cli shutdown
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+> 开机自启动设置
+
+```
+设为开机启动
+chkconfig redis on
+关闭开机启动
+chkconfig redis off
+```
 
 
 
-在Redis安装目录中，我们还可以看到一些东西，接下来我们来看一下这些东西怎么玩
-
-![image-20220327125457048](https://s2.loli.net/2022/03/27/eTHfCWzEx8atuLP.png)
-
-### 性能测试工具
+## 性能测试工具：redis-benchmark
 
 `redis-benchmark`是一个官方自带的性能测试工具
 
@@ -180,9 +232,7 @@ redis 性能测试的基本命令如下：
 redis-benchmark [option] [option value]
 ```
 
-**注：该命令是在 redis 的目录下执行的，而不是 redis 客户端的内部指令**
-
-
+**注：该命令不是 redis 客户端的内部指令，在安装目录下执行这个命令**
 
 附：redis 性能测试工具可选参数如下所示
 
@@ -212,11 +262,15 @@ redis-benchmark -h localhost -p 6379 -c 100 -n 100000
 
 可以看到Redis是非常快的
 
-### 基础知识
+
+
+# 三、Redis入门
+
+## 基础知识
 
 > redis默认有16个数据库
 
-默认使用 DB 0 ，可以使用select n切换到DB n，dbsize可以查看当前数据库的大小，与key数量相关。
+默认使用 DB 0 ，可以使用select n切换到DB n，dbsize可以查看当前数据库的大小，与key数量相关。		
 
 ```bash
 127.0.0.1:6379> config get databases # 命令行查看数据库数量databases
@@ -230,7 +284,7 @@ OK
 # 不同数据库之间 数据是不能互通的，并且dbsize 是根据库中key的个数。
 127.0.0.1:6379> set name loki 
 OK
-127.0.0.1:6379> SELECT 8
+127.0.0.1:6379> SELECT 8				
 OK
 127.0.0.1:6379[8]> get name # db8中并不能获取db0中的键值对。
 (nil)
@@ -255,7 +309,7 @@ OK
 误区2：多线程（CPU上下文会切换！）一定比单线程效率高！
 核心：Redis是将所有的数据放在内存中的，所以说使用单线程去操作效率就是最高的，多线程（CPU上下文会切换：耗时的操作！），对于内存系统来说，如果没有上下文切换效率就是最高的，多次读写都是在一个CPU上的，在内存存储数据情况下，单线程就是最佳的方案。
 
-### 关于Redis-key的一些操作
+## 关于Redis-key的一些操作
 
 ```bash
 keys * #查看所有的key
@@ -270,62 +324,71 @@ append key "value" #对当前key的value追加字符串，如果key不存在，�
 strlen key #测试字符串长度
 ```
 
-# 三、Redis数据类型
+# 四、Redis数据类型
+
+> - redis自身是一个Map类型的存储方式，其中所有的数据都是采用key:value的形式存储
+> - **我们讨论的数据类型指的是存储的数据的类型，也就是value部分的类型，key部分永远都是字符串**
 
 ## 五大基础数据类型
 
-- redis自身是一个Map类型的存储方式，其中所有的数据都是采用key:value的形式存储
-- 我们讨论的数据类型指的是存储的数据的类型，也就是value部分的类型，key部分永远都是字符串
+### String
 
-**推荐阅读**
++ 底层数据结构是一个动态字符串，类似于Java的ArrayList，采用预分配冗余空间的方式来减少内存的频繁分配
 
-[【Redis】五种数据类型及其使用场景](https://blog.csdn.net/zzu_seu/article/details/106323114?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164140189816780255210792%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=164140189816780255210792&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-106323114.first_rank_v2_pc_rank_v29&utm_term=redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B&spm=1018.2226.3001.4187)
++ String类型是最常用最基础的数据类型
++ String类型是二进制安全的，意味着String类型可以保存任何数据，比如jpg图片，视频，或者任何序列化对象
++ 一个`Redis`中的`value`可以存储最多512M的内容
 
-> （1）String
+```
+set name "loki"
+```
 
-下表列出了常用的 redis 字符串命令：
 
-| 常用命令及描述                                               |
-| :----------------------------------------------------------- |
-| [set key value](https://www.runoob.com/redis/strings-set.html) 设置指定 key 的值 |
-| [get key](https://www.runoob.com/redis/strings-get.html) 获取指定 key 的值。 |
-| [getset key value](https://www.runoob.com/redis/strings-getset.html) 将给定 key 的值设为 value ，并返回 key 的旧值(old value) |
-| [mset k1 v1 k2 v2] 同时设置一个或多个 key-value 对。         |
-| [mget k1 v1 k2 v2] 获取所有(一个或多个)给定 key 的值。       |
-| [strlen key](https://www.runoob.com/redis/strings-strlen.html) 返回 key 所储存的字符串值的长度 |
-| [incr key](https://www.runoob.com/redis/strings-incr.html) 将 key 中储存的数字值增一 |
-| [incrby key increment](https://www.runoob.com/redis/strings-incrby.html) 将 key 所储存的值加上给定的增量值（increment） |
-| [decr key](https://www.runoob.com/redis/strings-decr.html) 将 key 中储存的数字值减一 |
-| [decrby key decrement](https://www.runoob.com/redis/strings-decrby.html) key 所储存的值减去给定的减量值（decrement） |
-| [append key value](https://www.runoob.com/redis/strings-append.html) 如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾 |
 
-> （2）List
+> 下表列出了String常用的命令
+
+| 常用命令及描述           |                                                              |
+| :----------------------- | ------------------------------------------------------------ |
+| `set [key] [value ]`     | 设置指定 key 的值                                            |
+| `get [key]`              | 获取指定 key 的值。                                          |
+| `getset [key] [value]`   | 将给定 key 的值设为 value ，并返回 key 的旧值(old value)     |
+| `mset [k1 v1 k2 v2]`     | 同时设置一个或多个 key-value 对。                            |
+| `mget [k1 v1 k2 v2]`     | 获取所有(一个或多个)给定 key 的值。                          |
+| `strlen [key]`           | 返回 key 所储存的字符串值的长度                              |
+| `incr [key]`             | 将 key 中储存的数字值增一 （原子操作，不会被进程调度打断）   |
+| `decr [key]`             | 将 key 中储存的数字值减一                                    |
+| `incrby [key increment]` | 将 key 所储存的值加上给定的增量值（increment）               |
+| `decrby [key decrement]` | key 所储存的值减去给定的减量值（decrement）                  |
+| `append [key value]`     | 如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾 |
+
+### List：单键多值
+
++ 底层是一个双向链表，对两端的操作效率很高，但是对中间节点的操作效率较差
 
 + Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素到列表的头部（左边）或者尾部（右边）
++ 一个列表最多可以包含 2^32 - 1 个元素 (4294967295, 每个列表超过40亿个元素)
 
-+ 一个列表最多可以包含 2^32 - 1 个元素 (4294967295, 每个列表超过40亿个元素)。
+| 命令及描述                                                   |                                                              |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| [BLPOP key1 key2  timeout](https://www.runoob.com/redis/lists-blpop.html) | 移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止 |
+| [BRPOP key1 key2  timeout](https://www.runoob.com/redis/lists-brpop.html) | 移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止 |
+| [BRPOPLPUSH source destination timeout](https://www.runoob.com/redis/lists-brpoplpush.html) | 从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止 |
+| [lindex key index](https://www.runoob.com/redis/lists-lindex.html) | 通过索引获取列表中的元素                                     |
+| [linsert key before\|after pivot value](https://www.runoob.com/redis/lists-linsert.html) | 在列表的元素前或者后插入元素                                 |
+| [llen key](https://www.runoob.com/redis/lists-llen.html)     | 获取列表长度                                                 |
+| [lpop key](https://www.runoob.com/redis/lists-lpop.html)     | 移出并获取列表的第一个元素                                   |
+| [rpop key](https://www.runoob.com/redis/lists-rpop.html)     | 移除列表的最后一个元素，返回值为移除的元素。                 |
+| [lpush key value1 value2](https://www.runoob.com/redis/lists-lpush.html) | 将一个或多个值插入到列表头部                                 |
+| [LPUSHX key value](https://www.runoob.com/redis/lists-lpushx.html) | 将一个值插入到已存在的列表头部                               |
+| [rpush key value1 value2](https://www.runoob.com/redis/lists-rpush.html) | 在列表尾部添加一个或多个值                                   |
+| [lrange key start stop](https://www.runoob.com/redis/lists-lrange.html) | 获取列表指定范围内的元素                                     |
+| [LREM key count value](https://www.runoob.com/redis/lists-lrem.html) | 移除列表元素                                                 |
+| [LSET key index value](https://www.runoob.com/redis/lists-lset.html) | 通过索引设置列表元素的值                                     |
+| [LTRIM key start stop](https://www.runoob.com/redis/lists-ltrim.html) | 对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。 |
+| [RPOPLPUSH source destination](https://www.runoob.com/redis/lists-rpoplpush.html) | 移除列表的最后一个元素，并将该元素添加到另一个列表并返回     |
+| [RPUSHX key value](https://www.runoob.com/redis/lists-rpushx.html) | 为已存在的列表添加值                                         |
 
-| 命令及描述                                                   |
-| :----------------------------------------------------------- |
-| [BLPOP key1 key2  timeout](https://www.runoob.com/redis/lists-blpop.html) 移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。 |
-| [BRPOP key1 key2  timeout](https://www.runoob.com/redis/lists-brpop.html) 移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。 |
-| [BRPOPLPUSH source destination timeout](https://www.runoob.com/redis/lists-brpoplpush.html) 从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。 |
-| [lindex key index](https://www.runoob.com/redis/lists-lindex.html) 通过索引获取列表中的元素 |
-| [linsert key before\|after pivot value](https://www.runoob.com/redis/lists-linsert.html) 在列表的元素前或者后插入元素 |
-| [llen key](https://www.runoob.com/redis/lists-llen.html) 获取列表长度 |
-| [lpop key](https://www.runoob.com/redis/lists-lpop.html) 移出并获取列表的第一个元素 |
-| [rpop key](https://www.runoob.com/redis/lists-rpop.html) 移除列表的最后一个元素，返回值为移除的元素。 |
-| [lpush key value1 value2](https://www.runoob.com/redis/lists-lpush.html) 将一个或多个值插入到列表头部 |
-| [LPUSHX key value](https://www.runoob.com/redis/lists-lpushx.html) 将一个值插入到已存在的列表头部 |
-| [rpush key value1 value2](https://www.runoob.com/redis/lists-rpush.html) 在列表尾部添加一个或多个值 |
-| [lrange key start stop](https://www.runoob.com/redis/lists-lrange.html) 获取列表指定范围内的元素 |
-| [LREM key count value](https://www.runoob.com/redis/lists-lrem.html) 移除列表元素 |
-| [LSET key index value](https://www.runoob.com/redis/lists-lset.html) 通过索引设置列表元素的值 |
-| [LTRIM key start stop](https://www.runoob.com/redis/lists-ltrim.html) 对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。 |
-| [RPOPLPUSH source destination](https://www.runoob.com/redis/lists-rpoplpush.html) 移除列表的最后一个元素，并将该元素添加到另一个列表并返回 |
-| [RPUSHX key value](https://www.runoob.com/redis/lists-rpushx.html) 为已存在的列表添加值 |
-
-> （3）Set
+### Set
 
 + Set 是 String 类型的无序集合。集合成员是唯一的，这就意味着集合中不能出现重复的数据
 
@@ -350,7 +413,7 @@ strlen key #测试字符串长度
 | [SUNIONSTORE destination key1 [key2\]](https://www.runoob.com/redis/sets-sunionstore.html) 所有给定集合的并集存储在 destination 集合中 |
 | [SSCAN key cursor [MATCH pattern\] [COUNT count]](https://www.runoob.com/redis/sets-sscan.html) 迭代集合中的元素 |
 
-> （4）Hash
+### Hash
 
 + Redis hash 是一个 string 类型的 field（字段） 和 value（值） 的映射表，hash 特别适合用于存储对象
 + Redis 中每个 hash 可以存储 2^32 - 1 键值对
@@ -372,7 +435,7 @@ strlen key #测试字符串长度
 | [HVALS key](https://www.runoob.com/redis/hashes-hvals.html) 获取哈希表中所有值。 |
 | [HSCAN key cursor [MATCH pattern\] [COUNT count]](https://www.runoob.com/redis/hashes-hscan.html) 迭代哈希表中的键值对。 |
 
-> （5）Sorted set
+### Zset：有序集合
 
 + Redis 有序集合和集合一样也是 string 类型元素的集合,且不允许重复的成员
 
@@ -401,11 +464,7 @@ strlen key #测试字符串长度
 
 ## 三种特殊数据类型
 
-+ geospatial 
-+ Hyperloglog
-+ Bitmap
-
-> （1）geospatial 地理位置
+### geospatial：地理位置
 
 这个功能可以将用户给定的地理位置信息储存起来， 并对这些信息进行操作
 
@@ -454,7 +513,7 @@ georadius china:city 100 30 1000 km withcoord  #显示符合条件的定位
 georadius china:city 100 30 1000 km withcoord count 1  #输出指定个数符合条件的
 ```
 
-> （2）Hyperloglog
+### Hyperloglog：基数统计
 
 + Hyperloglog基数统计的算法。不过会有些许误差，如果允许容错，使用Hyperloglog，不允许容错的话使用set
 
@@ -479,7 +538,7 @@ OK
 (integer) 11 #key1+key2中基数的数量 a b c d e f g h i z k
 ```
 
-> （3）Bitmap
+### Bitmap
 
 Bitmap就是通过一个bit位来表示某个元素对应的值或者状态。Bitmaps位图，只有0和1两个状态。
 
@@ -663,7 +722,7 @@ set number 5
 
 > 如果同时使用AOF和RDB进行持久化，Redis会优先载入AOF文件，因为这是更安全的方式
 
-### 使用建议
+## 使用建议
 
 对RDB和AOF两种持久化方式的工作原理、执行流程及优缺点了解后，我们来思考下，实际场景中应该怎么权衡利弊，合理的使用两种持久化方式。如果仅仅是使用Redis作为缓存工具，所有数据可以根据持久化数据库进行重建，则可关闭持久化功能，做好预热、缓存穿透、击穿、雪崩之类的防护工作即可。
 
@@ -676,85 +735,30 @@ set number 5
 - 生产环境多为集群化部署，可在slave开启持久化能力，让master更好的对外提供写服务。
 - 备份文件应自动上传至异地机房或云存储，做好灾难备份
 
-# 六、Redis事务
-
-
-
-> 拓展：事务的ACID原则
-
-关系型数据库遵循ACID规则,事务在英文中是transaction，和现实世界中的交易很类似，它有如下四个特性：
-
-+ A (Atomicity) 原子性
-+ C (Consistency) 一致性
-+ I (Isolation) 独立性
-+ D (Durability) 持久性
-
-为了确保连续多个操作的原子性，我们常用的数据库都会有事务的支持，Redis 也不例外。但它又和关系型数据库不太一样
-
-> 传统数据库事务过程
-
-在关系型数据库中，我们开启事务并进行一系列的读写操作，最后，用户用户可以选择发送commit来确认之前的修改，或者发送rollback来放弃之前的修改
-
-```java
-Connection conn = ... //获取数据库连接
-conn.setAutoCommit(false); //开启事务
-try{
-   //......执行增删改查sql
-   //......执行增删改查sql
-   conn.commit(); //提交事务
-}catch (Exception e) {
-  conn.rollback();//事务回滚
-}finally{
-   conn.close();//关闭链接
-}
-```
-
-
-
-> Redis事务过程
-
-1. 开启事务（multi）
-2. 命令入队
-3. 执行事务（exec）
-
-注：所以事务中的命令在加入时都没有被执行，直到提交时才会开始执行(Exec)一次性完成。
-
-```
-MULTI       //开始事务
-SET   ...   //命令1入队
-GET   ...   //命令1入队
-SADD  ...   //命令1入队
-......
-EXEC        //执行事务(一次执行1.2.3...)
-```
-
-**特性：**
-
-+ 事务中每条命令都会被序列化，执行过程中按顺序执行，不允许其他命令进行干扰
-
-  事务支持一次执行多个命令，一个事务中所有命令都会被序列化。在事务执行过程，会按照顺序串行化执行队列中的命令，其他客户端提交的命令请求不会插入到事务执行命令序列中。
-
-+ Redis事务没有隔离级别的概念
-
-  批量操作在发送 EXEC 命令前被放入队列缓存，并不会被实际执行，也就不存在事务内的查询要看到事务里的更新，事务外查询不能看到
-
-+ **Redis单条命令是保证原子性的，但是事务不保证原子性**，且没有回滚，事务中任意命令执行失败，其余的命令仍会被执行。
-
-> **Redis为什么不支持回滚rollback？**
-
-Redis 操作失败的原因只可能是语法错误或者错误的数据类型操作，这些都是在开发期间能发现的问题，不会进入到生产环境，因此不需要回滚。
-Redis 内部设计推崇简单和高性能，支持事务回滚能力会导致设计复杂，这与Redis的初衷相违背，因此不需要回滚能力。
-Redis 的应用场景明显不是为了数据存储的高可靠与强一致性而设计的，而是为了数据访问的高性能而设计，设计者为了简单性和高性能而部分放弃了原子性
-
 # 七、关于Redis的整合
 
-## Java操作Redis
+## Jedis：Java操作Redis
 
 Jedis集成了Redis的相关命令操作，它是Java语言操作Redis数据库的桥梁。Jedis客户端封装了Redis数据库的大量命令，因此具有许多Redis操作[API]
 
 > 准备工作
 
-1、新建一个Maven项目，导入依赖
+**如果你的Redis是远程连接的话，会出现连接超时或者是拒绝访问的问题，在这边需要进行以下修改**
+
+
+
+**1、打开redis.conf配置文件**
+
++ daemonize yes
++ protected-mode no
++ 注释 bind 127.0.0.1
++ requirepass [设置密码]
+
+**2、云服务器要开放端口**
+
+> 连接步骤
+
+**使用Maven项目导入jedis依赖**
 
 ```xml
  		<dependency>
@@ -764,28 +768,7 @@ Jedis集成了Redis的相关命令操作，它是Java语言操作Redis数据库�
         </dependency>
 ```
 
-**2、远程连接测试Redis服务必须要做的事**
-
-1. Redis服务必须开启远程连接
-2. 必须关闭防火墙
-
-如果你的Redis是远程连接的话，会出现连接超时或者是拒绝访问的问题，在这边需要做两件事情
-
-打开redis.conf配置文件,进行以下修改
-
-```
-daemonize yes
-protected-mode no
-注释掉 bind 127.0.0.1
-requirepass 你的密码 （设置访问redis的密码）
-```
-
-```
-注：vim下如何搜索字符串：
-命令模式下，输入：/字符串
-比如搜索user, 输入/user
-按下回车之后，可以看到vim已经把光标移动到该字符处和高亮了匹配的字符串
-```
+> API测试---无非就是Redis的常用操作，自己在ide里多测试测试就好
 
 ```java
 public class TestPing {
@@ -796,17 +779,6 @@ public class TestPing {
         Jedis jedis = new Jedis("192.168.1.107", 6379);
         // Jedis中的API就是之前学习的命令
         System.out.println(jedis.ping());
-    }
-}
-```
-
-> API测试---无非就是Redis的常用操作，自己在ide里多测试测试就好
-
-```java
-public class JedisType {
-    public static void main(String[] args) {
-       //创建Jedis实例，连接本地Redis服务
-        Jedis jedis = new Jedis("121.43.108.27",6379);
         //选择数据库，默认是0号库
         jedis.select(0)；
         //设置Redis数据库的密码
@@ -854,13 +826,9 @@ spring:
     password: 密码
 ```
 
-```
-注：从SpringBoot2.x之后，底层使用的Jedis被lettuce替代
-```
+> **注：从SpringBoot2.x之后，底层使用的Jedis被lettuce替代**
 
 做完上述配置以后，`Spring Boot Data Redis` 提供了两个对象来操作Redis，并且已经注入Spring容器当中供我们使用
-
-
 
 ```
 RedisTemplate
@@ -945,7 +913,7 @@ public class User implements Serializable {
 
 但是我并不希望key被这样序列化，key应该是字符串类型的"user"才对，怎么办呢？
 
-![image-20220327182144911](https://s2.loli.net/2022/03/27/15T2BIh7jtX9Src.png)
+![image-20220327182144911](D:\桌面\P_picture_cahe\15T2BIh7jtX9Src.png)
 
 
 
@@ -961,58 +929,198 @@ public class User implements Serializable {
 
 这样我们就可以通过get key来获取到序列化的对象
 
-![image-20220327182615833](https://s2.loli.net/2022/04/01/u6Vv8wUkLAnhQRM.png)
+![image-20220327182615833](D:\桌面\P_picture_cahe\u6Vv8wUkLAnhQRM.png)
 
 同样对于HashKey来说，我们也可以修改Hashkey的序列化方式来让它按照我们想要的方式序列化
 
 
 
-> 还有一个比较好玩的点，如果对一个key有连续多次操作可以使用boundApi
 
+
+
+
+
+
+
+
+
+
+
+
+# 六、Redis.conf：配置文件各项配置详细解释
+
+> **daemonize：是否守护线程方式运行Redis，默认是NO。用来指定redis是否要用守护线程的方式启动**
+>
+> **daemonize 设置yes或者no区别**
+>
+> - `daemonize  yes`:redis采用的是单进程多线程的模式。当redis.conf中选项daemonize设置成yes时，代表开启守护进程模式。在该模式下，redis会在后台运行，并将进程pid号写入至redis.conf选项pidfile设置的文件中，此时redis将一直运行，除非手动kill该进程。
+> - `daemonize  no`: 当daemonize选项设置成no时，当前界面将进入redis的命令行界面，exit强制退出或者关闭连接工具(putty,xshell等)都会导致redis进程退出。
+
+
+
+**总结**
+
+```bash
+daemonize yes #是否以后台进程运行
+
+pidfile /var/run/redis/redis-server.pid    #pid文件位置
+
+port 6379#监听端口
+
+bind 127.0.0.1   #绑定地址，如外网需要连接，设置0.0.0.0
+
+timeout 300     #连接超时时间，单位秒
+
+loglevel notice  #日志级别，分别有：
+
+# debug ：适用于开发和测试
+
+# verbose ：更详细信息
+
+# notice ：适用于生产环境
+
+# warning ：只记录警告或错误信息
+
+logfile /var/log/redis/redis-server.log   #日志文件位置
+
+syslog-enabled no    #是否将日志输出到系统日志
+
+databases 16#设置数据库数量，默认数据库为0
+
+############### 快照方式 ###############
+save 900 1    #在900s（15m）之后，至少有1个key发生变化，则快照
+
+save 300 10   #在300s（5m）之后，至少有10个key发生变化，则快照
+
+save 60 10000  #在60s（1m）之后，至少有1000个key发生变化，则快照
+
+rdbcompression yes   #dump时是否压缩数据
+
+dir /var/lib/redis   #数据库（dump.rdb）文件存放目录
+
+############### 主从复制 ###############
+slaveof <masterip> <masterport>  #主从复制使用，用于本机redis作为slave去连接主redis
+
+masterauth <master-password>   #当master设置密码认证，slave用此选项指定master认证密码
+
+slave-serve-stale-data yes     #当slave与master之间的连接断开或slave正在与master进行数据同步时，如果有slave请求，当设置为yes时，slave仍然响应请求，此时可能有问题，如果设置no时，slave会返回"SYNC with master in progress"错误信息。但INFO和SLAVEOF命令除外。
+
+############### 安全 ###############
+requirepass foobared   #配置redis连接认证密码
+
+
+
+############### 限制 ###############
+maxclients 128#设置最大连接数，0为不限制
+
+maxmemory <bytes>#内存清理策略，如果达到此值，将采取以下动作：
+
+# volatile-lru ：默认策略，只对设置过期时间的key进行LRU算法删除
+
+# allkeys-lru ：删除不经常使用的key
+
+# volatile-random ：随机删除即将过期的key
+
+# allkeys-random ：随机删除一个key
+
+# volatile-ttl ：删除即将过期的key
+
+# noeviction ：不过期，写操作返回报错
+
+maxmemory-policy volatile-lru#如果达到maxmemory值，采用此策略
+
+maxmemory-samples 3   #默认随机选择3个key，从中淘汰最不经常用的
+
+
+
+############### 附加模式 ###############
+appendonly no    #AOF持久化，是否记录更新操作日志，默认redis是异步（快照）把数据写入本地磁盘
+
+appendfilename appendonly.aof  #指定更新日志文件名
+
+# AOF持久化三种同步策略：
+
+# appendfsync always   #每次有数据发生变化时都会写入appendonly.aof
+
+# appendfsync everysec  #默认方式，每秒同步一次到appendonly.aof
+
+# appendfsync no       #不同步，数据不会持久化
+
+no-appendfsync-on-rewrite no   #当AOF日志文件即将增长到指定百分比时，redis通过调用BGREWRITEAOF是否自动重写AOF日志文件。
+
+
+
+############### 虚拟内存 ###############
+vm-enabled no      #是否启用虚拟内存机制，虚拟内存机将数据分页存放，把很少访问的页放到swap上，内存占用多，最好关闭虚拟内存
+
+vm-swap-file /var/lib/redis/redis.swap   #虚拟内存文件位置
+
+vm-max-memory 0    #redis使用的最大内存上限，保护redis不会因过多使用物理内存影响性能
+
+vm-page-size 32    #每个页面的大小为32字节
+
+vm-pages 134217728  #设置swap文件中页面数量
+
+vm-max-threads 4    #访问swap文件的线程数
+
+
+
+############### 高级配置 ###############
+hash-max-zipmap-entries 512   #哈希表中元素（条目）总个数不超过设定数量时，采用线性紧凑格式存储来节省空间
+
+hash-max-zipmap-value 64     #哈希表中每个value的长度不超过多少字节时，采用线性紧凑格式存储来节省空间
+
+list-max-ziplist-entries 512  #list数据类型多少节点以下会采用去指针的紧凑存储格式
+
+list-max-ziplist-value 64    #list数据类型节点值大小小于多少字节会采用紧凑存储格式
+
+set-max-intset-entries 512   #set数据类型内部数据如果全部是数值型，且包含多少节点以下会采用紧凑格式存储
+
+activerehashing yes        #是否激活重置哈希
 ```
-stringRedisTemplate.boundXXXX
-redisTemplate.boundXXXX
-```
-
-# 九、Redis配置文件详解
-
-[阿里云Redis配置文件详解（redis.conf）](https://developer.aliyun.com/article/38806)
 
 
 
-# 十、
+# 七、Redis事务和锁机制
 
 
 
 
 
 
+
+
+
+# 八、Redis主从复制
+
+
+
+
+
+
+
+# 九、Redis集群
+
+
+
+
+
+
+
+# 十、Redis分布式锁
+
+
+
+
+
+
+
+
+
+---
 
 
 
 Current time:Sun Mar 27 18:40:32 CST 2022
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+update time:

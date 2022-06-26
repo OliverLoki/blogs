@@ -1,10 +1,10 @@
-推荐阅读[NoSQL的前世今生](https://blog.csdn.net/Night__breeze/article/details/123766938)，总结以下内容
+
 
 > + Redis的出现是为了解决大规模数据带来的挑战
->
-> + Redis是一种满足CP原则的**高性能分布式**数据库
+>+ Redis是一种满足CP原则的**高性能分布式**[NoSQL数据库](https://blog.csdn.net/Night__breeze/article/details/123766938)
+>   + 关于CP原则请看[分布式数据库中的CAP定理](https://blog.csdn.net/Night__breeze/article/details/123766938)
 
-## 一、Redis简介
+# 一、Redis简介
 
 简介旨在说明两个问题
 
@@ -54,59 +54,13 @@ Redis可以用在如下场景，其中1，2，5用得较多
 
    谁得分高谁排名往上。命令：ZADD（有序集，sorted set）
 
-## 二、搭建一个Redis学习环境
+# 二、搭建一个Redis学习环境
 
 推荐使用Linux环境学习使用Redis，更接近真实开发
 
 > 如何搭建自己的Linux学习环境？
 
-两种方式搭建Linux学习环境
-
-+ 通过VMware等软件安装虚拟机，再安装CentOS镜像
-+ 购买云服务器（相当于远程的Linux系统）
-
-云服务器的方式更接近真实开发，并且本地虚拟机配置较为繁琐，本文以阿里云服务器为例，其他云服务器提供商的操作大同小异
-
-
-
-### 搭建云服务器Linux学习环境
-
-> 1、购买云服务器
-
-[腾讯云教育优惠地址][https://cloud.tencent.com/act/campus?fromSource=gwzcw.3083777.3083777.3083777&utm_medium=cpc&utm_id=gwzcw.3083777.3083777.3083777&gclid=Cj0KCQiAt8WOBhDbARIsANQLp96ZrLlgwyd1EYvofuIlEVleNNMdQQkG1Mn0AAiSKkn9FxLXV8MXvNUaAnu-EALw_wcB] 
-
-阿里云也有免费试用1个月的活动
-
-> 2、云服务器的配置
-
-**必须进行以下三步配置才可以用Xshell连接**
-
-1. 重置实例密码，用做与XShell连接时的登录密码
-2. 记住公网ip，用作填写新建会话时的主机号
-3. 进行安全组配置，开放22端口号
-
-![image-20220103155138685](https://s2.loli.net/2022/01/03/g5toM4CIA1jaVyZ.png)
-
-
-
-> 3、XShell与Xftp工具的下载与使用
-
-+ Xshell：用于连接远程机，连接后可用命令行操控远程机
-+ Xftp:用于本机和远程机传输文件时使用
-
-> 4、Xshell新建会话
-
-![image-20220103160009777](D:\桌面\P_picture_cahe\image-20220103160009777.png)
-
-> 5、点击连接，默认用户名是root,密码就是你重置的密码
-
-![image-20220103160251680](https://s2.loli.net/2022/04/01/CHpuYSZldj6kn3x.png)
-
-![image-20220103160503744](https://s2.loli.net/2022/04/01/hI4BKdkSZtPf7gW.png)
-
-
-
-至此，基本环境搭建完毕
+[Linux基础环境搭建移步此处](https://blog.csdn.net/Night__breeze/article/details/125437582)
 
 ### Redis的安装&环境&配置
 
@@ -316,7 +270,9 @@ append key "value" #对当前key的value追加字符串，如果key不存在，�
 strlen key #测试字符串长度
 ```
 
-## 三、Redis的五大基础数据类型
+# 三、Redis数据类型
+
+## 五大基础数据类型
 
 - redis自身是一个Map类型的存储方式，其中所有的数据都是采用key:value的形式存储
 - 我们讨论的数据类型指的是存储的数据的类型，也就是value部分的类型，key部分永远都是字符串
@@ -336,11 +292,11 @@ strlen key #测试字符串长度
 | [getset key value](https://www.runoob.com/redis/strings-getset.html) 将给定 key 的值设为 value ，并返回 key 的旧值(old value) |
 | [mset k1 v1 k2 v2] 同时设置一个或多个 key-value 对。         |
 | [mget k1 v1 k2 v2] 获取所有(一个或多个)给定 key 的值。       |
-| [strlen key](https://www.runoob.com/redis/strings-strlen.html) 返回 key 所储存的字符串值的长度。 |
-| [incr key](https://www.runoob.com/redis/strings-incr.html) 将 key 中储存的数字值增一。 |
-| [incrby key increment](https://www.runoob.com/redis/strings-incrby.html) 将 key 所储存的值加上给定的增量值（increment） 。 |
-| [decr key](https://www.runoob.com/redis/strings-decr.html) 将 key 中储存的数字值减一。 |
-| [decrby key decrement](https://www.runoob.com/redis/strings-decrby.html) key 所储存的值减去给定的减量值（decrement） 。 |
+| [strlen key](https://www.runoob.com/redis/strings-strlen.html) 返回 key 所储存的字符串值的长度 |
+| [incr key](https://www.runoob.com/redis/strings-incr.html) 将 key 中储存的数字值增一 |
+| [incrby key increment](https://www.runoob.com/redis/strings-incrby.html) 将 key 所储存的值加上给定的增量值（increment） |
+| [decr key](https://www.runoob.com/redis/strings-decr.html) 将 key 中储存的数字值减一 |
+| [decrby key decrement](https://www.runoob.com/redis/strings-decrby.html) key 所储存的值减去给定的减量值（decrement） |
 | [append key value](https://www.runoob.com/redis/strings-append.html) 如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾 |
 
 > （2）List
@@ -380,7 +336,7 @@ strlen key #测试字符串长度
 | :----------------------------------------------------------- |
 | [SADD key member1 member2](https://www.runoob.com/redis/sets-sadd.html) 向集合添加一个或多个元素 |
 | [scard key](https://www.runoob.com/redis/sets-scard.html) 获取集合的成员数 |
-| [SDIFF key1 [key2\]](https://www.runoob.com/redis/sets-sdiff.html) 返回第一个集合与其他集合之间的差异。 |
+| [SDIFF key1 [key2\]](https://www.runoob.com/redis/sets-sdiff.html) 返回第一个集合与其他集合之间的差异 |
 | [SDIFFSTORE destination key1 [key2\]](https://www.runoob.com/redis/sets-sdiffstore.html) 返回给定所有集合的差集并存储在 destination 中 |
 | [SINTER key1 [key2\]](https://www.runoob.com/redis/sets-sinter.html) 返回给定所有集合的交集 |
 | [SINTERSTORE destination key1 [key2\]](https://www.runoob.com/redis/sets-sinterstore.html) 返回给定所有集合的交集并存储在 destination 中 |
@@ -443,7 +399,7 @@ strlen key #测试字符串长度
 | [ZUNIONSTORE destination numkeys key key ...](https://www.runoob.com/redis/sorted-sets-zunionstore.html) 计算给定的一个或多个有序集的并集，并存储在新的 key 中 |
 | [ZSCAN key cursor [MATCH pattern\] [COUNT count]](https://www.runoob.com/redis/sorted-sets-zscan.html) 迭代有序集合中的元素（包括元素成员和元素分值） |
 
-## 四、Redis的三种特殊数据类型
+## 三种特殊数据类型
 
 + geospatial 
 + Hyperloglog
@@ -558,7 +514,7 @@ Bitmap就是通过一个bit位来表示某个元素对应的值或者状态。Bi
 (integer) 4
 ```
 
-## 五、Redis持久化操作
+# 五、Redis持久化操作
 
 > Redis是一个内存数据库，所有的数据将保存在内存中，这与传统的MySQL、Oracle、SqlServer等关系型数据库直接把数据保存到硬盘相比，Redis的读写效率非常高。但是保存在内存中也有一个很大的缺陷，一旦断电或者宕机，内存数据库中的内容将会全部丢失。为了弥补这一缺陷，Redis提供了把内存数据持久化到硬盘文件，以及通过备份文件来恢复数据的功能，即Redis持久化机制。
 
@@ -567,7 +523,7 @@ Redis官方支持两种方式的持久化
 + 快照（Snapshot)
 + AOF(Append Only File) 只追加日志文件
 
-### 持久化之RDB操作
+## 持久化之RDB操作
 
 > RDB快照用官方的话来说：RDB持久化方案是按照指定时间间隔对你的数据集生成的时间点快照（point-to-time snapshot）。它以紧缩的二进制文件（xxx.rdb）保存Redis数据库某一时刻所有数据对象的内存快照，可用于Redis的数据备份、转移与恢复。到目前为止，仍是官方的默认支持方案
 
@@ -623,7 +579,7 @@ Redis官方支持两种方式的持久化
 
 > 上一节我们知道RDB是一种时间点（point-to-time）快照，适合数据备份及灾难恢复，由于工作原理的“先天性缺陷”无法保证实时性持久化，这对于缓存丢失零容忍的系统来说是个硬伤，于是就有了AOF
 
-### 持久化之AOF操作
+## 持久化之AOF操作
 
 AOF持久化默认是关闭的，修改redis.conf以下信息并重启，即可开启AOF持久化功能、
 
@@ -720,9 +676,9 @@ set number 5
 - 生产环境多为集群化部署，可在slave开启持久化能力，让master更好的对外提供写服务。
 - 备份文件应自动上传至异地机房或云存储，做好灾难备份
 
-## 六、Redis事务
+# 六、Redis事务
 
-能力有限,讲不清楚这个，《Redis设计与实现》一书中已给出了很详细的介绍，这里就不多赘述
+
 
 > 拓展：事务的ACID原则
 
@@ -790,7 +746,9 @@ Redis 操作失败的原因只可能是语法错误或者错误的数据类型�
 Redis 内部设计推崇简单和高性能，支持事务回滚能力会导致设计复杂，这与Redis的初衷相违背，因此不需要回滚能力。
 Redis 的应用场景明显不是为了数据存储的高可靠与强一致性而设计的，而是为了数据访问的高性能而设计，设计者为了简单性和高性能而部分放弃了原子性
 
-## 七、Java操作Reids-Jedis
+# 七、关于Redis的整合
+
+## Java操作Redis
 
 Jedis集成了Redis的相关命令操作，它是Java语言操作Redis数据库的桥梁。Jedis客户端封装了Redis数据库的大量命令，因此具有许多Redis操作[API]
 
@@ -870,7 +828,7 @@ public class JedisType {
 }
 ```
 
-## 八、SpringBoot整合Redis
+## SpringBoot整合Redis
 
 操作无非就是对Redis的基本操作而已，主要是测试Springboot是否连通远程Redis，进行一个测试
 
@@ -1016,11 +974,19 @@ stringRedisTemplate.boundXXXX
 redisTemplate.boundXXXX
 ```
 
-## 九、Redis配置文件详解
+# 九、Redis配置文件详解
 
 [阿里云Redis配置文件详解（redis.conf）](https://developer.aliyun.com/article/38806)
 
----
+
+
+# 十、
+
+
+
+
+
+
 
 
 

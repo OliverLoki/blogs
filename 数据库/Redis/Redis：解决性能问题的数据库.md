@@ -1,49 +1,66 @@
 
 
-> + Redis的出现是为了解决大规模数据带来的挑战
->+ Redis是一种满足CP原则的**高性能分布式**[NoSQL数据库](https://blog.csdn.net/Night__breeze/article/details/123766938)
->   + 关于CP原则请看[分布式数据库中的CAP定理](https://blog.csdn.net/Night__breeze/article/details/123766938)
+> 《The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker.》
+>
+> 数百万开发人员使用的开源内存数据存储，作为数据库、缓存、流引擎和消息代理。  ————摘录自redis官网														
 
-# 一、Redis简介：key-value内存型数据库
 
-+ **什么是Redis**
 
-  > The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker.
+# 一、Redis简介
 
-+ **Redis的特性**
 
-  + Redis是用C语言开发的一个开源的高性能基于内存运行的键值对NoSQL数据库
-  + Redis 通常被称为数据结构服务器，因为值（value）可以是字符串(String)、哈希(Hash)、列表(list)、集合(sets)和有序集合(sorted sets)等类型
 
-  + Redis运行在内存中但是可以持久化到磁盘，所以在对不同数据集进行高速读写时需要权衡内存，因为数据量不能大于硬件内存。在内存数据库方面的另一个优点是，相比在磁盘上相同的复杂的数据结构，在内存中操作起来非常简单，这样Redis可以做很多内部复杂性很强的事情。同时，在磁盘格式方面他们是紧凑的以追加的方式产生的，因为他们并不需要进行随机访问。
-  + Redis有着更为复杂的数据结构并且提供对他们的原子性操作，这是一个不同于其他数据库的进化路径。Redis的数据类型都是基于基本数据结构的同时对程序员透明，无需进行额外的抽象
-  + Redis支持数据的备份，即master-slave模式的数据备份
+## 一句话总结Redis
 
-+ **Redis可以用在如下场景，其中1，2，5用得较多**
+> Redis是用`C语言开发`的`单线程且基于内存运行`的`key-value型`的高性能分布式[NoSQL数据库](https://blog.csdn.net/Night__breeze/article/details/123766938)，满足[分布式数据库的CP原则](https://blog.csdn.net/Night__breeze/article/details/123766938)
 
-  + 缓存
-    热点数据（经常会被查询，但是不经常被修改或者删除的数据），首选是使用redis缓存。
+## Redis的特性
 
-  + 计数器
-    单线程避免并发问题，高性能，如减库存。
++ Redis 的值（`value`）可以是以下类型，key始终是String类型
 
-  + 队列
-    相当于消息系统，ActiveMQ，RocketMQ等工具类似，但是个人觉得简单用一下还行，如果对于数据一致性要求高的话还是用RocketMQ等专业系统。
+  + 字符串(String)
+  + 哈希(Hash)
+  + 列表(list)
+  + 集合(sets)
+  + 有序集合(sorted sets)
 
-  + 位操作
-    使用setbit、getbit、bitcount命令，如统计用户签到，去重登录次数统计，某用户是否在线状态等；
++ Redis运行在内存中但是可以持久化到磁盘，所以在对不同数据集进行高速读写时需要权衡内存，因为数据量不能大于硬件内存。在内存数据库方面的另一个优点是，相比在磁盘上相同的复杂的数据结构，在内存中操作起来非常简单，这样Redis可以做很多内部复杂性很强的事情。同时，在磁盘格式方面他们是紧凑的以追加的方式产生的，因为他们并不需要进行随机访问
 
-  + redis内构建一个足够长的数组，每个数组元素只能是0和1两个值，然后这个数组的下标index用来表示我们上面例子里面的用户id（必须是数字哈），那么很显然，这个几亿长的大数组就能通过下标和元素值（0和1）来构建一个记忆系统，上面我说的几个场景也就能够实现。用到的命令是：setbit、getbit、bitcount
++ Redis是单线程的，所以Redis的性能瓶颈不是CPU，而是机器内存和网络带宽。Redis具有非常好的性能，QPS达到10W+
 
-  + 分布式锁与单线程
-    验证前端的重复请求（可以自由扩展类似情况），可以通过redis进行过滤：每次请求将request Ip、参数、接口等hash作为key存储redis（幂等性请求），设置多长时间有效期，然后下次请求过来的时候先在redis中检索有没有这个key，进而验证是不是一定时间内过来的重复提交。秒杀系统，基于redis是单线程特征，防止出现数据库“爆破”
+  > Redis为什么单线程还这么快？
+  >
+  > 误区1：高性能的服务器一定是多线程的？
+  > 误区2：多线程（CPU上下文会切换！）一定比单线程效率高！
+  > 核心：Redis是将所有的数据放在内存中的，所以说使用单线程去操作效率就是最高的，多线程（CPU上下文会切换：耗时的操作！），对于内存系统来说，如果没有上下文切换效率就是最高的，多次读写都是在一个CPU上的，在内存存储数据情况下，单线程就是最佳的方案
 
-  + 最新列表
-    redis的LPUSH命令构建List。
+## Redis应用场景
 
-  + 排行榜
+Redis可以用在如下场景，其中1，2，5用得较多
 
-    谁得分高谁排名往上。命令：ZADD（有序集，sorted set）
++ **缓存**
+  热点数据（经常会被查询，但是不经常被修改或者删除的数据），首选是使用redis缓存。
+
++ **计数器**
+  单线程避免并发问题，高性能，如减库存。
+
++ 队列
+  相当于消息系统，ActiveMQ，RocketMQ等工具类似，但是个人觉得简单用一下还行，如果对于数据一致性要求高的话还是用RocketMQ等专业系统。
+
++ 位操作
+  使用setbit、getbit、bitcount命令，如统计用户签到，去重登录次数统计，某用户是否在线状态等；
+
++ redis内构建一个足够长的数组，每个数组元素只能是0和1两个值，然后这个数组的下标index用来表示我们上面例子里面的用户id（必须是数字哈），那么很显然，这个几亿长的大数组就能通过下标和元素值（0和1）来构建一个记忆系统，上面我说的几个场景也就能够实现。用到的命令是：setbit、getbit、bitcount
+
++ **分布式锁与单线程**
+  验证前端的重复请求（可以自由扩展类似情况），可以通过redis进行过滤：每次请求将request Ip、参数、接口等hash作为key存储redis（幂等性请求），设置多长时间有效期，然后下次请求过来的时候先在redis中检索有没有这个key，进而验证是不是一定时间内过来的重复提交。秒杀系统，基于redis是单线程特征，防止出现数据库“爆破”
+
++ 最新列表
+  redis的LPUSH命令构建List。
+
++ 排行榜
+
+  谁得分高谁排名往上。命令：ZADD（有序集，sorted set）
 
 # 二、Linux环境下安装与配置Redis
 
@@ -177,6 +194,49 @@ shutdown #关闭进程
 exit #退出
 ```
 
+## redis默认有16个数据库
+
+默认使用 DB 0 ，可以使用select n切换到DB n，dbsize可以查看当前数据库的大小，与key数量相关。		
+
+```bash
+127.0.0.1:6379> config get databases # 命令行查看数据库数量databases
+
+127.0.0.1:6379> select 8 # 切换数据库 DB 8
+OK
+
+127.0.0.1:6379[8]> dbsize # 查看数据库大小
+(integer) 0
+
+# 不同数据库之间 数据是不能互通的，并且dbsize 是根据库中key的个数。
+127.0.0.1:6379> set name loki 
+OK
+127.0.0.1:6379> SELECT 8				
+OK
+127.0.0.1:6379[8]> get name # db8中并不能获取db0中的键值对。
+(nil)
+```
+
++ `keys *` ：查看当前数据库中所有的key。
+
++ `flushdb`：清空当前数据库中的键值对。
+
++ `flushall`：清空所有数据库的键值对
+
+## 关于Redis中key的一些操作
+
+```bash
+keys * #查看所有的key
+set key value #set key
+get key #get key
+EXISTS key #判断key是否存在
+move key 数据库序号 #移动当前库的key
+del key #移除key
+expire key 10 #设置key的存活时间为10s
+type key #查看当前key的类型
+append key "value" #对当前key的value追加字符串，如果key不存在，相当于set key
+strlen key #测试字符串长度
+```
+
 ## 设置Redis开机自启动
 
 > 修改redis.conf配置文件中的两项配置
@@ -261,68 +321,6 @@ redis-benchmark -h localhost -p 6379 -c 100 -n 100000
 ![image-20220105013514930](https://s2.loli.net/2022/01/05/ZMFYicTXejW1m3A.png)
 
 可以看到Redis是非常快的
-
-
-
-# 三、Redis入门
-
-## 基础知识
-
-> redis默认有16个数据库
-
-默认使用 DB 0 ，可以使用select n切换到DB n，dbsize可以查看当前数据库的大小，与key数量相关。		
-
-```bash
-127.0.0.1:6379> config get databases # 命令行查看数据库数量databases
-
-127.0.0.1:6379> select 8 # 切换数据库 DB 8
-OK
-
-127.0.0.1:6379[8]> dbsize # 查看数据库大小
-(integer) 0
-
-# 不同数据库之间 数据是不能互通的，并且dbsize 是根据库中key的个数。
-127.0.0.1:6379> set name loki 
-OK
-127.0.0.1:6379> SELECT 8				
-OK
-127.0.0.1:6379[8]> get name # db8中并不能获取db0中的键值对。
-(nil)
-```
-
-+ `keys *` ：查看当前数据库中所有的key。
-
-+ `flushdb`：清空当前数据库中的键值对。
-
-+ `flushall`：清空所有数据库的键值对
-
-> Redis是单线程的，Redis是基于内存操作的
-
-所以Redis的性能瓶颈不是CPU,而是机器内存和网络带宽。
-
-那么为什么Redis的速度如此快呢，性能这么高呢？QPS达到10W+
-
-> Redis为什么单线程还这么快？
->
-
-误区1：高性能的服务器一定是多线程的？
-误区2：多线程（CPU上下文会切换！）一定比单线程效率高！
-核心：Redis是将所有的数据放在内存中的，所以说使用单线程去操作效率就是最高的，多线程（CPU上下文会切换：耗时的操作！），对于内存系统来说，如果没有上下文切换效率就是最高的，多次读写都是在一个CPU上的，在内存存储数据情况下，单线程就是最佳的方案。
-
-## 关于Redis-key的一些操作
-
-```bash
-keys * #查看所有的key
-set key value #set key
-get key #get key
-EXISTS key #判断key是否存在
-move key 数据库序号 #移动当前库的key
-del key #移除key
-expire key 10 #设置key的存活时间为10s
-type key #查看当前key的类型
-append key "value" #对当前key的value追加字符串，如果key不存在，相当于set key
-strlen key #测试字符串长度
-```
 
 # 四、Redis数据类型
 
@@ -584,19 +582,20 @@ Redis官方支持两种方式的持久化
 
 ## 持久化之RDB操作
 
-> RDB快照用官方的话来说：RDB持久化方案是按照指定时间间隔对你的数据集生成的时间点快照（point-to-time snapshot）。它以紧缩的二进制文件（xxx.rdb）保存Redis数据库某一时刻所有数据对象的内存快照，可用于Redis的数据备份、转移与恢复。到目前为止，仍是官方的默认支持方案
+**说明**
 
-注：快照持久化是默认开启的，这就是为什么有时候断电重启后数据不丢失的原因
++ 按照`指定时间间隔对数据集生成快照`。它以紧缩的二进制文件（`xxx.rdb`）保存Redis数据库某一时刻所有数据对象的内存快照
++ 可用于Redis的数据备份、转移与恢复。到目前为止，仍是官方的默认支持方案
++ 优点是适合大规模数据恢复，恢复速度快，节省磁盘空间。缺点是最后一次持久化后的数据可能丢失
 
-> 快照生成的方式
+**==注：快照持久化在Redis中是默认开启的，这就是为什么有时候断电重启后数据不丢失的原因==**
 
-**一、服务器配置自动触发**
+### RDB快照生成时机
 
-如果用户在`redis.conf`中设置了save配置选项, redis会在save选项条件满足之后自动触发一次BCSAVE命令，如果设置多个save配置选项,当任意一个save配置选项条件满足, redis也会触发一次BGSAVE命令
-
-以下为Redis.conf源码节选
+> **一、通过配置 `redis.conf` ，达到条件自动触发一次 `BGSAVE` 命令，如果设置多个save配置选项,当任意一个save配置选项条件满足, redis也会触发一次BGSAVE命令**
 
 ```pascal
+--------redis.conf 相关部分节选----------
 ################### SNAPSHOTTING ##########################
 # Save the DB to disk.
 # save <seconds> <changes>
@@ -605,71 +604,130 @@ Redis官方支持两种方式的持久化
 #   * After 3600 seconds (an hour) if at least 1 key changed
 #   * After 300 seconds (5 minutes) if at least 100 keys changed
 #   * After 60 seconds if at least 10000 keys changed
-# save 360 1
-# save 300 100
-# save 60 10000
+# 每分钟有10000个key发生变化，则执行一次BGSAVE命令	
+save 60 10000
 ```
 
-**二、客户端命令** 
+> **二、客户端命令** `BGSAVE`
 
-+ `BGSAVE`指令--推荐命令
+```
+BGSAVE
+```
 
-  客户端可以使用BGSAVE命令来创建一个快照,当接收到客户端的BCSAVE命令时, redis会调用`fork`来创建一个子进程，然后子进程负责将快照写入磁盘中,而父进程则继续处理命令请求
++ 当接收到客户端的 BCSAVE 命令时，redis会调用`fork`来创建一个子进程，然后子进程负责将快照写入磁盘中，而父进程则继续处理命令请求
+  + 处于效率考虑，Linux 在 fork（）方法中引入了写时复制技术	
 
-+ `SAVE`指令
+**注**：还有一条指令是`SAVE`指令，使用SAVE命令来创建一个快照,接收到SAVE命令的redis服务器在快照创建完毕之前将不再响应任何其他的命令。很显然，`SAVE`指令不可取，持久化备份会导致短时间内Redis服务不可用，这对于高HA的系统来讲是无法容忍的。所以，`BGSAVE`是RDB持久化的主要实践方式。由于fork子进程后，父进程数据一直在变化，子进程并不与父进程同步，RDB持久化必然无法保证实时性；RDB持久化完成后发生断电或宕机，会导致部分数据丢失；备份频率决定了丢失数据量的大小，提高备份频率，意味着fork过程消耗较多的CPU资源，也会导致较大的磁盘I/O
 
-  使用SAVE命令来创建一个快照,接收到SAVE命令的redis服务器在快照创建完毕之前将不再响应任何其他的命令
+> **三、如果执行服务器关机`shutdown`命令时，会触发一次`SAVE`命令**
 
-很显然，`SAVE`指令不可取，持久化备份会导致短时间内Redis服务不可用，这对于高HA的系统来讲是无法容忍的。所以，`BGSAVE`是RDB持久化的主要实践方式。由于fork子进程后，父进程数据一直在变化，子进程并不与父进程同步，RDB持久化必然无法保证实时性；RDB持久化完成后发生断电或宕机，会导致部分数据丢失；备份频率决定了丢失数据量的大小，提高备份频率，意味着fork过程消耗较多的CPU资源，也会导致较大的磁盘I/O
+### RDB持久化文件的路径和数据恢复
 
+> 在`redis.conf`中查看和修改生成目录和文件名，如下所示
 
+```
+# The filename where to dump the DB
+dbfilename dump.rdb
+# Note that you must specify a directory here, not a file name.
+dir ./
+```
 
-**三、如果执行服务器关机`shutdown`命令时，会触发一次`SAVE`命令**
++ 默认rdb备份文件名是 dump.rdb
++ 默认目录是当前目录，也就是redis启动目录
 
+> **备份文件恢复**
 
+1. 关闭Redis
+2. 将备份文件拷贝到工作目录
+3. 启动Redis，备份文件会自动加载
 
-![image-20220327133059624](https://s2.loli.net/2022/03/27/vDwRaYro2dApP5N.png)
+### 其他问题
 
+```apl
+#当redis无法写入磁盘的话，直接关闭redis写操作，推荐yes
+stop-writes-on-bgsave-error yes
+#采用LZF算法压缩文件并存储磁盘，推荐yes，如果不想消耗CPU资源可以关闭
+rdbcompression yes
+#检查完整性，但是会带来性能消耗，如果希望获取性能提升，可以关闭
+rdbchecksum yes
+```
 
+> 异常情况：数据未恢复
 
-**注意：生成目录和文件名，都是可以在`redis.conf`中修改**
-
-
-
-> 上一节我们知道RDB是一种时间点（point-to-time）快照，适合数据备份及灾难恢复，由于工作原理的“先天性缺陷”无法保证实时性持久化，这对于缓存丢失零容忍的系统来说是个硬伤，于是就有了AOF
+原因：有些版本，redis在重启服务器时会生成新的rdb覆盖redis目录下的rdb，所以导致重启不能恢复数据。
+解决办法：做一个备份，重启的时候把备份文件改成启动加载文件。
 
 ## 持久化之AOF操作
 
-AOF持久化默认是关闭的，修改redis.conf以下信息并重启，即可开启AOF持久化功能、
+上一节我们知道RDB无法保证实时性持久化，这对于缓存丢失零容忍的系统来说是个硬伤，于是就有了AOF：通过日志的形式来记录写操作
+
+> **AOF持久化特性与开启方式**
+
++ **AOF持久化默认是关闭的，修改redis.conf以下信息并重启，即可开启AOF持久化功能**
++ **当AOF持久化和rdb持久化同时开启，Redis会优先载入AOF文件，因为这是更安全的方式**
++ **AOF的备份机制和性能虽然和RDB不同，但是备份和恢复的操作同RDB一样，都是拷贝备份文件，需要恢复时再拷贝到Redis工作目录下，启动系统即加载**
 
 ```
 # no-关闭，yes-开启，默认no
 appendonly yes
 #修改文件名称
-appendfilename appendonly.aof
+appendfilename appendonly.aof	
+#修改文件夹名
+appenddirname "appendonlydir"
 ```
 
-> AOF日志追加频率的选择与修改
+### AOF持久化三种同步策略
 
-![image-20220327145820191](https://s2.loli.net/2022/03/27/flNFdKLyHTbEJSG.png)
+在redis.conf中
 
-+ alway（谨慎使用）
-  + 说明:每个redis写命令都要同步写入硬盘，严重降低redis速度
-  + 解释:如果用户使用了always选项,那么每个redis写命令都会被写入硬盘,从而将发生系统崩溃时出现的数据丢失减到最少;遗憾的是,因为这种同步策略需要对硬盘进行大量的写入操作，所以redis处理命令的速度会受到硬盘性能的限制;
-  + 注意:转盘式硬盘在这种频率下200左右个命令/s ﹔固态硬盘(SSD)几百万个命令/s;
-  + 警告︰使用SSD用户请谨慎使用always选项,这种模式不断写入少量数据的做法有可能会引发严重的写入放大问题,导致将固态硬盘的寿命从原来的几年降低为几个月。
-+ everysec（推荐）
-  + 说明:每秒执行一次同步显式的将多个写命令同步到磁盘
-  + 解释:为了兼顾数据安全和写入性能，用户可以考虑使用everysec选项,让redis每秒一次的频率对AOF文件进行同步; redis每秒同步一次AOF文件时性能和不使用任何持久化特性时的性能相差无几,，而通过每秒同步一次AOF文件, redis可以保证，即使系统崩溃,用户最多丢失1秒之内产生的数据
-+ no（不推荐）
-  + 说明:由操作系统决定何时同步
-  + 解释︰最后使用no选项,将完全有操作系统决定什么时候同步AOF日志文件,这个选项不会对redis性能带来影响但是系统崩溃时,会丢失不定数量的数据，另外如果用户硬盘处理写入操作不够快的话,当缓冲区被等待写入硬盘数据填满时, redis会处于阻塞状态,并导致redis的处理命令请求的速度变慢
+```
+# AOF持久化三种同步策略：
+# appendfsync always   #每次有数据发生变化时都会写入appendonly.aof
+appendfsync everysec   #推荐方式，每秒同步一次到appendonly.aof
+# appendfsync no       #不同步，数据不会持久化
+```
 
-> AOF文件的重写
+> + **`alway`（谨慎使用）**
+>   + **说明:每个redis写命令都要同步写入硬盘，严重降低redis速度**
+>   + **解释:如果用户使用了always选项,那么每个redis写命令都会被写入硬盘,从而将发生系统崩溃时出现的数据丢失减到最少;遗憾的是,因为这种同步策略需要对硬盘进行大量的写入操作，所以redis处理命令的速度会受到硬盘性能的限制;**
+>
+> :warning:**警告︰使用SSD（固态硬盘）用户请谨慎使用always选项,这种模式不断写入少量数据的做法有可能会引发严重的写入放大问题,导致将固态硬盘的寿命从原来的几年降低为几个月。**
+>
+> + **`everysec`（推荐）**
+>   + **说明:每秒执行一次同步显式的将多个写命令同步到磁盘**
+>   + **解释:为了兼顾数据安全和写入性能，用户可以考虑使用everysec选项,让redis每秒一次的频率对AOF文件进行同步; redis每秒同步一次AOF文件时性能和不使用任何持久化特性时的性能相差无几,，而通过每秒同步一次AOF文件, redis可以保证，即使系统崩溃，用户最多丢失1秒之内产生的数据**
+> + **`no`（不推荐）**
+>   + **说明:由操作系统决定何时同步**
+>   + **解释︰最后使用no选项,将完全有操作系统决定什么时候同步AOF日志文件,这个选项不会对redis性能带来影响但是系统崩溃时,会丢失不定数量的数据，另外如果用户硬盘处理写入操作不够快的话,当缓冲区被等待写入硬盘数据填满时, redis会处于阻塞状态,并导致redis的处理命令请求的速度变慢**
 
-如前面提到的，Redis长时间运行，命令不断写入AOF，文件会越来越大，不加控制可能影响宿主机的安全。
+### AOF文件的重写
 
-为了解决AOF文件体积问题，Redis引入了AOF文件重写功能，它会根据Redis内数据对象的最新状态生成新的AOF文件，新旧文件对应的数据状态一致，但是新文件会具有较小的体积。重写既减少了AOF文件对磁盘空间的占用，又可以提高Redis重启时数据恢复的速度。还是下面这个例子，旧文件中的6条命令等同于新文件中的1条命令，压缩效果显而易见。
+如前面提到的，**==Redis长时间运行，命令不断写入AOF，文件会越来越大，所以需要解决AOF文件体积问题==**
+
+Redis引入了AOF文件重写功能，它会根据Redis内数据对象的最新状态生成新的AOF文件，新旧文件对应的数据状态一致，但是新文件会具有较小的体积。重写既减少了AOF文件对磁盘空间的占用，又可以提高Redis重启时数据恢复的速度
+
++ **重写AOF文件的操作，并没有读取旧的AOF文件，而是将整个内存中的数据库内容用命令的方式重写了一个新AOF文件,替换原有的文件这点和快照有点类似**
+
+> Redis触发重写的方式
+
+1. 客户端指令触发重写，不会阻塞Redis服务
+
+   ```
+   BGREWRITEAOF
+   ```
+
+2. `redis.conf`配置：`auto-aof-rewrite-percentage`和`auto-aof-rewrite-min-size`选项
+
+   ```
+   #当AOF文件体积大于64M，并且AOF文件的体积比上一次重写之后体积大了至少一倍(100%)时，会自动触发
+   #如果重写过于频繁，用户可以考虑将  auto-aof-rewrite-percentage  设置为更大
+   auto-aof-rewrite-percentage 100
+   auto-aof-rewrite-min-size 64mb
+   ```
+
+> 举个栗子，Redis如何重写
+
+旧文件中的6条命令等同于新文件中的1条命令，压缩效果显而易见。
 
 ```
 set number 0
@@ -685,55 +743,29 @@ incr number
 set number 5
 ```
 
-> 触发重写的方式
+### AOF文件损坏和其他缺点
 
-1. 客户端触发重写
+> **如果遇到AOF文件损坏，可以通过在工作目录下执行 `usr/local/bin/redis-check-aof--fixappendonly.aof` 命令进行修复**
 
-   ```
-   BGREWRITEAOF
-   ```
-
-   不会阻塞Redis服务
-
-2. redis.conf配置自动触发
-
-   配置redis.conf中的`auto-aof-rewrite-percentage`选项
-
-   如下图所示
-
-   ```
-   auto-aof-rewrite-percentage 100
-   auto-aof-rewrite-min-size 64mb
-   ```
-
-启用的AOF持久化时,当AOF文件体积大于64M,并且AOF文件的体积比上一次重写之后体积大了至少一倍(100%)时,会自动触发,如果重写过于频繁，用户可以考虑将`auto-aof-rewrite-percentage`设置为更大
-
-![image-20220327151414991](https://s2.loli.net/2022/03/27/WSNjqg7fOsioKcx.png)
-
-> AOF重写的原理
-
-注意∶重写AOF文件的操作，并没有读取旧的AOF文件，而是将整个内存中的数据库内容用命令的方式重写了一个新AOF文件,替换原有的文件这点和快照有点类似
-
-> AOF的缺点
+**其他缺点**
 
 - 对于相同的数据集合，AOF文件通常会比RDB文件大；
 - 在特定的fsync策略下，AOF会比RDB略慢。一般来讲，fsync_every_second的性能仍然很高，fsync_no的性能与RDB相当。但是在巨大的写压力下，RDB更能提供最大的低延时保障。
 - 在AOF上，Redis曾经遇到一些几乎不可能在RDB上遇到的罕见bug。一些特殊的指令（如BRPOPLPUSH）导致重新加载的数据与持久化之前不一致，Redis官方曾经在相同的条件下进行测试，但是无法复现问题。
 
-> 如果同时使用AOF和RDB进行持久化，Redis会优先载入AOF文件，因为这是更安全的方式
-
 ## 使用建议
 
-对RDB和AOF两种持久化方式的工作原理、执行流程及优缺点了解后，我们来思考下，实际场景中应该怎么权衡利弊，合理的使用两种持久化方式。如果仅仅是使用Redis作为缓存工具，所有数据可以根据持久化数据库进行重建，则可关闭持久化功能，做好预热、缓存穿透、击穿、雪崩之类的防护工作即可。
+对RDB和AOF两种持久化方式的工作原理、执行流程及优缺点了解后，我们来思考下，实际场景中应该怎么权衡利弊，合理的使用两种持久化方式
 
-一般情况下，Redis会承担更多的工作，如分布式锁、排行榜、注册中心等，持久化功能在灾难恢复、数据迁移方面将发挥较大的作用。建议遵循几个原则：
++ 如果仅仅是使用Redis作为缓存工具，所有数据可以根据持久化数据库进行重建，则可关闭持久化功能，做好预热、缓存穿透、击穿、雪崩之类的防护工作即可
 
-- 不要把Redis作为数据库，所有数据尽可能可由应用服务自动重建。
-- 使用4.0以上版本Redis，使用AOF+RDB混合持久化功能。
-- 合理规划Redis最大占用内存，防止AOF重写或save过程中资源不足。
-- 避免单机部署多实例
-- 生产环境多为集群化部署，可在slave开启持久化能力，让master更好的对外提供写服务。
-- 备份文件应自动上传至异地机房或云存储，做好灾难备份
++ 一般情况下，Redis会承担更多的工作，如分布式锁、排行榜、注册中心等，持久化功能在灾难恢复、数据迁移方面将发挥较大的作用。建议遵循几个原则
+  + 不要把Redis作为数据库，所有数据尽可能可由应用服务自动重建
+  + 使用4.0以上版本Redis，使用AOF+RDB混合持久化功能
+  + 合理规划Redis最大占用内存，防止AOF重写或save过程中资源不足
+  + 避免单机部署多实例
+  + 生产环境多为集群化部署，可在slave开启持久化能力，让master更好的对外提供写服务
+  + 备份文件应自动上传至异地机房或云存储，做好灾难备份
 
 # 七、关于Redis的整合
 
@@ -768,7 +800,7 @@ Jedis集成了Redis的相关命令操作，它是Java语言操作Redis数据库�
         </dependency>
 ```
 
-> API测试---无非就是Redis的常用操作，自己在ide里多测试测试就好
+> API测试demo
 
 ```java
 public class TestPing {
@@ -935,18 +967,6 @@ public class User implements Serializable {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 # 六、Redis.conf：配置文件各项配置详细解释
 
 > **daemonize：是否守护线程方式运行Redis，默认是NO。用来指定redis是否要用守护线程的方式启动**
@@ -989,9 +1009,7 @@ databases 16#设置数据库数量，默认数据库为0
 
 ############### 快照方式 ###############
 save 900 1    #在900s（15m）之后，至少有1个key发生变化，则快照
-
 save 300 10   #在300s（5m）之后，至少有10个key发生变化，则快照
-
 save 60 10000  #在60s（1m）之后，至少有1000个key发生变化，则快照
 
 rdbcompression yes   #dump时是否压缩数据
@@ -1009,46 +1027,31 @@ slave-serve-stale-data yes     #当slave与master之间的连接断开或slave�
 requirepass foobared   #配置redis连接认证密码
 
 
-
 ############### 限制 ###############
 maxclients 128#设置最大连接数，0为不限制
 
 maxmemory <bytes>#内存清理策略，如果达到此值，将采取以下动作：
 
 # volatile-lru ：默认策略，只对设置过期时间的key进行LRU算法删除
-
 # allkeys-lru ：删除不经常使用的key
-
 # volatile-random ：随机删除即将过期的key
-
 # allkeys-random ：随机删除一个key
-
 # volatile-ttl ：删除即将过期的key
-
 # noeviction ：不过期，写操作返回报错
 
 maxmemory-policy volatile-lru#如果达到maxmemory值，采用此策略
-
 maxmemory-samples 3   #默认随机选择3个key，从中淘汰最不经常用的
-
-
 
 ############### 附加模式 ###############
 appendonly no    #AOF持久化，是否记录更新操作日志，默认redis是异步（快照）把数据写入本地磁盘
-
 appendfilename appendonly.aof  #指定更新日志文件名
 
 # AOF持久化三种同步策略：
-
 # appendfsync always   #每次有数据发生变化时都会写入appendonly.aof
-
 # appendfsync everysec  #默认方式，每秒同步一次到appendonly.aof
-
 # appendfsync no       #不同步，数据不会持久化
 
 no-appendfsync-on-rewrite no   #当AOF日志文件即将增长到指定百分比时，redis通过调用BGREWRITEAOF是否自动重写AOF日志文件。
-
-
 
 ############### 虚拟内存 ###############
 vm-enabled no      #是否启用虚拟内存机制，虚拟内存机将数据分页存放，把很少访问的页放到swap上，内存占用多，最好关闭虚拟内存
@@ -1062,8 +1065,6 @@ vm-page-size 32    #每个页面的大小为32字节
 vm-pages 134217728  #设置swap文件中页面数量
 
 vm-max-threads 4    #访问swap文件的线程数
-
-
 
 ############### 高级配置 ###############
 hash-max-zipmap-entries 512   #哈希表中元素（条目）总个数不超过设定数量时，采用线性紧凑格式存储来节省空间
@@ -1091,7 +1092,9 @@ activerehashing yes        #是否激活重置哈希
 
 
 
-# 八、Redis主从复制
+# 八、Redis主从复制和哨兵模式
+
+
 
 
 

@@ -98,15 +98,20 @@ show engines;
 
 ## MySQL目录结构（Win版本）
 
-> **查看mysql数据库数据的存放目录**
+MySQL目录分为
 
-```
-show variables like 'datadir'; 
-```
++ MySQL安装目录
 
-![image-20220423191219672](https://s2.loli.net/2022/05/18/gxUmCQ2IMOJNP3n.png)
++ 数据库文件目录
 
-> MySQL的目录结构如下所示
+  ```
+  查看mysql数据库数据的存放目录（需要登陆)
+  show variables like 'datadir'; 
+  ```
+
++ 配置文件 my.ini 目录
+
+> MySQL安装目录结构如下所示
 
 ![image-20220423194610105](https://s2.loli.net/2022/04/23/emuWBwCLREqknX4.png)
 
@@ -141,4 +146,3 @@ show variables like 'datadir';
 **推荐阅读**
 
 [Understand MySQL](https://www.rathishkumar.in/2016/04/understanding-mysql-architecture.html)
-

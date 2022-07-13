@@ -1,3 +1,7 @@
+
+
++ 字体：Trebuchet MS
+
 ## 插件篇
 
 如果你既想写出质量杠杠的 Java 代码，又想追求开发效率，用 Intellij IDEA 准没错
@@ -20,6 +24,8 @@
 + Git Commit Template:使用模板创建commit信息
 
 ## 注释篇
+
+
 
 类注释优化
 
@@ -44,5 +50,5 @@
  */
 ```
 
-![image-20220414120618591](https://s2.loli.net/2022/04/14/3I5cuQfPHE6jDJ1.png)
+![image-20220713220820167](https://s2.loli.net/2022/07/13/ruJtjfozLbsU6Fa.png)
 

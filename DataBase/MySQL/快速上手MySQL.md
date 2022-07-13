@@ -1,8 +1,8 @@
-参考数据
+参考资料
 
 + https://db-engines.com/en/ranking
 + https://www.bilibili.com/video/BV1iq4y1u7vj
-+ 《MySQL必知必会》
+  + 《MySQL必知必	会》
 
 # 一、MySQL入门：最流行的关系型数据库管理系统
 
@@ -40,18 +40,16 @@
 
 **MySQL 是一种关系型数据库，主要用于持久化存储我们的系统中的一些数据比如用户信息,所谓的关系型数据库，是建立在关系模型基础上的数据库，借助于集合代数等数学概念和方法来处理数据库中的数据。**
 
-- MySQL 是开源的，目前隶属于 Oracle 旗下产品。
 - MySQL 使用标准的结构化查询语言 SQL ，支持复杂查询，支持事务
 - MySQL 可以运行于多个系统上，并且支持多种语言。这些编程语言包括 C、C++、Python、Java、Perl、PHP、Eiffel、Ruby 和 Tcl 等。
 - MySQL 支持大型数据库，支持 5000 万条记录的数据仓库，32 位系统表文件最大可支持 4GB，64 位系统支持最大的表文件为8TB。
-- MySQL 是可以定制的，采用了 GPL 协议，你可以修改源码来开发自己的 MySQL 系统。
 
 > MySQL的四大版本
 
-+ MySQL Community Server 社区版本：开源免费，不提供官方技术支持
-+ MySQL Community Server 企业版本：付费，不能在线下载，提供了更多的功能和技术支持
-+ MySQL Cluster 集群版：开源免费，用于假设集群服务器，可将几个MySQL server集群为一个MySQL server，需要在社区版或者企业版的基础上使用
-+ Mysql Cluster CGE 高级集群版：付费
++ `MySQL Community Server 社区版本`：开源免费，不提供官方技术支持
++ `MySQL Community Server 企业版本`：付费，不能在线下载，提供了更多的功能和技术支持
++ `MySQL Cluster 集群版`：开源免费，用于假设集群服务器，可将几个MySQL server集群为一个MySQL server，需要在社区版或者企业版的基础上使用
++ `Mysql Cluster CGE 高级集群版`：付费
 
 ## 安装MySQL Commuinty Server
 
@@ -306,15 +304,46 @@ mysql -V
 
 # 二、结构化查询语言SQL
 
-+ **SQL 的范围包括数据插入、查询、更新和删除，数据库模式创建和修改，以及数据访问控制**
-+ **SQl语句在执行的时候，内部会先进行编译，由DBMS完成**
-+ **DBMS负责执行SQL语句，通过执行SQL语句来控制DB中的数据**
+**DBMS负责编译执行SQL语句，通过执行SQL语句来控制DB中的数据**
+
+
+
+> SQL语言分类
+
++ `DDL（Data Definition Languages、数据定义语言）`这些语句定义了不同的数据库、表、视图、索
+  引等数据库对象，还可以用来创建、删除、修改数据库和数据表的结构。关键字包括 `CREATE 、 DROP 、 ALTER` 等
++ `DML（Data Manipulation Language、数据操作语言）`，用于添加、删除、更新和查询数据库记
+  录，并检查数据完整性。关键字包括 `INSERT 、 DELETE 、 UPDATE 、 SELECT` 等
+
++ `DCL（Data Control Language、数据控制语言）`，用于定义数据库、表、字段、用户的访问权限和
+  安全级别。关键字包括 `GRANT 、 REVOKE 、 COMMIT 、 ROLLBACK 、 SAVEPOINT` 等
+
++ `DQL（数据查询语言）`：`SELECT`
++ `TCL （Transaction Control Language，事务控制语言）`: `COMMIT 、 ROLLBACK`
+
+> SQL语言大小写规范
+
++ **MySQL 在 Windows 环境下是大小写不敏感的**
++ **MySQL 在 Linux 环境下是大小写敏感的**
+  + 数据库名、表名、表的别名、变量名是严格区分大小写的
+  + 关键字、函数名、列名(或字段名)、列的别名(字段的别名) 是忽略大小写的
++ **推荐采用统一的书写规范：**
+  + 数据库名、表名、表别名、字段名、字段别名等都小写
+  + SQL 关键字、函数名、绑定变量等都大写
+
+> SQL注释
+
+```
+单行注释：#注释文字
+单行注释：-- 注释文字 (--后面必须包含一个空格。)
+多行注释：/* 注释文字  */
+```
 
 ## 数据查询语言DQL：查询表中数据
 
 DQL全称`Data Query language`，即数据查询语言
 
-> **提出一个概念：临时表**
+**首先提出一个概念：临时表**
 
 1. 定义：查询命令在内存中生成的表
 2. 作用：单表查询包含了7个查询命令，除了from命令之外，剩下六个查询操作的都是上一个查询命令生成的临时表
@@ -326,58 +355,62 @@ DQL全称`Data Query language`，即数据查询语言
 
 > **七个查询命令以及执行优先级**
 
-1. 执行优先级：
+**FROM > WHERE > GROUP BY > HAVING > SELECT  > ORDER BY > LIMIT**
 
-   **FROM > WHERE > GROUP BY > HAVING > SELECT  > ORDER BY > LIMIT**
+> **一个使用了7个命令的栗子**
 
-2. select的行为取决于提供临时表的命令--尝试写代码来理解
-   	1、select操作的临时表由【where/from】提供
-   	此时select面对的是一个临时表，select将临时表指定字段下所有数据切成一个新的临时表
-   	2、select草错的临时表是【group by】提供
-   	此时select面对的临时表是多个，select会依次操作每个临时表，操作每一个临时表的时候，之后读取临时表的第一行，将第一行在内存中合成一个全新的临时表  
+Q:从员工表中查询50-70岁之间的员工姓名，根据性别进行分组，然后按找薪资升序排列，截取0到5行的数据
 
-3. from命令相当于读取流【InputStream】，用于将硬盘中表文件加载到内存中生成一个零时表，供后续查询命令使用
-
-> 查询命令详解
+```mysql
+select employee_name from employee where age between 50,70 group by sex order by alary  ASC limit 0,5
+```
 
 **==SELECT==**
 
+select [字段名||函数||子查询] FROM 表文件;
+
 ```mysql
-
-select 字段名||函数||子查询 FROM 表文件;
-    #查询表文件所有字段
-    select * from 表名;
-    #查询表的部分字段
-    select 字段名1,字段名2... from 表名;
-
+select [字段名] from [表名];
+#查询表文件所有字段
+select * from [表名];
+#列的别名，as可以不加
+select [字段名] as [字段别名] from [表名];
+#在SELECT语句中使用关键字DISTINCT去除重复行
+SELECT DISTINCT department_id FROM   employees;
+#这里有两点需要注意
+    1.  DISTINCT 需要放到所有列名的前面，如果写成 SELECT salary, DISTINCT department_id
+    FROM employees 会报错。
+    2.  DISTINCT 其实是对后面所有列名的组合进行去重，你能看到最后的结果是 74 条，因为这 74 个部
+    门id不同，都有 salary 这个属性值。如果你想要看都有哪些不同的部门（department_id），只需
+    要写 DISTINCT department_id 即可，后面不需要再加其他的列名了。
 ```
 
 **==WHERE==**
 
+过滤数据：循环遍历from生成的临时表中数据行，遍历时定位满足条件的数据行，结束后返回一个新的临时表
+
 ```mysql
-#循环遍历from生成的临时表中数据行，遍历时定位满足条件的数据行，结束后返回一个新的临时表
-	SELECT * FROM 表文件 WHERE 判断条件;
+SELECT * FROM [tablename] WHERE 判断条件;
 	#判断条件
 		#逻辑表达式——mysql服务器提供特殊运算符
-		SELECT * FROM 表文件 WHERE 判断条件1 and 判断条件2;
-		SELECT * FROM 表文件 WHERE 判断条件1 or 判断条件2;	
+		SELECT * FROM [tablename] WHERE 判断条件1 and 判断条件2;
+		SELECT * FROM [tablename] WHERE 判断条件1 or 判断条件2;	
 		# between...and... 在某个范围内
-		SELECT * FROM 表文件 WHERE 判断内容 between.. and..;
+		SELECT * FROM [tablename] WHERE 判断内容 between.. and..;
 		# in 包含这些
-		SELECT * FROM 表文件 WHERE 判断内容 in('条件1','条件2'...);
+		SELECT * FROM [tablename] WHERE 判断内容 in('条件1','条件2'...);
 		# not in 不包含这些
-		SELECT * FROM 表文件 WHERE 判断内容 not in('条件1','条件2'...);
+		SELECT * FROM [tablename] WHERE 判断内容 not in('条件1','条件2'...);
 		# is null 所选字段是否为空 不能是 name==null,这是错误的运算
-		SELECT * FROM 表文件 WHERE 判断内容 is null;
+		SELECT * FROM [tablename] WHERE 判断内容 is null;
 		# is not null
-		SELECT * FROM 表文件 WHERE 判断内容 is not null;
+		SELECT * FROM [tablename] WHERE 判断内容 is not null;
 ```
 
 **==like：模糊查询==**
 
 ```mysql
-	#
-	#通配符:  % 表示一个任意长度的字符串 _ 表示一个占位符
+#通配符:  % 表示一个任意长度的字符串 _ 表示一个占位符
 	#查询姓名以s开头的职员--前置模糊查询
 	select * from 表 where name like 's%';
 	#查询姓名以s结尾的职员--后置模糊查询
@@ -414,7 +447,6 @@ select 字段名||函数||子查询 FROM 表文件;
 	-- 多字段分组
 		-- 多字段分组时，分组字段出现的顺序都查询结果没有任何影响
 		-- 会出现多个临时表
-
 ```
 
 **==having：临时表过滤条件==**
@@ -435,23 +467,24 @@ select 字段名||函数||子查询 FROM 表文件;
 
 **==order by：排序==**
 
-```mysql
-	-- asc  升序
-	-- desc 降序
-	select 查询内容 from 表名 where 数据行定位条件条件 group by 分组字段 order by 字段名称/字段位置（查询内容的） ASC
-    -- 多字段排序：在已有条件下进行进一步排序
++ asc   升序
++ desc  降序
 
+```sql
+select * from [tablename] order by age desc;
 ```
 
 **==limit：mysql特有==**
 
++ 写在查询语句最后
++ [位置偏移量] [行数]
+
 ```mysql
-limit 0 , 5
-	-- 截取0到5行的数据
-	-- mysql临时表字段起始位置从一开始计算
-	-- mysql临时表数据行其实位置从0行进行计算
-	-- 一般写在查询语句最后
+#从第0行开始查询5条数据
+select * from [tablename] limit 0,5;
 ```
+
+
 
 ### 多表查询
 
@@ -465,7 +498,7 @@ limit 0 , 5
 
   2、使用6个查询命令从这个临时表摘取需要数据(少了from)
 
-##### 1、连接查询合并方案
+#### 1、连接查询合并方案
 
 1. 要求两个表存在隶属关系
 
@@ -542,7 +575,7 @@ FROM 不需要帮助的表 RIGHT JOIN 需要帮助的表
 ON 合法数据行定位条件
 ```
 
-##### 2、联合查询合并方案
+#### 2、联合查询合并方案
 
 **开发中一般只用于行转列查询**
 

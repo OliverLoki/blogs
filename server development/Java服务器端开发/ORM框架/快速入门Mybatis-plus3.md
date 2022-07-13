@@ -96,12 +96,11 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://localhost:3306/db?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/[dbname]?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
 mybatis-plus:
   type-aliases-package: com.loki.pojo
   mapper-locations: classpath:mapper/*.xml
 configuration:
-  map-underscore-to-camel-case: false
   #配置日志输出,需要导入相应依赖
   log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #关闭属性名大写自动转换

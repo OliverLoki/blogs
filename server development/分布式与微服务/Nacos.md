@@ -355,22 +355,32 @@ server:
 
 > **Nacos自带嵌入式数据库 derby ，可通过以下配置切换到MySQL，使用内置数据源无需进行任何配置。生产使用建议至少主备模式，或者采用高可用数据库。**
 
+**`docker安装MySQL8.0.23`**
+
+```
+docker run --name nacos_mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.23
+```
+
+```
+#查看MySQL的服务器地址，填写进MySQL连接URL
+docker inspect mysql | grep IPAddress
+```
+
 1. `\Nacos\nacos-server-2.0.3\nacos\conf`下找到 `nacos-mysql.sql` ，执行这个sql脚本
 
 2. `\Nacos\nacos-server-2.0.3\nacos\conf`下找到 `application.properties` 增加mysql数据源配置，添加mysql数据源的url、用户名和密码
 
-3. Mysql8.0+，需要在 `nacos/plugins/mysql` 目录下的 `pom.xml `配置`mysql-connector-java-8.X.X.jar`
-
    ```properties
    spring.datasource.platform=mysql
-   
    db.num=1
    db.url.0=
    db.user=
    db.password=
    ```
 
-再以单机模式启动nacos，nacos所有写嵌入式数据库的数据都写到了mysql
+再以单机模式启动nacos，nacos所有写嵌入式数据库的数据都写到了mysql，可以尝试新增一个配置，然后再MySQL中查看变化
+
+
 
 ## Linux下搭建Nacos集群
 
@@ -454,7 +464,7 @@ server:
    
        server {
        
-           listen       1111;
+           listen       80;
            server_name  localhost;
            
            location / {
@@ -464,9 +474,9 @@ server:
    
    ```
 
-8. 访问 本机的1111成功进入nacos管理页面
+8. 访问 ip/nacos，即可直接访问nacos管理页面
 
-   
+![image-20220721044012603](https://s2.loli.net/2022/07/21/68F3ZpdDHVkUweE.png)
 
 > 注
 >
@@ -483,7 +493,6 @@ server:
 >   ps -ef | grep nacos |grep -v grep|wc -l
 >   ```
 >
->   
 
 
 

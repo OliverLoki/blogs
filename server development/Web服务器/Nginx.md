@@ -84,6 +84,10 @@ Loki以后都将在Linux环境下学习整理，因此你需要有一定的Linux
 >   `openssl`是多功能命令工具，用于生成密钥，创建数字证书，手动加密解密数据
 >   nginx 不仅支持 http 协议，还支持 https（即在ssl协议上传输http），所以需要在 Centos 安装 OpenSSL 库
 >
+>   ```
+>   yum -y install pcre-devel openssl openssl-devel
+>   ```
+>
 > + `pcre-devel`
 >
 >   PCRE(Perl Compatible Regular Expressions)是一个轻量级的Perl函数库，包括 perl 兼容的正则表达式库。它比Boost之类的正则表达式库小得多。PCRE十分易用，同时功能也很强大，性能超过了POSIX正则表达式库和一些经典的正则表达式库
@@ -144,7 +148,7 @@ Loki以后都将在Linux环境下学习整理，因此你需要有一定的Linux
 
 
 
-在本机下载以后通过xftp上传到`Linux`服务器,执行以下命令
+在本机下载以后通过xftp上传到`Linux`服务器，解压后进入解压目录，执行以下命令
 
 | 命令                                    | 功能          |
 | --------------------------------------- | ------------- |
@@ -916,4 +920,6 @@ server {
 ```
 
 
+
+# 九、搭建Nginx集群
 

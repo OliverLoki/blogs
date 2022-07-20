@@ -90,7 +90,7 @@
 
 ### VMWare搭建一个Linux虚拟机
 
-前置操作
+**需要准备的东西**
 
 > + [下载VMware Workstation Pro](https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html)
 >
@@ -1318,7 +1318,7 @@ loki    ALL=(ALL)       ALL
 + yum在线安装（推荐使用）
   + 基于rpm包管理器，可以从指定服务器下载rpm包，并且自动处理依赖关系
 
-### RPM安装：半自动化安装
+### RPM包管理工具：半自动化安装
 
 > rpm查询
 
@@ -1341,7 +1341,7 @@ rpm -e [软件名]
 rpm -ivh [rpm包全名]
 ```
 
-### yum安装：全自动安装
+### yum包管理工具：全自动安装
 
 如果yum下载很慢，可以考虑修改yum镜像源，但是一般不用这个操作，yum在下载时会自动选择合适的服务器
 
@@ -1370,6 +1370,43 @@ yum list | grep [软件名]
 #安装指定的yum包
 yun install [软件包名]
 ```
+
+
+
+### jdk安装配置
+
+> rpm安装方式
+
+1. 查看是否安装
+
+   ```
+   whereis java
+   java -version
+   ```
+
+2. 是否有Java安装包文件
+
+   ```
+   rpm -qa | grep java
+   ```
+
+3. [Linux x64 RPM Package下载](https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html)后使用xftp，传输至 /opt 目录下
+
+4. 
+
+5. 1
+
+6. 1
+
+7. 1！
+
+8. 
+
+
+
+
+
+### mysql安装配置
 
 
 

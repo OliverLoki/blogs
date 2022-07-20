@@ -163,7 +163,14 @@ set password for root@localhost = password('你的密码');
 
 ### Linux环境下安装卸载
 
+安装文件下载目录：/data/software
+Mysql目录安装位置：/usr/local/mysql
+数据库保存位置：/data/mysql
+日志保存位置：/data/log/mysql
 
+
+
+​	
 
 
 

@@ -174,13 +174,15 @@ docker run hello-world
 
 ![image-20220504224615570](https://img-blog.csdnimg.cn/img_convert/82105e9e5f79a26dcbf74f5949fe07ac.png)
 
-```bash
-sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json <<-'EOF'
+daemon.json
+
+```
 {
   "registry-mirrors": ["https://v4e316go.mirror.aliyuncs.com"]
 }
-EOF
+```
+
+```bash
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
@@ -210,22 +212,22 @@ sudo systemctl restart docker
 
 **容器命令**
 
-| 命令                                             | 描述                   |
-| :----------------------------------------------- | ---------------------- |
-| docker run -d -p 3389:80 [nginx]                 | 运行一个容器           |
-| docker start [容器id]                            | 启动本地容器           |
-| docker restart [容器id]                          | 重启容器               |
-| docker stop [容器id]                             | 停止运行容器           |
-| exit                                             | 直接退出容器并关闭     |
-| Ctrl + P + Q                                     | 容器不关闭退出         |
-| docker top [容器id]                              | 查看容器中进程信息     |
-| docker ps                                        | 列出当前正在运行的容器 |
-| docker ps -a                                     | 列出历史运行的容器     |
-| docker exec -it [容器id] /bin/bash               | 进入容器，修改配置     |
-| docker rm -f [容器id]                            | 删除指定容器           |
-| docker rm -f $(docker ps -aq)                    | 删除所有容器           |
-| docker restart [容器id]                          | 重启容器               |
-| docker logs -tf --tail [日志条数number] [容器id] | 显示日志               |
+| 命令                                             | 描述                     |
+| :----------------------------------------------- | ------------------------ |
+| docker run -d -p [主机端口:容器端口] [nginx]     | 运行一个容器             |
+| docker start [容器id]                            | 启动本地容器             |
+| docker restart [容器id]                          | 重启容器                 |
+| docker stop [容器id]                             | 停止运行容器             |
+| exit                                             | 直接退出容器并关闭       |
+| Ctrl + P + Q                                     | 容器不关闭退出           |
+| docker top [容器id]                              | 查看容器中进程信息       |
+| docker ps                                        | 列出当前正在运行的容器   |
+| docker ps -a                                     | 列出所有容器，包括停止的 |
+| docker exec -it [容器id] [bin\|bash]             | 进入容器，修改配置       |
+| docker rm -f [容器id]                            | 删除指定容器             |
+| docker rm -f $(docker ps -aq)                    | 删除所有容器             |
+| docker restart [容器id]                          | 重启容器                 |
+| docker logs -tf --tail [日志条数number] [容器id] | 显示日志                 |
 
 
 
@@ -251,7 +253,7 @@ docker run [可选参数] [image]
 --name="loki"   容器名字    tomcat01    tomcat02    用来区分容器
 -d      后台方式运行
 -it     使用交互方式运行，进入容器查看内容
--p      指定容器的端口     -p [宿主机端口]:[容器端口]
+-p      指定端口映射     -p [宿主机端口]:[容器端口]
 -P      随机指定端口
 ```
 

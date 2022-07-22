@@ -1,37 +1,42 @@
 # About this repository
 
-**通过Github repo来记录Loki的个人博客，内容也会发布在其他内容创作平台**
+**通过Github repo来记录Loki的个人博客，理论性的东西会被很快遗忘，我们更需要经验性的东西，它来自于实操**
 
 
 
-**内容如下，会持续更新**
+**outline*
 
-+ Java系列：JavaSE入门与进阶、JVM、Java并发编程、JavaWeb
+> ps:加粗为代办
 
-+ 计算机基础系列：计算机网络、操作系统、数据结构与算法等
-+ Web应用框架：Spring、Springboot
-+ Web服务器：Tomcat、Nginx、Netty
-+ ORM框架：Mybatis、Mybatis-plus、JPA
-+ 认证与授权：JWT、Shiro、SpringSecurity等
-+ 分布式架构：
-+ 微服务：
-+ 开发工具：Git、Maven、IDEA
-+ 常用中间件：Docker、ElasticSearch、RabbitMQ
++ Java系列：JavaSE、JVM、JUC、JavaWeb
+
++ 计算机基础：计算机网络、操作系统、数据结构与算法
+
++ 后端开发
+
+  + Web开发框架：Spring、**SpringFlux**、Springboot
+
+  + Web服务器：Tomcat、Nginx、**Netty**
+  + ORM框架：Mybatis、Mybatis-plus、**JPA**
+  + 权限管理：JWT、Shiro、SpringSecurity
+
++ 分布式与微服务
+
+  + Nacos
+  + Sentinel
+  + OpenFeign
+  + Gateway
+  + 分布式事务：
+
++ 开发工具：Git、Maven、Apifox、idea
+
++ 中间件：Docker、**ElasticSearch、RabbitMQ**
 
 
 
-# Outline
+# 知识星球
 
-> **理论性的东西会被很快遗忘，我们更需要经验性的东西，它来自于实操**
-
-**注：**
-
-+ 由于任务列表的粒度较粗，所以没有打勾可能是处于学习阶段，但是没有完结，也有可能是准备去学这门技术
-
-+ ~~Tag说明~~
-+ ~~`todo` -> 待办清单~~
-  + ~~`wait` -> 太忙了~，先搁置一会儿~~
-+ 如果有什么纰漏之处被您看到请及时指正、交流、共同进步
+如有纰漏错误之处，请及时指正、交流、共同进步
 
 ## 计算机内功基础
 
@@ -146,26 +151,20 @@
 - [ ] SSO
 - [ ] OAuth2
 
-## 微服务
+## 分布式与微服务
 
 - [ ] Spring Cloud Alibaba
-- [ ] Nacos
-- [ ] Zookeeper
-
-## 分布式
-
-
-
-
-
-
+- [x] Nacos
+- [ ] Gateway
+- [ ] OpenFeign
+- [x] Sentinel
 
 ## 开发工具
 
 + Idea优化与整合
     + [ ] Idea个人优化
 + Git——协同开发
-    + [x] [Git系列整合]()
+    + [x] [Git：分布式版本控制系统]()
     + [ ] Git实践与进阶
 
 + Maven——java包管理工具

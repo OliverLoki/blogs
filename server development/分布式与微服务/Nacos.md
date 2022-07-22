@@ -1,4 +1,4 @@
-# 	一、Nacos Quick start
+Nacos Quick start
 
 > 什么是Nacos
 

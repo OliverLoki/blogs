@@ -2,8 +2,7 @@
 
 + 版本限制说明（需要借助json解析工具）：`start.spring.io/actuator/info`
 + SpringCloud官方推荐当前cloud版本适合的Springboot版本（详见Reference Doc）：https://spring.io/projects/spring-cloud#learn
-
-> **SpringCloud组件停更说明与技术选型**
++ SpringCloud Alibaba组件版本说明：https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明
 
 + **服务注册与发现**
 
@@ -15,13 +14,12 @@
 
 + **服务调用**
 
-  | 名称         | 描述                   | 满足的CAP理论 |          |
-  | ------------ | ---------------------- | ------------- | -------- |
-  | Ribbon       |                        | AP            | 停止维护 |
-  | LoadBalancer |                        |               |          |
-  | Feign        |                        | CP            |          |
-  | OpenFeign    | Netfilx新出的替代feign |               |          |
-
+  | 名称      | 描述                   | 满足的CAP理论 |          |
+  | --------- | ---------------------- | ------------- | -------- |
+  | Ribbon    |                        | AP            | 停止维护 |
+  | Feign     |                        | CP            |          |
+  | OpenFeign | Netfilx新出的替代feign |               |          |
+  
 + **服务熔断降级**
 
   | 名称         | 描述                        | 满足的CAP理论 |                            |

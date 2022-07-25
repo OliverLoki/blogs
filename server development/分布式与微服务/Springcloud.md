@@ -73,18 +73,16 @@
 | 2.0.4.RELEASE(停止维护，建议升级) | Spring Cloud Finchley       | 2.0.X.RELEASE       |
 | 1.5.1.RELEASE(停止维护，建议升级) | Spring Cloud Edgware        | 1.5.X.RELEASE       |
 
-
-
-> **Loki的学习版本（自用，保证可靠性，均来自官方推荐）**
+> **Loki目前使用的版本（自用，保证可靠性，均来自官方推荐）**
 
 + Spring Cloud Hoxton.SR12
-
+  + Gateway 
 + Springboot 2.3.12.RELEASE
 + cloud alibaba 2.2.7.RELEASE
   + Nacos Version：2.0.3
   + Sentinel Version：1.8.1
   + RocketMQ Version：4.6.1
-+ JDK 8~15
++ JDK 11
 
 
 

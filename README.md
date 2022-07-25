@@ -4,14 +4,12 @@
 
 
 
-**outline*
+***outline***
 
 > ps:加粗为代办
 
 + Java系列：JavaSE、JVM、JUC、JavaWeb
-
 + 计算机基础：计算机网络、操作系统、数据结构与算法
-
 + 后端开发
 
   + Web开发框架：Spring、**SpringFlux**、Springboot
@@ -19,17 +17,16 @@
   + Web服务器：Tomcat、Nginx、**Netty**
   + ORM框架：Mybatis、Mybatis-plus、**JPA**
   + 权限管理：JWT、Shiro、SpringSecurity
-
 + 分布式与微服务
 
-  + Nacos
-  + Sentinel
-  + OpenFeign
-  + Gateway
-  + 分布式事务：
-
+  + 服务发现与配置：Nacos
+  + 流量管理与熔断降级：Sentinel
+  + 服务调用：OpenFeign
+  + 服务网关：Gateway
+  + 分布式事务：**Seata**
++ 前端
+  + 
 + 开发工具：Git、Maven、Apifox、idea
-
 + 中间件：Docker、**ElasticSearch、RabbitMQ**
 
 
@@ -40,68 +37,68 @@
 
 ## 计算机内功基础
 
-### 计算机网络
+> 计算机网络
 
 - [x] [计算机网络系列：图解HTTP读书笔记](https://blog.csdn.net/Night__breeze/article/details/124874557)
 - [ ] 计算机网络系列：TCP协议
 - [ ] 计算机网络系列：IP协议 
 
-### 操作系统
+> 操作系统
 
 - [x] Linux基础
 - [x] Shell编程基础
 - [ ] 进程调度算法
-- [ ] 
 
-### 数据结构与算法
+> 数据结构与算法
 
 - [ ] Leetcode刷题专栏（每日更新）题量： 
 - [ ] Java手写常见数据结构
 - [ ] Java手写常用算法
 
-### UML：统一建模语言
+> UML：统一建模语言
 
 - [x] UML：类图
 
 ## JavaSE
 
-### JavaSE 基础
+> JavaSE 基础
 
 - [x] [JavaSE系列：集合框架](blog.csdn.net/Night__breeze/article/details/124346280)
 - [ ] JavaSE系列：I/O流 
 - [x] [JavaSE系列：异常处理](blog.csdn.net/Night__breeze/article/details/124890564)
 - [x] [JDBC：Java如何在底层操作数据库](https://blog.csdn.net/Night__breeze/article/details/120653466?spm=1001.2014.3001.5501)
 
-### JVM
+> ### JVM
 
-+ [x] [JVM入门：内存结构、类加载、垃圾回收](blog.csdn.net/Night__breeze/article/details/124253231)
++ [ ] [JVM入门：内存结构、类加载、垃圾回收](blog.csdn.net/Night__breeze/article/details/124253231)
++ [ ] 
 
-### Java并发编程
+> Java并发编程
 
 + [ ] Java多线程与JUC
 
-### Java 网络编程
+> Java 网络编程
 
 - [ ] Socket编程 
-- [ ] URL处理 
+- [ ] 
 
 ## Database
 
-### MySQL
+> MySQL
 
 - [ ] [MySQL入门]()
 - [ ] 
 
-### Redis
+> Redis
 
 - [ ] [Redis入门](https://blog.csdn.net/Night__breeze/article/details/123778708)
 - [ ] 
 
-### MongoDB `todo`
+> **MongoDB**
 
 ## Web应用框架
 
-### Spring系列
+> Spring系列
 
 + Spring
   - [ ] Spring系列：IoC与AoP
@@ -109,11 +106,13 @@
   - [ ] Springboot自动配置原理
   - [ ] 
 
-### Netty
+## Web服务器
+
+> Netty
 
 - [ ] Netty
 
-### Nginx
+> Nginx
 
 - [x] [Nginx系列（一）：快速入门Nginx](https://blog.csdn.net/Night__breeze/article/details/124457586)
 - [x] [Nginx系列（二）：反向代理与负载均衡](https://blog.csdn.net/Night__breeze/article/details/124494678)
